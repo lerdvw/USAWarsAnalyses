@@ -748,6 +748,390 @@ ROWS = [
         cost_year_note="Year of the operation",
         sources=[4, 5],
     ),
+
+    # ---- After 9/11, 2001-2026 ----------------------------------------------
+    conflict(
+        name="Enduring Freedom",
+        theatre="Afghanistan - response to 9/11",
+        start=date(2001, 10, 7),
+        end=date(2021, 8, 30),
+        era="Post-9/11",
+        presidents="G.W. Bush, Obama, Trump, Biden",
+        conflict_type="Defensive",
+        reason=(
+            "Self-defence after the September 11 attacks: destroy al-Qaeda and remove "
+            "the Taliban government sheltering it."
+        ),
+        summary=(
+            "Special forces and air power toppled the Taliban in ten weeks; bin Laden "
+            "escaped at Tora Bora. What followed was twenty years of "
+            "counterinsurgency, a surge to 100,000 troops under Obama, a negotiated "
+            "withdrawal under Trump, and a collapse under Biden in which the Taliban "
+            "retook Kabul before the last US aircraft left. The longest war in "
+            "American history."
+        ),
+        auth_level=3,
+        authority="Congress",
+        auth_note=(
+            "2001 AUMF (PL 107-40), House 420-1, Senate 98-0. UN affirmed self-defence "
+            "but did not authorise the invasion."
+        ),
+        kia=1922,
+        deaths=2459,
+        wounded=20_769,
+        losses_text=(
+            "2,459 military dead, 1,922 from hostile action; 20,769 wounded; about "
+            "3,900 US contractors also died"
+        ),
+        cost_m=2_300_000,
+        cost_text=(
+            "About $933bn direct DoD; $2.3tn full burden including veterans' care "
+            "(Costs of War)"
+        ),
+        cost_year=2012,
+        cost_year_note=(
+            "OUTLAY-WEIGHTED: spending peaked with the 2010-12 surge. Indicative only"
+        ),
+        sources=[5, 6, 9],
+    ),
+
+    conflict(
+        name="Iraqi Freedom / New Dawn",
+        theatre="Iraq invasion and occupation",
+        start=date(2003, 3, 20),
+        end=date(2011, 12, 18),
+        era="Post-9/11",
+        presidents="G.W. Bush, Obama",
+        conflict_type="Offensive",
+        reason=(
+            "Stated: eliminate weapons of mass destruction and end Saddam Hussein's "
+            "regime. No such weapons were found."
+        ),
+        summary=(
+            "Baghdad fell in three weeks; the occupation then dissolved into "
+            "insurgency and sectarian civil war after the Iraqi army and Baath party "
+            "were disbanded. The 2007 surge reduced the violence; US forces withdrew "
+            "at the end of 2011 under a status-of-forces agreement Iraq would not "
+            "extend. Congress had authorised force but the Security Council refused, "
+            "and the war split the Western alliance."
+        ),
+        auth_level=3,
+        authority="Congress",
+        auth_note=(
+            "2002 AUMF (PL 107-243), House 296-133, Senate 77-23. No UNSC "
+            "authorisation; the revived-authority theory was widely rejected."
+        ),
+        kia=3481,
+        deaths=4431,
+        wounded=31_994,
+        losses_text=(
+            "4,431 military dead, 3,481 from hostile action; 31,994 wounded; about "
+            "3,650 US contractors also died"
+        ),
+        cost_m=2_000_000,
+        cost_text="About $815bn direct DoD; roughly $2.0tn full burden (Costs of War)",
+        cost_year=2008,
+        cost_year_note="OUTLAY-WEIGHTED: spending peaked FY2007-08. Indicative only",
+        sources=[5, 6, 9],
+    ),
+
+    conflict(
+        name="Odyssey Dawn / Unified Protector",
+        theatre="Libya",
+        start=date(2011, 3, 19),
+        end=date(2011, 10, 31),
+        era="Post-9/11",
+        presidents="Obama",
+        conflict_type="Humanitarian",
+        reason=(
+            "Protect civilians in Benghazi under UNSCR 1973; the mission broadened "
+            "into regime change, which the resolution did not authorise."
+        ),
+        summary=(
+            "US missiles and aircraft destroyed Libyan air defences and armour "
+            "advancing on Benghazi, then handed the lead to NATO. Seven months of air "
+            "strikes ended when rebels captured and killed Qaddafi. The administration "
+            "argued the War Powers Resolution's 60-day clock did not apply because "
+            "there were no 'hostilities'; the House rejected authorisation. Libya has "
+            "been in civil war since."
+        ),
+        auth_level=2,
+        authority="UN only",
+        auth_note=(
+            "UNSCR 1973. House rejected authorisation 123-295; administration argued "
+            "there were no 'hostilities'."
+        ),
+        kia=0,
+        deaths=0,
+        wounded=0,
+        losses_text="None",
+        cost_m=1100,
+        cost_text="About $1.1bn",
+        cost_year=2011,
+        cost_year_note="Year of the operation",
+        sources=[4, 42],
+        combat=13,
+    ),
+
+    conflict(
+        name="Inherent Resolve",
+        theatre="ISIS, Iraq and Syria",
+        start=date(2014, 8, 8),
+        end=None,
+        era="Post-9/11",
+        presidents="Obama, Trump, Biden, Trump",
+        conflict_type="Offensive",
+        reason=(
+            "Destroy the Islamic State after its capture of Mosul. Conducted in Iraq "
+            "at the government's invitation, in Syria without consent."
+        ),
+        summary=(
+            "Air strikes began to stop ISIS at Erbil and protect the Yazidis on "
+            "Sinjar, then grew into a campaign of 35,000 strikes supporting Iraqi "
+            "forces and Syrian Kurds, who retook Mosul in 2017 and Raqqa and the last "
+            "ISIS territory in 2019. About 2,500 US troops remain in Iraq and 900 in "
+            "Syria. Obama sent Congress a draft authorisation in 2015; it was never "
+            "voted on."
+        ),
+        auth_level=1,
+        authority="Standing law",
+        auth_note=(
+            "2001 and 2002 AUMFs invoked; Obama's 2015 draft AUMF never voted on."
+        ),
+        kia=23,
+        deaths=116,
+        wounded=325,
+        losses_text="116 dead, 23 from hostile action; roughly 325 wounded",
+        cost_m=60_000,
+        cost_text="About $60bn+ and rising",
+        cost_year=2018,
+        cost_year_note="OUTLAY-WEIGHTED midpoint of a 2014-2026 campaign",
+        sources=[5, 6],
+        flag="‡",
+    ),
+
+    conflict(
+        name="Shayrat Strike",
+        theatre="Syria",
+        start=date(2017, 4, 6),
+        end=date(2017, 4, 6),
+        era="Post-9/11",
+        presidents="Trump",
+        conflict_type="Offensive",
+        reason="Punitive strike for the Khan Shaykhun sarin attack.",
+        summary=(
+            "Fifty-nine Tomahawk missiles struck the Syrian air base from which the "
+            "chemical attack was flown. The base was operating again within days."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note=(
+            "Response to the Khan Shaykhun chemical attack; OLC opinion followed in "
+            "2018."
+        ),
+        kia=0,
+        deaths=0,
+        wounded=0,
+        losses_text="None",
+        cost_m=100,
+        cost_text="About $100m",
+        cost_year=2017,
+        cost_year_note="Year of the operation",
+        sources=[4],
+    ),
+
+    conflict(
+        name="Syria Strikes, Douma",
+        theatre="With the UK and France",
+        start=date(2018, 4, 14),
+        end=date(2018, 4, 14),
+        era="Post-9/11",
+        presidents="Trump",
+        conflict_type="Offensive",
+        reason=(
+            "Punitive strike for the Douma chemical attack; conducted with the UK and "
+            "France."
+        ),
+        summary=(
+            "One hundred and five missiles struck three chemical-weapons facilities "
+            "near Damascus and Homs in a single night. No congressional or Security "
+            "Council authorisation."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note="No congressional or Security Council authorisation.",
+        kia=0,
+        deaths=0,
+        wounded=0,
+        losses_text="None",
+        cost_m=240,
+        cost_text="About $240m",
+        cost_year=2018,
+        cost_year_note="Year of the operation",
+        sources=[4],
+    ),
+
+    conflict(
+        name="Soleimani Strike",
+        theatre="Baghdad",
+        start=date(2020, 1, 3),
+        end=date(2020, 1, 3),
+        era="Post-9/11",
+        presidents="Trump",
+        conflict_type="Offensive",
+        reason=(
+            "Targeted killing of the IRGC Quds Force commander. The administration "
+            "cited an imminent threat it never substantiated to Congress."
+        ),
+        summary=(
+            "A drone strike at Baghdad airport killed Qassem Soleimani and an Iraqi "
+            "militia leader. Iran retaliated with ballistic missiles on US bases in "
+            "Iraq; no Americans died but about 110 suffered brain injuries. Iran's air "
+            "defences then shot down a Ukrainian airliner, killing 176. Both chambers "
+            "passed a resolution to restrain further action; Trump vetoed it."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note=(
+            "Article II plus a claimed 2002 Iraq AUMF basis. Both chambers passed "
+            "S.J.Res. 68 to restrain him; vetoed, override failed."
+        ),
+        kia=0,
+        deaths=0,
+        wounded=110,
+        losses_text=(
+            "None killed; about 110 traumatic brain injuries in the Iranian "
+            "retaliation"
+        ),
+        cost_m=75,
+        cost_text="About $75m (estimate)",
+        cost_year=2020,
+        cost_year_note="Year of the operation",
+        sources=[42, 43],
+        flag="†",
+    ),
+
+    conflict(
+        name="Syria Militia Strikes",
+        theatre="Iran-backed militias",
+        start=date(2021, 2, 25),
+        end=date(2021, 2, 25),
+        era="Post-9/11",
+        presidents="Biden",
+        conflict_type="Defensive",
+        reason="Retaliation for rocket attacks on US personnel at Erbil.",
+        summary=(
+            "Air strikes on militia facilities at the Syria-Iraq border crossing; "
+            "Biden's first use of force."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note="Article 51 collective self-defence asserted.",
+        kia=0,
+        deaths=0,
+        wounded=0,
+        losses_text="None",
+        cost_m=15,
+        cost_text="About $15m",
+        cost_year=2021,
+        cost_year_note="Year of the operation",
+        sources=[42],
+    ),
+
+    conflict(
+        name="al-Zawahiri Strike",
+        theatre="Kabul",
+        start=date(2022, 7, 31),
+        end=date(2022, 7, 31),
+        era="Post-9/11",
+        presidents="Biden",
+        conflict_type="Offensive",
+        reason="Targeted killing of the al-Qaeda leader under the 2001 AUMF.",
+        summary=(
+            "Two Hellfire missiles killed Ayman al-Zawahiri on the balcony of a "
+            "Taliban-provided safe house in Kabul, a year after the withdrawal."
+        ),
+        auth_level=1,
+        authority="Standing law",
+        auth_note="2001 AUMF, 21 years after enactment.",
+        kia=0,
+        deaths=0,
+        wounded=0,
+        losses_text="None",
+        cost_m=2,
+        cost_text="About $2m",
+        cost_year=2022,
+        cost_year_note="Year of the operation",
+        sources=[4],
+    ),
+
+    conflict(
+        name="Poseidon Archer",
+        theatre="Houthi targets, Yemen",
+        start=date(2024, 1, 11),
+        end=date(2025, 1, 20),
+        era="Post-9/11",
+        presidents="Biden",
+        conflict_type="Freedom of passage",
+        reason=(
+            "Reopen Red Sea shipping lanes after Houthi missile and drone attacks on "
+            "commercial vessels."
+        ),
+        summary=(
+            "A year of US and British strikes on Houthi launch sites and the largest "
+            "sustained naval combat since World War II, with destroyers shooting down "
+            "hundreds of missiles and drones. Commercial traffic through the Red Sea "
+            "fell by half regardless. Three soldiers were killed at Tower 22 in Jordan "
+            "in a related militia attack."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note="Article 51; no congressional authorisation.",
+        kia=0,
+        deaths=0,
+        wounded=0,
+        losses_text=(
+            "None in the Yemen strikes; 3 killed at Tower 22 in Jordan in a related "
+            "attack"
+        ),
+        cost_m=2500,
+        cost_text="About $2.5bn",
+        cost_year=2024,
+        cost_year_note="Bulk of the campaign in 2024",
+        sources=[42],
+        combat=120,
+        flag="†",
+    ),
+
+    conflict(
+        name="Iraq and Syria Retaliation",
+        theatre="After the Tower 22 attack",
+        start=date(2024, 2, 2),
+        end=date(2024, 2, 2),
+        era="Post-9/11",
+        presidents="Biden",
+        conflict_type="Defensive",
+        reason=(
+            "Retaliation for the drone attack on Tower 22 in Jordan that killed three "
+            "US soldiers."
+        ),
+        summary=(
+            "Eighty-five targets struck across two countries in one night, against "
+            "Iran's Quds Force and the militias it arms."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note="Article II; Article 51 asserted.",
+        kia=0,
+        deaths=0,
+        wounded=0,
+        losses_text="None",
+        cost_m=50,
+        cost_text="About $50m",
+        cost_year=2024,
+        cost_year_note="Year of the operation",
+        sources=[42],
+    ),
 ]
 
 
