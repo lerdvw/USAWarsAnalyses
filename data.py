@@ -15,6 +15,34 @@ TODAY = date(2026, 9, 22)
 
 
 # ---------------------------------------------------------------------------
+# Scales
+# ---------------------------------------------------------------------------
+
+# Eras, oldest first.
+ERAS = [
+    "Founding",
+    "Expansion",
+    "Imperial and World Wars",
+    "Cold War",
+    "Post-Cold War",
+    "Post-9/11",
+]
+
+# A conflict's principal *stated* rationale. Assigning one is a judgment.
+TYPES = ["Defensive", "Offensive", "Humanitarian", "Freedom of passage", "Other"]
+
+# Authorization strength: a number that sorts, and the label shown for it.
+LV_LABEL = {
+    5: "Declared war",     # Congress declared war
+    4: "Congress + UN",    # a statute and a Security Council resolution
+    3: "Congress",         # a statute or joint resolution, even after the fact
+    2: "UN only",          # a Security Council resolution, no statute
+    1: "Standing law",     # an existing statute or AUMF, invoked again
+    0: "Executive only",   # the President acting alone
+}
+
+
+# ---------------------------------------------------------------------------
 # The conflicts
 # ---------------------------------------------------------------------------
 
@@ -338,3 +366,7 @@ def derived(row):
 for number, row in enumerate(ROWS, 1):
     row["idx"] = number  # the # column
     row.update(derived(row))
+    row["auth_label"] = LV_LABEL[row["auth_level"]]
+
+# No misspelt era or type.
+assert all(row["era"] in ERAS and row["conflict_type"] in TYPES for row in ROWS)

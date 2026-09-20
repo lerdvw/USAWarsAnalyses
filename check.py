@@ -37,8 +37,18 @@ def rows():
     print(f"rows            {len(ROWS)}, {ongoing} ongoing")
 
 
+def scales():
+    """Every authorization level has a label; print how many conflicts have each."""
+    for row in ROWS:
+        check(row["auth_level"] in data.LV_LABEL, f"{row['name']}: unknown authorization level {row['auth_level']}")
+    counts = [f"{data.LV_LABEL[level]} {sum(row['auth_level'] == level for row in ROWS)}"
+              for level in sorted(data.LV_LABEL, reverse=True)]
+    print(f"authorization   {', '.join(counts)}")
+
+
 if __name__ == "__main__":
     rows()
+    scales()
     for message in FAILED:
         print("FAIL", message)
     print("\nall checks pass" if not FAILED else f"\n{len(FAILED)} check(s) failed")
