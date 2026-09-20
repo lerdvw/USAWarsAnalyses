@@ -436,6 +436,318 @@ ROWS = [
         sources=[4, 5],
         combat=5,
     ),
+
+    # ---- After the Cold War, 1990-2000 --------------------------------------
+    conflict(
+        name="Desert Shield / Desert Storm",
+        theatre="Gulf War - response to Iraq's invasion of Kuwait",
+        start=date(1990, 8, 7),
+        end=date(1991, 2, 28),
+        era="Post-Cold War",
+        presidents="G.H.W. Bush",
+        conflict_type="Defensive",
+        reason=(
+            "Collective defence: expel Iraqi forces from Kuwait after the August 1990 "
+            "invasion and shield Saudi Arabia."
+        ),
+        summary=(
+            "A 35-nation coalition of 700,000 troops, half a million of them American, "
+            "deployed to Saudi Arabia over five months. A six-week air campaign was "
+            "followed by a 100-hour ground war that destroyed the Iraqi army in "
+            "Kuwait. Bush stopped short of Baghdad. Allies paid almost the entire "
+            "bill. Both the Security Council and Congress voted before force was used "
+            "- the last time that happened."
+        ),
+        auth_level=4,
+        authority="Congress + UN",
+        auth_note="UNSCR 678 and PL 102-1 - Senate 52-47, House 250-183.",
+        kia=148,
+        deaths=383,
+        wounded=467,
+        losses_text="148 battle deaths, 235 other deaths in theatre, 467 wounded",
+        cost_m=7000,
+        cost_text="About $7bn net after allied contributions (estimate)",
+        cost_year=1991,
+        cost_year_note="Combat and most outlays in 1991",
+        sources=[1, 2, 31],
+    ),
+
+    conflict(
+        name="Somalia Intervention",
+        theatre="Restore Hope and UNOSOM II",
+        start=date(1992, 12, 9),
+        end=date(1994, 3, 31),
+        era="Post-Cold War",
+        presidents="G.H.W. Bush, Clinton",
+        conflict_type="Humanitarian",
+        reason=(
+            "Secure famine relief deliveries during the civil war; later widened under "
+            "UNOSOM II to disarming the militias."
+        ),
+        summary=(
+            "Marines landed to protect food convoys during a famine that had killed "
+            "300,000. Under the UN the mission expanded to disarming warlords, and the "
+            "hunt for Mohamed Farrah Aidid ended in the Battle of Mogadishu in October "
+            "1993, in which 18 US soldiers died and a pilot was captured. Clinton "
+            "withdrew within six months. The episode shaped the refusal to intervene "
+            "in Rwanda."
+        ),
+        auth_level=2,
+        authority="UN only",
+        auth_note=(
+            "UNSCR 794 and 814; no prior congressional authorisation. Congress later "
+            "set a withdrawal deadline by funding cutoff."
+        ),
+        kia=29,
+        deaths=43,
+        wounded=153,
+        losses_text="43 dead, 29 from hostile action; 153 wounded",
+        cost_m=1700,
+        cost_text="About $1.7bn",
+        cost_year=1993,
+        cost_year_note="Midpoint of the deployment",
+        sources=[4, 5],
+        combat=15,
+        flag="†",
+    ),
+
+    conflict(
+        name="Iraq Intelligence HQ Strike",
+        theatre="Baghdad",
+        start=date(1993, 6, 26),
+        end=date(1993, 6, 26),
+        era="Post-Cold War",
+        presidents="Clinton",
+        conflict_type="Offensive",
+        reason=(
+            "Retaliation for the Iraqi plot to assassinate former President Bush in "
+            "Kuwait."
+        ),
+        summary=(
+            "Twenty-three Tomahawk missiles destroyed the Iraqi Intelligence Service "
+            "headquarters at night to limit casualties. Clinton's first use of force."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note="Article 51 letter to the Security Council.",
+        kia=0,
+        deaths=0,
+        wounded=0,
+        losses_text="None",
+        cost_m=50,
+        cost_text="About $50m",
+        cost_year=1993,
+        cost_year_note="Year of the operation",
+        sources=[4],
+    ),
+
+    conflict(
+        name="Uphold Democracy",
+        theatre="Haiti",
+        start=date(1994, 9, 19),
+        end=date(1995, 3, 31),
+        era="Post-Cold War",
+        presidents="Clinton",
+        conflict_type="Humanitarian",
+        reason=(
+            "Restore the elected president Aristide after the 1991 coup and end the "
+            "junta's abuses."
+        ),
+        summary=(
+            "With the invasion force airborne, a last-minute mission by Jimmy Carter, "
+            "Colin Powell and Sam Nunn persuaded the junta to step down, and 20,000 "
+            "troops landed unopposed. Aristide returned in October. The UN took over "
+            "in March 1995. Clinton asserted he needed no congressional authorisation "
+            "and did not seek it."
+        ),
+        auth_level=2,
+        authority="UN only",
+        auth_note="UNSCR 940; Clinton stated he did not need Congress.",
+        kia=1,
+        deaths=4,
+        wounded=6,
+        losses_text="4 dead, 1 from hostile action; roughly 6 wounded",
+        cost_m=2000,
+        cost_text="About $2bn",
+        cost_year=1995,
+        cost_year_note="Bulk of outlays in FY1995",
+        sources=[4, 5],
+        combat=1,
+        flag="†",
+    ),
+
+    conflict(
+        name="Deliberate Force",
+        theatre="Bosnia, NATO air campaign",
+        start=date(1995, 8, 30),
+        end=date(1995, 9, 20),
+        era="Post-Cold War",
+        presidents="Clinton",
+        conflict_type="Humanitarian",
+        reason=(
+            "Protect the UN-declared safe areas after the Srebrenica massacre and the "
+            "Markale market shelling."
+        ),
+        summary=(
+            "Three weeks of NATO air strikes on Bosnian Serb positions, most flown by "
+            "US aircraft, combined with a Croat-Bosnian ground offensive to bring the "
+            "Serbs to the table. The Dayton accords followed in November, and 20,000 "
+            "US troops deployed with IFOR to enforce them."
+        ),
+        auth_level=2,
+        authority="UN only",
+        auth_note="Under UNSCR 816/836; no congressional authorisation.",
+        kia=0,
+        deaths=0,
+        wounded=0,
+        losses_text="None",
+        cost_m=1000,
+        cost_text=(
+            "About $1bn (estimate); IFOR/SFOR peacekeeping after cost ~$20bn more"
+        ),
+        cost_year=1995,
+        cost_year_note="Year of the operation",
+        sources=[4],
+        combat=12,
+        flag="†",
+    ),
+
+    conflict(
+        name="Desert Strike",
+        theatre="Iraq cruise missiles",
+        start=date(1996, 9, 3),
+        end=date(1996, 9, 4),
+        era="Post-Cold War",
+        presidents="Clinton",
+        conflict_type="Offensive",
+        reason=(
+            "Punish Iraqi military moves against Kurdish Irbil and extend the southern "
+            "no-fly zone."
+        ),
+        summary=(
+            "Forty-four cruise missiles struck air defences in southern Iraq after "
+            "Iraqi forces entered the Kurdish zone; the no-fly zone was extended north "
+            "to Baghdad's suburbs."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note="Response to Iraqi moves against Irbil.",
+        kia=0,
+        deaths=0,
+        wounded=0,
+        losses_text="None",
+        cost_m=70,
+        cost_text="About $70m",
+        cost_year=1996,
+        cost_year_note="Year of the operation",
+        sources=[4],
+    ),
+
+    conflict(
+        name="Infinite Reach",
+        theatre="Sudan and Afghanistan",
+        start=date(1998, 8, 20),
+        end=date(1998, 8, 20),
+        era="Post-Cold War",
+        presidents="Clinton",
+        conflict_type="Offensive",
+        reason=(
+            "Retaliation for the al-Qaeda bombings of the US embassies in Kenya and "
+            "Tanzania."
+        ),
+        summary=(
+            "Cruise missiles struck al-Qaeda camps in Afghanistan, missing bin Laden, "
+            "and the al-Shifa pharmaceutical plant in Khartoum, which the "
+            "administration said made nerve-agent precursors - a claim that did not "
+            "hold up."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note="Article 51 self-defence after the embassy bombings.",
+        kia=0,
+        deaths=0,
+        wounded=0,
+        losses_text="None",
+        cost_m=79,
+        cost_text="About $79m",
+        cost_year=1998,
+        cost_year_note="Year of the operation",
+        sources=[4],
+    ),
+
+    conflict(
+        name="Desert Fox",
+        theatre="Iraq",
+        start=date(1998, 12, 16),
+        end=date(1998, 12, 19),
+        era="Post-Cold War",
+        presidents="Clinton",
+        conflict_type="Offensive",
+        reason=(
+            "Degrade Iraqi WMD capability after Baghdad ended cooperation with UN "
+            "weapons inspectors."
+        ),
+        summary=(
+            "Four nights of US and British air and missile strikes on some 100 "
+            "targets, timed after the inspectors withdrew and ending on the eve of "
+            "Ramadan - and during the House impeachment vote. Inspectors did not "
+            "return until 2002."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note=(
+            "Claimed revived authority under UNSCR 678/687; no congressional "
+            "authorisation. Contested."
+        ),
+        kia=0,
+        deaths=0,
+        wounded=0,
+        losses_text="None",
+        cost_m=750,
+        cost_text="About $750m (estimate)",
+        cost_year=1998,
+        cost_year_note="Year of the operation",
+        sources=[4],
+        flag="†",
+    ),
+
+    conflict(
+        name="Allied Force",
+        theatre="Kosovo, NATO air war",
+        start=date(1999, 3, 24),
+        end=date(1999, 6, 10),
+        era="Post-Cold War",
+        presidents="Clinton",
+        conflict_type="Humanitarian",
+        reason=(
+            "Stated: halt the expulsion and killing of Kosovar Albanians. No Security "
+            "Council authorisation; the humanitarian basis was contested at the time."
+        ),
+        summary=(
+            "Seventy-eight days of NATO bombing of Serbia without a ground campaign. "
+            "The expulsion of Kosovar Albanians accelerated once bombing began; "
+            "Milosevic conceded in June and Kosovo became a UN protectorate. The House "
+            "tied 213-213 on authorising the air war and the campaign ran past the War "
+            "Powers Resolution's 60-day limit."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note=(
+            "No Security Council resolution; House deadlocked 213-213 on authorising. "
+            "Ran past the 60-day clock. Neither authority existed."
+        ),
+        kia=0,
+        deaths=2,
+        wounded=0,
+        losses_text=(
+            "2 dead in an Apache training crash in Albania; none from hostile action"
+        ),
+        cost_m=3000,
+        cost_text="About $3bn",
+        cost_year=1999,
+        cost_year_note="Year of the operation",
+        sources=[4, 5],
+    ),
 ]
 
 
