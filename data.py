@@ -1132,6 +1132,232 @@ ROWS = [
         cost_year_note="Year of the operation",
         sources=[42],
     ),
+
+    conflict(
+        name="Rough Rider",
+        theatre="Yemen, 1,100+ strikes",
+        start=date(2025, 3, 15),
+        end=date(2025, 5, 5),
+        era="Post-9/11",
+        presidents="Trump",
+        conflict_type="Freedom of passage",
+        reason=(
+            "Resume and escalate the campaign against Houthi attacks on Red Sea "
+            "shipping; ended by agreement on 5 May 2025."
+        ),
+        summary=(
+            "Fifty-two days of strikes on more than a thousand targets. Three F/A-18s "
+            "were lost from carriers and some seven Reaper drones shot down. It ended "
+            "with an Omani-brokered agreement that the Houthis would stop attacking US "
+            "ships, though not Israeli-linked ones. The campaign's planning was "
+            "discussed on a Signal group chat that included a journalist."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note="War Powers letter sent 28 March, after the campaign began.",
+        kia=0,
+        deaths=0,
+        wounded=0,
+        losses_text="None; 3 F/A-18s and about 7 MQ-9s lost",
+        cost_m=2000,
+        cost_text="About $2bn (estimates $1-3bn)",
+        cost_year=2025,
+        cost_year_note="Year of the operation",
+        sources=[40],
+    ),
+
+    conflict(
+        name="Midnight Hammer",
+        theatre="Iranian nuclear sites",
+        start=date(2025, 6, 22),
+        end=date(2025, 6, 22),
+        era="Post-9/11",
+        presidents="Trump",
+        conflict_type="Offensive",
+        reason=(
+            "Preventive strike on the Fordow, Natanz and Isfahan nuclear facilities "
+            "during the Israel-Iran war."
+        ),
+        summary=(
+            "Seven B-2s dropped fourteen 30,000-pound bunker-busters on Fordow and "
+            "Natanz while a submarine fired Tomahawks at Isfahan, twelve days into "
+            "Israel's war with Iran. Iran fired missiles at the US base in Qatar in a "
+            "telegraphed response, and a ceasefire followed within days. How much "
+            "enriched uranium survived is disputed."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note=(
+            "Notification sent 23 June, after the aircraft had left Iranian airspace."
+        ),
+        kia=0,
+        deaths=0,
+        wounded=0,
+        losses_text="None",
+        cost_m=200,
+        cost_text="About $200m for the strike; $4.8-7.2bn with the regional buildup",
+        cost_year=2025,
+        cost_year_note="Year of the operation",
+        sources=[41, 42, 43],
+    ),
+
+    conflict(
+        name="Southern Spear",
+        theatre="Boat strikes, Caribbean and eastern Pacific",
+        start=date(2025, 9, 2),
+        end=None,
+        era="Post-9/11",
+        presidents="Trump",
+        conflict_type="Other",
+        reason=(
+            "Lethal interdiction of vessels alleged to carry narcotics, framed as "
+            "armed conflict with designated cartels rather than law enforcement - "
+            "which is the core legal dispute."
+        ),
+        summary=(
+            "Beginning in September 2025 the military destroyed small boats in "
+            "international waters that it said carried drugs, killing everyone aboard, "
+            "without interdiction, boarding or arrest. By September 2026 at least 68 "
+            "strikes had killed more than 230 people. The administration declared an "
+            "armed conflict with designated cartels; the Senate rejected a war powers "
+            "resolution 51-48, and the House defeated its own."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note=(
+            "Senate rejected the Schiff-Kaine resolution 51-48; House versions also "
+            "defeated."
+        ),
+        kia=0,
+        deaths=0,
+        wounded=0,
+        losses_text="None; 230+ killed aboard the vessels",
+        cost_m=820,
+        cost_text="About $820m campaign-specific through July 2026",
+        cost_year=2026,
+        cost_year_note="Campaign centroid",
+        sources=[36, 37, 49, 50],
+        combat=68,
+        flag="‡",
+    ),
+
+    conflict(
+        name="Absolute Resolve",
+        theatre="Venezuela, capture of Maduro",
+        start=date(2026, 1, 3),
+        end=date(2026, 1, 3),
+        era="Post-9/11",
+        presidents="Trump",
+        conflict_type="Offensive",
+        reason=(
+            "Capture President Maduro on US drug-trafficking charges, followed by US "
+            "direction of a political transition."
+        ),
+        summary=(
+            "Special operations forces backed by more than 150 aircraft struck air "
+            "defences and seized Nicolas Maduro and his wife from a fortified compound "
+            "in Caracas in a night raid, flying them to New York to face drug charges. "
+            "Around 80 to 100 Venezuelan and Cuban personnel died. Congress learned of "
+            "it after it was over; the vice-president was sworn in as interim "
+            "president two days later."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note="Congress learned of it after completion.",
+        kia=0,
+        deaths=0,
+        wounded=7,
+        losses_text="None killed; 7 injured. About 80-100 Venezuelan and Cuban dead",
+        cost_m=3880,
+        cost_text=(
+            "About $3.9bn - DERIVED: $4.7bn reported jointly with Southern Spear (Aug "
+            "2025-Mar 2026) less the $820m campaign figure"
+        ),
+        cost_year=2026,
+        cost_year_note="Year of the operation",
+        sources=[38, 39, 46],
+        flag="†",
+    ),
+
+    conflict(
+        name="Epic Fury",
+        theatre="Iran, with Israel",
+        start=date(2026, 2, 28),
+        end=date(2026, 5, 5),
+        era="Post-9/11",
+        presidents="Trump",
+        conflict_type="Offensive",
+        reason=(
+            "Destroy Iran's nuclear, missile, naval and regime-security capacity, "
+            "jointly with Israel."
+        ),
+        summary=(
+            "A US-Israeli air and missile campaign against Iran's military, nuclear "
+            "and security apparatus, the largest US combat operation since 2003. Iran "
+            "struck back at US bases and shipping and closed the Strait of Hormuz. A "
+            "ceasefire took hold on 7 April and the operation was declared over on 5 "
+            "May, at a cost of $33bn, more than 400 wounded and dozens of aircraft. "
+            "The House has since voted three times to end the hostilities; the Senate "
+            "has not acted."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note=(
+            "Gang of Eight briefed. H.Con.Res. 38 failed 212-219; the House has since "
+            "passed a war powers resolution three times."
+        ),
+        kia=7,
+        deaths=13,
+        wounded=417,
+        losses_text=(
+            "7 killed in action, 13 dead in all (disputed; officials allege an "
+            "undercount of at least four); 417 wounded; 42-52 aircraft lost"
+        ),
+        cost_m=33_400,
+        cost_text="$33.4bn through 29 June (DoD); CSIS estimates $34-42bn",
+        cost_year=2026,
+        cost_year_note="Year of the operation",
+        sources=[32, 33, 34, 35, 44, 47, 48],
+        combat=38,
+        flag="§",
+    ),
+
+    conflict(
+        name="Project Freedom",
+        theatre="Strait of Hormuz escort",
+        start=date(2026, 5, 4),
+        end=None,
+        era="Post-9/11",
+        presidents="Trump",
+        conflict_type="Freedom of passage",
+        reason=(
+            "Escort merchant shipping through the Strait of Hormuz after Iranian "
+            "attacks on commercial vessels."
+        ),
+        summary=(
+            "Declared the second stage of the Iran war after Epic Fury ended: "
+            "destroyers and aircraft escorting merchant ships through the strait Iran "
+            "had closed. The overt phase was paused after two days; Iranian boats and "
+            "missiles engaged three US destroyers on 7 May. No casualty or cost "
+            "accounting has been published."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note=(
+            "Declared the second stage of the Iran war after Epic Fury concluded."
+        ),
+        kia=None,
+        deaths=None,
+        wounded=None,
+        losses_text="Not separately reported",
+        cost_m=None,
+        cost_text="Not separately reported",
+        cost_year=2026,
+        cost_year_note="No figures",
+        sources=[45],
+        combat=3,
+        flag="‡",
+    ),
 ]
 
 

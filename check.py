@@ -19,6 +19,11 @@ def check(ok, message):
         FAILED.append(message)
 
 
+def total(key):
+    """A field summed over every conflict, skipping blanks."""
+    return sum(row[key] for row in ROWS if row[key] is not None)
+
+
 # ---------------------------------------------------------------------------
 # The dataset
 # ---------------------------------------------------------------------------
@@ -59,10 +64,20 @@ def sources():
     print(f"sources         {len(numbers)} listed, {len(cited)} cited")
 
 
+def totals():
+    """Print the headline totals and how many rows lack a figure."""
+    blank = sum(row["kia"] is None or row["cost_m"] is None for row in ROWS)
+    print(f"KIA + MIA       {total('kia'):,}")
+    print(f"casualties      {total('casualties'):,}")
+    print(f"cost, then-year ${total('cost_m'):,}m")
+    print(f"blank figures   {blank} rows lack a death count or a cost")
+
+
 if __name__ == "__main__":
     rows()
     scales()
     sources()
+    totals()
     for message in FAILED:
         print("FAIL", message)
     print("\nall checks pass" if not FAILED else f"\n{len(FAILED)} check(s) failed")
