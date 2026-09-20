@@ -15,6 +15,57 @@ TODAY = date(2026, 9, 22)
 
 
 # ---------------------------------------------------------------------------
+# Inflation
+# ---------------------------------------------------------------------------
+
+# Costs are restated in the dollars of this month (CPI-U, 1982-84 = 100).
+CPI_BASE = 334.980
+CPI_BASE_LABEL = "August 2026"
+
+# CPI-U by year, 1982-84 = 100, for every year a cost is dated to:
+#   1913 on     BLS annual averages; 2026 is the mean of January to August.
+CPI = {
+    # 1980 onward
+    1980: 82.4,
+    1981: 90.9,
+    1983: 99.6,
+    1986: 109.6,
+    1988: 118.3,
+    1990: 130.7,
+    1991: 136.2,
+    1993: 144.5,
+    1995: 152.4,
+    1996: 156.9,
+    1998: 163.0,
+    1999: 166.6,
+    2008: 215.303,
+    2011: 224.939,
+    2012: 229.594,
+    2017: 245.120,
+    2018: 251.107,
+    2020: 258.811,
+    2021: 270.970,
+    2022: 292.655,
+    2024: 313.689,
+    2025: 321.943,
+    2026: 330.1,
+}
+
+# Where each year's index comes from, in words for the deflator sheet.
+CPI_BASIS = {
+    "bls": "BLS CPI-U annual average",
+    2026: "Mean of published Jan-Aug 2026 months; partial-year estimate",
+}
+
+
+def cpi_basis(year):
+    """Which series a year's CPI figure comes from, in words."""
+    if year == 2026:
+        return CPI_BASIS[2026]
+    return CPI_BASIS["bls"]
+
+
+# ---------------------------------------------------------------------------
 # Scales
 # ---------------------------------------------------------------------------
 
@@ -1395,6 +1446,9 @@ for number, row in enumerate(ROWS, 1):
     row["idx"] = number  # the # column
     row.update(derived(row))
     row["auth_label"] = LV_LABEL[row["auth_level"]]
+    row["cpi"] = CPI[row["cost_year"]]
+    row["factor"] = CPI_BASE / row["cpi"]
+    row["cost_adj"] = None if row["cost_m"] is None else row["cost_m"] * row["factor"]
 
 # No misspelt era or type.
 assert all(row["era"] in ERAS and row["conflict_type"] in TYPES for row in ROWS)

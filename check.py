@@ -73,11 +73,19 @@ def totals():
     print(f"blank figures   {blank} rows lack a death count or a cost")
 
 
+def inflation():
+    """No cost is dated to a year dearer than the base month."""
+    for row in ROWS:
+        check(row["factor"] >= 1, f"{row['name']}: {row['cost_year']} prices sit above the base month")
+    print(f"cost, {data.CPI_BASE_LABEL} ${total('cost_adj'):,.0f}m")
+
+
 if __name__ == "__main__":
     rows()
     scales()
     sources()
     totals()
+    inflation()
     for message in FAILED:
         print("FAIL", message)
     print("\nall checks pass" if not FAILED else f"\n{len(FAILED)} check(s) failed")
