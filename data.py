@@ -24,8 +24,13 @@ CPI_BASE_LABEL = "August 2026"
 
 # CPI-U by year, 1982-84 = 100, for every year a cost is dated to:
 #   1913 on     BLS annual averages; 2026 is the mean of January to August.
+#   1800-1912   Federal Reserve Bank of Minneapolis estimates (1967 = 100),
+#               rebased here by multiplying by 9.9 / 29.7.
 CPI = {
     # Imperial and world wars
+    1898: 8.3,
+    1900: 8.3,
+    1901: 8.3,
     1913: 9.9,
     1914: 10.0,
     1916: 10.9,
@@ -79,6 +84,10 @@ CPI = {
 
 # Where each year's index comes from, in words for the deflator sheet.
 CPI_BASIS = {
+    "pre1913": (
+        "Minneapolis Fed historical estimate (1967=100), rebased x9.9/29.7; the Fed "
+        "says pre-1913 values 'should be considered estimates'"
+    ),
     "bls": "BLS CPI-U annual average",
     2026: "Mean of published Jan-Aug 2026 months; partial-year estimate",
 }
@@ -88,6 +97,8 @@ def cpi_basis(year):
     """Which series a year's CPI figure comes from, in words."""
     if year == 2026:
         return CPI_BASIS[2026]
+    if year < 1913:
+        return CPI_BASIS["pre1913"]
     return CPI_BASIS["bls"]
 
 
@@ -265,6 +276,131 @@ def conflict(name, theatre, start, end, era, presidents, conflict_type, reason, 
 
 ROWS = [
     # ---- Imperial and world wars, 1898-1945 ---------------------------------
+    conflict(
+        name="Spanish-American War",
+        theatre="Cuba, Puerto Rico, the Philippines and Guam",
+        start=date(1898, 4, 21),
+        end=date(1898, 12, 10),
+        era="Imperial and World Wars",
+        presidents="McKinley",
+        conflict_type="Offensive",
+        reason=(
+            "Stated: liberate Cuba from Spanish rule and avenge the destruction of the "
+            "USS Maine. The war also delivered an overseas empire."
+        ),
+        summary=(
+            "The Maine exploded in Havana harbour in February 1898 - almost certainly "
+            "an accident - and a press campaign and Congress pushed McKinley to war. "
+            "Dewey destroyed the Spanish fleet at Manila Bay; the Army took Santiago; "
+            "and the ten-week war ended with Spain ceding Puerto Rico, Guam and the "
+            "Philippines and freeing Cuba. Disease killed five times as many Americans "
+            "as combat."
+        ),
+        auth_level=5,
+        authority="Declared war",
+        auth_note=(
+            "Congress declared war on 25 April 1898, backdated to 21 April, after "
+            "passing the Teller Amendment disclaiming any intention to annex Cuba."
+        ),
+        kia=385,
+        deaths=2446,
+        wounded=1662,
+        losses_text=(
+            "385 battle deaths; 2,061 other deaths, mostly typhoid and yellow fever; "
+            "1,662 wounded"
+        ),
+        cost_m=283,
+        cost_text="$283m then-year (CRS)",
+        cost_year=1898,
+        cost_year_note="Year of the war",
+        sources=[1, 2],
+        combat_end=date(1898, 8, 13),
+    ),
+
+    conflict(
+        name="Philippine-American War",
+        theatre="The Philippine Islands",
+        start=date(1899, 2, 4),
+        end=date(1902, 7, 4),
+        era="Imperial and World Wars",
+        presidents="McKinley, T. Roosevelt",
+        conflict_type="Offensive",
+        reason=(
+            "Suppress the Philippine Republic's resistance to American annexation "
+            "after Spain ceded the islands."
+        ),
+        summary=(
+            "Filipino forces that had fought Spain alongside the Americans turned "
+            "against them when it became clear the US meant to keep the islands. "
+            "Conventional defeat gave way to guerrilla war, concentration camps and "
+            "reprisals on both sides. Roosevelt declared it over in 1902, though the "
+            "Moro Rebellion in the south continued until 1913. Some 200,000 Filipino "
+            "civilians died, mostly of disease and famine."
+        ),
+        auth_level=1,
+        authority="Standing law",
+        auth_note=(
+            "No separate authorisation. The Senate ratified the Treaty of Paris in "
+            "February 1899 and the war was fought under the President's authority over "
+            "the ceded territory; the Philippine Organic Act followed in 1902."
+        ),
+        kia=1020,
+        deaths=4196,
+        wounded=2930,
+        losses_text=(
+            "1,020 killed in action (some counts 1,500); 4,196 dead from all causes; "
+            "2,930 wounded. The Moro Rebellion added several hundred more deaths to "
+            "1913"
+        ),
+        cost_m=400,
+        cost_text="About $400m then-year (contemporary estimate)",
+        cost_year=1900,
+        cost_year_note="Midpoint of the war",
+        sources=[11, 18],
+        flag="†",
+    ),
+
+    conflict(
+        name="Boxer Rebellion",
+        theatre="Tientsin and Peking, China",
+        start=date(1900, 6, 20),
+        end=date(1900, 9, 30),
+        era="Imperial and World Wars",
+        presidents="McKinley",
+        conflict_type="Other",
+        reason=(
+            "Relieve the foreign legations besieged in Peking by the Boxers and Qing "
+            "troops, and protect American nationals."
+        ),
+        summary=(
+            "US Marines from the Philippines and the 9th Infantry joined an "
+            "eight-nation relief force that fought through Tientsin and reached Peking "
+            "in August, lifting the 55-day siege. The US then used its share of the "
+            "indemnity to fund Chinese students' education in America. McKinley sent "
+            "troops without consulting Congress, a precedent later presidents cited."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note=(
+            "Ordered by McKinley during a congressional recess; no authorisation "
+            "sought or given."
+        ),
+        kia=46,
+        deaths=46,
+        wounded=220,
+        losses_text=(
+            "Roughly 46 killed and 220 wounded across the Seymour expedition, "
+            "Tientsin, Yangcun and Peking (compiled from engagement returns)"
+        ),
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1900,
+        cost_year_note="No cost figure",
+        sources=[12],
+        combat_end=date(1900, 8, 15),
+        flag="†",
+    ),
+
     conflict(
         name="Occupation of Nicaragua",
         theatre="Nicaragua; Sandino insurgency 1927-33",
