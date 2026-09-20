@@ -25,6 +25,19 @@ CPI_BASE_LABEL = "August 2026"
 # CPI-U by year, 1982-84 = 100, for every year a cost is dated to:
 #   1913 on     BLS annual averages; 2026 is the mean of January to August.
 CPI = {
+    # Cold War
+    1950: 24.1,
+    1952: 26.5,
+    1953: 26.7,
+    1955: 26.8,
+    1958: 28.9,
+    1961: 29.9,
+    1962: 30.2,
+    1965: 31.5,
+    1966: 32.4,
+    1968: 34.8,
+    1970: 38.8,
+    1975: 53.8,
     # 1980 onward
     1980: 82.4,
     1981: 90.9,
@@ -239,6 +252,444 @@ def conflict(name, theatre, start, end, era, presidents, conflict_type, reason, 
 
 ROWS = [
     # ---- Cold War, 1946-1989 ------------------------------------------------
+    conflict(
+        name="Korean War",
+        theatre="Korean peninsula",
+        start=date(1950, 6, 25),
+        end=date(1953, 7, 27),
+        era="Cold War",
+        presidents="Truman, Eisenhower",
+        conflict_type="Defensive",
+        reason=(
+            "Repel North Korea's invasion of the South under a UN Security Council "
+            "resolution, which the Soviet Union was boycotting and so could not veto."
+        ),
+        summary=(
+            "Truman committed forces within days and called it a police action. "
+            "MacArthur's landing at Inchon reversed the war; his drive to the Yalu "
+            "brought China in and the front collapsed back to the 38th parallel, where "
+            "it stayed for two years of attrition. The armistice, never a peace "
+            "treaty, left the peninsula divided. The first war the US fought on UN "
+            "rather than congressional authority."
+        ),
+        auth_level=2,
+        authority="UN only",
+        auth_note=(
+            "UN Security Council Resolutions 83 and 84 (June-July 1950). Truman did "
+            "not ask Congress and said he did not need to; Congress funded the war but "
+            "never authorised it. The Supreme Court checked him in Youngstown (1952)."
+        ),
+        kia=33_739,
+        deaths=36_574,
+        wounded=103_284,
+        losses_text=(
+            "33,739 battle deaths; 2,835 other deaths in theatre; 103,284 wounded. The "
+            "54,246 figure sometimes quoted included every service death worldwide in "
+            "the period"
+        ),
+        cost_m=30_000,
+        cost_text="$30,000m then-year (CRS)",
+        cost_year=1952,
+        cost_year_note="Peak year of war spending",
+        sources=[1, 2, 25],
+    ),
+
+    conflict(
+        name="First Taiwan Strait Crisis",
+        theatre="Quemoy, Matsu and the Tachen Islands",
+        start=date(1954, 9, 3),
+        end=date(1955, 5, 1),
+        era="Cold War",
+        presidents="Eisenhower",
+        conflict_type="Defensive",
+        reason=(
+            "Deter a Chinese assault on Taiwan and the offshore islands after the PLA "
+            "began shelling Quemoy."
+        ),
+        summary=(
+            "Eisenhower signed a defence treaty with Taiwan and asked Congress for "
+            "advance authority to defend it, which it gave in the Formosa Resolution. "
+            "The Seventh Fleet evacuated the Tachen Islands; Eisenhower and Dulles let "
+            "it be known nuclear weapons were on the table. The shelling stopped in "
+            "May 1955. No American forces engaged."
+        ),
+        auth_level=3,
+        authority="Congress",
+        auth_note=(
+            "Formosa Resolution, January 1955 (410-3, 85-3): the first advance blanket "
+            "authorisation Congress gave a president to use force at his discretion - "
+            "the template for Tonkin and the AUMFs."
+        ),
+        kia=0,
+        deaths=0,
+        wounded=0,
+        losses_text="No US casualties",
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1955,
+        cost_year_note="No cost figure",
+        sources=[24],
+        combat=0,
+    ),
+
+    conflict(
+        name="Second Taiwan Strait Crisis",
+        theatre="Quemoy and Matsu",
+        start=date(1958, 8, 23),
+        end=date(1958, 12, 2),
+        era="Cold War",
+        presidents="Eisenhower",
+        conflict_type="Defensive",
+        reason=(
+            "Deter a Chinese seizure of Quemoy under renewed bombardment, and keep it "
+            "supplied."
+        ),
+        summary=(
+            "China fired 400,000 shells at Quemoy in six weeks. The Seventh Fleet "
+            "escorted Nationalist supply convoys to the three-mile limit; US aircraft "
+            "supplied Sidewinder missiles, first used in combat here. The Joint Chiefs "
+            "again discussed nuclear strikes. Beijing announced a ceasefire in "
+            "October, then shelled on alternate days for twenty years. No US forces "
+            "were hit."
+        ),
+        auth_level=1,
+        authority="Standing law",
+        auth_note="Fought under the 1955 Formosa Resolution, still in force.",
+        kia=0,
+        deaths=0,
+        wounded=0,
+        losses_text="No US casualties",
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1958,
+        cost_year_note="No cost figure",
+        sources=[24],
+        combat=0,
+    ),
+
+    conflict(
+        name="Lebanon Intervention",
+        theatre="Beirut",
+        start=date(1958, 7, 15),
+        end=date(1958, 10, 25),
+        era="Cold War",
+        presidents="Eisenhower",
+        conflict_type="Other",
+        reason=(
+            "Stated: protect American lives and support the Chamoun government against "
+            "a Nasserist revolt after the Iraqi monarchy was overthrown."
+        ),
+        summary=(
+            "Fourteen thousand Marines and soldiers landed on Beirut's beaches among "
+            "the bathers and met no resistance. A political settlement replaced "
+            "Chamoun with the army commander Chehab, and the force withdrew after "
+            "three months. The first use of the Eisenhower Doctrine, which Congress "
+            "had approved the year before."
+        ),
+        auth_level=1,
+        authority="Standing law",
+        auth_note=(
+            "Middle East Resolution (Eisenhower Doctrine), March 1957, authorising "
+            "force against 'international communism' at a state's request."
+        ),
+        kia=1,
+        deaths=1,
+        wounded=5,
+        losses_text=(
+            "1 killed by a sniper, 5 wounded; a handful of accidental deaths are "
+            "sometimes added"
+        ),
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1958,
+        cost_year_note="No cost figure",
+        sources=[28],
+        combat=1,
+    ),
+
+    conflict(
+        name="Bay of Pigs Invasion",
+        theatre="Playa Giron, Cuba",
+        start=date(1961, 4, 17),
+        end=date(1961, 4, 20),
+        era="Cold War",
+        presidents="Kennedy",
+        conflict_type="Offensive",
+        reason=(
+            "Overthrow Fidel Castro with a CIA-trained brigade of Cuban exiles, "
+            "without visible US involvement."
+        ),
+        summary=(
+            "Brigade 2506, 1,400 exiles trained in Guatemala, landed and was destroyed "
+            "in three days when the expected uprising did not come and Kennedy "
+            "withheld US air cover. Four Alabama Air National Guard pilots flying for "
+            "the CIA were killed. Castro ransomed the prisoners for $53m in food and "
+            "medicine; the fiasco pushed him toward Moscow and set up the missile "
+            "crisis."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note=(
+            "A covert CIA operation approved by Eisenhower and Kennedy; Congress was "
+            "not informed."
+        ),
+        kia=4,
+        deaths=4,
+        wounded=0,
+        losses_text="4 US airmen killed; the brigade lost 118 dead and 1,200 captured",
+        cost_m=46,
+        cost_text="About $46m then-year (CIA operational budget)",
+        cost_year=1961,
+        cost_year_note="Year of the operation",
+        sources=[23],
+        flag="†",
+    ),
+
+    conflict(
+        name="Cuban Missile Crisis",
+        theatre="Naval quarantine of Cuba",
+        start=date(1962, 10, 22),
+        end=date(1962, 11, 20),
+        era="Cold War",
+        presidents="Kennedy",
+        conflict_type="Defensive",
+        reason=(
+            "Force the removal of Soviet nuclear missiles from Cuba by a naval "
+            "'quarantine' short of a declared blockade."
+        ),
+        summary=(
+            "The closest the world has come to nuclear war. Kennedy rejected an air "
+            "strike for a quarantine line 500 miles out; Soviet ships turned back. A "
+            "U-2 was shot down over Cuba on 27 October and its pilot killed. "
+            "Khrushchev withdrew the missiles in exchange for a no-invasion pledge and "
+            "the secret removal of US missiles from Turkey. Strategic Air Command went "
+            "to DEFCON 2 for the only time."
+        ),
+        auth_level=3,
+        authority="Congress",
+        auth_note=(
+            "Joint Resolution on Cuba, 3 October 1962 (86-1, 384-7), authorising force "
+            "to stop Cuban aggression and prevent an offensive Soviet capability; the "
+            "quarantine was also framed under the OAS Rio Treaty."
+        ),
+        kia=1,
+        deaths=1,
+        wounded=0,
+        losses_text=(
+            "Major Rudolf Anderson, killed when his U-2 was shot down; several aircrew "
+            "died in accidents during the alert"
+        ),
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1962,
+        cost_year_note="No cost figure",
+        sources=[28],
+        combat=0,
+    ),
+
+    conflict(
+        name="Vietnam War",
+        theatre="South Vietnam, with air war over North Vietnam, Laos and Cambodia",
+        start=date(1955, 11, 1),
+        end=date(1975, 4, 30),
+        era="Cold War",
+        presidents="Eisenhower, Kennedy, L. Johnson, Nixon, Ford",
+        conflict_type="Defensive",
+        reason=(
+            "Stated: defend South Vietnam against communist insurgency and North "
+            "Vietnamese invasion, and hold the line of containment in Southeast Asia."
+        ),
+        summary=(
+            "Advisers from 1955 became half a million troops by 1968. The Tonkin Gulf "
+            "Resolution, passed on a disputed account of an attack, was the only "
+            "authorisation. The Tet Offensive broke domestic support; Nixon withdrew "
+            "while widening the war into Cambodia and Laos; the Paris accords ended US "
+            "combat in January 1973 and Saigon fell in April 1975. Congress passed the "
+            "War Powers Resolution over Nixon's veto in response."
+        ),
+        auth_level=3,
+        authority="Congress",
+        auth_note=(
+            "Gulf of Tonkin Resolution, August 1964 (416-0, 88-2), authorising 'all "
+            "necessary measures'. Repealed in January 1971; the war continued for two "
+            "more years on Article II and appropriations."
+        ),
+        kia=47_434,
+        deaths=58_220,
+        wounded=153_303,
+        losses_text=(
+            "47,434 battle deaths; 10,786 other deaths in theatre; 153,303 wounded "
+            "requiring hospital care (a further 150,341 did not). Counted 1 November "
+            "1955 to 15 May 1975"
+        ),
+        cost_m=111_000,
+        cost_text="$111,000m then-year (CRS; DoD incremental cost)",
+        cost_year=1968,
+        cost_year_note="Peak year of war spending",
+        sources=[1, 2, 3],
+        combat_start=date(1964, 8, 5),
+        combat_end=date(1973, 1, 27),
+    ),
+
+    conflict(
+        name="Dominican Republic Intervention",
+        theatre="Santo Domingo",
+        start=date(1965, 4, 28),
+        end=date(1966, 9, 21),
+        era="Cold War",
+        presidents="L. Johnson",
+        conflict_type="Offensive",
+        reason=(
+            "Stated: protect American lives during a civil war. Johnson's real "
+            "concern, stated within days, was to prevent 'another Cuba'."
+        ),
+        summary=(
+            "Twenty-two thousand US troops landed to stop a revolt seeking to restore "
+            "the elected president Juan Bosch, whom the military had deposed. The OAS "
+            "was persuaded afterward to send a token inter-American force. Elections "
+            "in 1966 installed Joaquin Balaguer, who ruled for most of the next three "
+            "decades. Senator Fulbright's hearings on the episode began his break with "
+            "Johnson over Vietnam."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note=(
+            "No congressional authorisation; the OAS endorsed the force a week after "
+            "the landing."
+        ),
+        kia=27,
+        deaths=44,
+        wounded=172,
+        losses_text="27 killed in action, 44 dead from all causes, 172 wounded",
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1965,
+        cost_year_note="No cost figure",
+        sources=[28],
+        combat=30,
+        flag="†",
+    ),
+
+    conflict(
+        name="Korean DMZ Conflict",
+        theatre="Demilitarised Zone, Korea",
+        start=date(1966, 10, 5),
+        end=date(1969, 12, 3),
+        era="Cold War",
+        presidents="L. Johnson, Nixon",
+        conflict_type="Defensive",
+        reason=(
+            "Repel North Korean infiltration and ambushes along the DMZ, a campaign "
+            "Pyongyang timed to the US commitment in Vietnam."
+        ),
+        summary=(
+            "Three years of ambushes, raids and firefights along the armistice line, "
+            "including the North Korean commando raid on the Blue House in Seoul and "
+            "the seizure of the USS Pueblo in 1968, whose crew was held for eleven "
+            "months. It is sometimes called the Second Korean War. The Pueblo has "
+            "never been returned."
+        ),
+        auth_level=1,
+        authority="Standing law",
+        auth_note=(
+            "US forces served under the UN Command established in 1950; no separate "
+            "authorisation."
+        ),
+        kia=43,
+        deaths=43,
+        wounded=111,
+        losses_text=(
+            "43 US soldiers killed, 111 wounded; the 82 Pueblo crew were held as "
+            "prisoners"
+        ),
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1968,
+        cost_year_note="No cost figure",
+        sources=[28],
+        combat=100,
+        flag="†",
+    ),
+
+    conflict(
+        name="Cambodian Campaign",
+        theatre="Eastern Cambodia",
+        start=date(1970, 4, 29),
+        end=date(1970, 7, 22),
+        era="Cold War",
+        presidents="Nixon",
+        conflict_type="Offensive",
+        reason=(
+            "Destroy North Vietnamese and Viet Cong sanctuaries and supply bases "
+            "across the Cambodian border."
+        ),
+        summary=(
+            "US and South Vietnamese forces crossed into Cambodia to attack base areas "
+            "the secret bombing had failed to eliminate. Large stocks of supplies were "
+            "captured but the sanctuaries were not destroyed. The invasion set off the "
+            "largest protests of the war; National Guardsmen killed four students at "
+            "Kent State. Congress responded with the Cooper-Church amendment cutting "
+            "off funds for ground troops in Cambodia."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note=(
+            "Ordered by Nixon under Article II without notice to Congress, which then "
+            "legislated to bar future ground operations. Included in the Vietnam "
+            "totals; shown separately because of its distinct authorisation history."
+        ),
+        kia=338,
+        deaths=338,
+        wounded=1525,
+        losses_text="338 US killed, 1,525 wounded (included in the Vietnam War totals)",
+        cost_m=None,
+        cost_text="Within the Vietnam War figure",
+        cost_year=1970,
+        cost_year_note="No separate cost",
+        sources=[22],
+    ),
+
+    conflict(
+        name="Mayaguez Incident",
+        theatre="Koh Tang island, Cambodia",
+        start=date(1975, 5, 12),
+        end=date(1975, 5, 15),
+        era="Cold War",
+        presidents="Ford",
+        conflict_type="Other",
+        reason=(
+            "Recover the container ship SS Mayaguez and its crew, seized by the Khmer "
+            "Rouge in international waters two weeks after the fall of Saigon."
+        ),
+        summary=(
+            "Marines assaulted Koh Tang island, where the crew was thought to be, and "
+            "met heavy fire; three helicopters were shot down. The crew had already "
+            "been released by boat and was recovered by a destroyer while the battle "
+            "continued. Three Marines were left behind alive on the island and later "
+            "executed. The last names on the Vietnam Veterans Memorial are theirs."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note=(
+            "Ordered by Ford under Article II; Congress was notified, not consulted, "
+            "under the new War Powers Resolution."
+        ),
+        kia=18,
+        deaths=41,
+        wounded=50,
+        losses_text=(
+            "15 killed in action and 3 missing, presumed executed; 41 dead in all "
+            "including 23 airmen killed in a helicopter crash in Thailand en route; 50 "
+            "wounded"
+        ),
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1975,
+        cost_year_note="No cost figure",
+        sources=[21],
+        combat=1,
+    ),
+
     conflict(
         name="Eagle Claw",
         theatre="Iran hostage rescue",
