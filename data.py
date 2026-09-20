@@ -25,6 +25,19 @@ CPI_BASE_LABEL = "August 2026"
 # CPI-U by year, 1982-84 = 100, for every year a cost is dated to:
 #   1913 on     BLS annual averages; 2026 is the mean of January to August.
 CPI = {
+    # Imperial and world wars
+    1913: 9.9,
+    1914: 10.0,
+    1916: 10.9,
+    1917: 12.8,
+    1918: 15.1,
+    1919: 17.3,
+    1920: 20.0,
+    1930: 16.7,
+    1941: 14.7,
+    1943: 17.3,
+    1944: 17.6,
+    1945: 18.0,
     # Cold War
     1950: 24.1,
     1952: 26.5,
@@ -251,6 +264,335 @@ def conflict(name, theatre, start, end, era, presidents, conflict_type, reason, 
 
 
 ROWS = [
+    # ---- Imperial and world wars, 1898-1945 ---------------------------------
+    conflict(
+        name="Occupation of Nicaragua",
+        theatre="Nicaragua; Sandino insurgency 1927-33",
+        start=date(1912, 8, 4),
+        end=date(1933, 1, 2),
+        era="Imperial and World Wars",
+        presidents="Taft, Wilson, Harding, Coolidge, Hoover",
+        conflict_type="Offensive",
+        reason=(
+            "Stated: protect American lives and property and guarantee a US-backed "
+            "government. In practice, secure the canal route and American financial "
+            "control."
+        ),
+        summary=(
+            "Marines landed in 1912 to save the Conservative government from a revolt "
+            "and stayed as a legation guard until 1925; they returned in 1926 to "
+            "another civil war. Augusto Sandino's guerrillas fought them from 1927 "
+            "until the last Marines left in January 1933, having trained the National "
+            "Guard that Anastasio Somoza then used to seize power and murder Sandino."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note="No congressional authorisation at any point in 21 years.",
+        kia=47,
+        deaths=136,
+        wounded=66,
+        losses_text=(
+            "1926-33 campaign: 136 Marines died, 47 from hostile action (32 killed in "
+            "action, 15 died of wounds); 66 wounded. The 1912 landing added a few more"
+        ),
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1930,
+        cost_year_note="No cost figure",
+        sources=[15, 18],
+        combat_start=date(1927, 5, 1),
+        combat_end=date(1933, 1, 2),
+        flag="†",
+    ),
+
+    conflict(
+        name="Occupation of Veracruz",
+        theatre="Veracruz, Mexico",
+        start=date(1914, 4, 21),
+        end=date(1914, 11, 23),
+        era="Imperial and World Wars",
+        presidents="Wilson",
+        conflict_type="Offensive",
+        reason=(
+            "Stated: obtain satisfaction for the arrest of US sailors at Tampico. In "
+            "practice, stop a German arms shipment to Huerta and undermine his "
+            "government."
+        ),
+        summary=(
+            "Sailors and Marines seized the customs house and city in two days of "
+            "street fighting. Wilson had asked Congress for approval the day before, "
+            "and the House and Senate voted it the day after the landing. The "
+            "occupation lasted seven months and helped topple Huerta, but it united "
+            "Mexican factions against the US and was remembered there as an invasion."
+        ),
+        auth_level=3,
+        authority="Congress",
+        auth_note=(
+            "Wilson requested authority on 20 April; the House approved 337-37 on the "
+            "20th and the Senate 72-13 on the 22nd, after the landing had begun."
+        ),
+        kia=22,
+        deaths=22,
+        wounded=70,
+        losses_text="22 killed, 70 wounded",
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1914,
+        cost_year_note="No cost figure",
+        sources=[13],
+        combat=2,
+    ),
+
+    conflict(
+        name="Occupation of Haiti",
+        theatre="Haiti; Caco wars 1915 and 1918-20",
+        start=date(1915, 7, 28),
+        end=date(1934, 8, 1),
+        era="Imperial and World Wars",
+        presidents="Wilson, Harding, Coolidge, Hoover, F. Roosevelt",
+        conflict_type="Offensive",
+        reason=(
+            "Stated: restore order after the mob killing of the president and protect "
+            "foreign lives. In practice, secure US financial control and pre-empt "
+            "German influence."
+        ),
+        summary=(
+            "Marines landed the day after President Sam was dragged from the French "
+            "legation and killed. They ran the country for 19 years through a client "
+            "government, rewrote the constitution to permit foreign land ownership, "
+            "and suppressed two Caco peasant rebellions, killing several thousand "
+            "Haitians. Forced road-building labour under the corvee provoked the "
+            "second rising. The occupation ended under Roosevelt's Good Neighbour "
+            "policy."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note=(
+            "No congressional authorisation; a 1916 treaty ratified by the Senate "
+            "regularised the financial control after the fact."
+        ),
+        kia=38,
+        deaths=146,
+        wounded=None,
+        losses_text=(
+            "146 Marines and sailors died over 19 years, roughly 38 from hostile "
+            "action (estimate); wounded not reliably tallied"
+        ),
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1920,
+        cost_year_note="No cost figure",
+        sources=[27, 18],
+        combat=720,
+        flag="†",
+    ),
+
+    conflict(
+        name="Occupation of the Dominican Republic",
+        theatre="Dominican Republic",
+        start=date(1916, 5, 15),
+        end=date(1924, 9, 18),
+        era="Imperial and World Wars",
+        presidents="Wilson, Harding, Coolidge",
+        conflict_type="Offensive",
+        reason=(
+            "Stated: end political chaos and enforce the customs receivership securing "
+            "Dominican debt. In practice, install a compliant government."
+        ),
+        summary=(
+            "When the Dominican government refused US demands, Marines occupied the "
+            "country and the Navy ran it directly under a military governor. A "
+            "guerrilla resistance in the east was suppressed over several years. The "
+            "Marines built roads and a National Guard, which Rafael Trujillo commanded "
+            "and then used to seize power in 1930."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note="No congressional authorisation.",
+        kia=None,
+        deaths=144,
+        wounded=None,
+        losses_text=(
+            "About 144 Marines died from all causes; hostile deaths and wounded not "
+            "reliably separated in the surviving returns"
+        ),
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1920,
+        cost_year_note="No cost figure",
+        sources=[28, 18],
+        combat=180,
+        flag="†",
+    ),
+
+    conflict(
+        name="Pancho Villa Expedition",
+        theatre="Chihuahua, Mexico",
+        start=date(1916, 3, 14),
+        end=date(1917, 2, 7),
+        era="Imperial and World Wars",
+        presidents="Wilson",
+        conflict_type="Defensive",
+        reason=(
+            "Capture or destroy Pancho Villa's force after his raid on Columbus, New "
+            "Mexico killed 18 Americans on US soil."
+        ),
+        summary=(
+            "Pershing led 10,000 troops 400 miles into Mexico without catching Villa. "
+            "Two clashes with Mexican federal troops at Parral and Carrizal nearly "
+            "caused a war with the Carranza government; Wilson mobilised 100,000 "
+            "National Guardsmen to the border. The expedition withdrew as the US "
+            "prepared to enter the European war. It was the Army's first use of "
+            "aircraft and motor transport in the field."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note=(
+            "Ordered by Wilson with Carranza's grudging acquiescence; no congressional "
+            "action. The National Guard call-up used the 1916 National Defense Act."
+        ),
+        kia=68,
+        deaths=65,
+        wounded=67,
+        losses_text=(
+            "65 killed, 67 wounded, 3 missing and 24 captured across the raid and "
+            "expedition"
+        ),
+        cost_m=None,
+        cost_text=(
+            "Not separately accounted; contemporary estimates ran to $130m with the "
+            "border mobilisation"
+        ),
+        cost_year=1916,
+        cost_year_note="No cost figure",
+        sources=[26],
+        combat=30,
+        flag="†",
+    ),
+
+    conflict(
+        name="World War I",
+        theatre="Western Front, France; the Atlantic",
+        start=date(1917, 4, 6),
+        end=date(1918, 11, 11),
+        era="Imperial and World Wars",
+        presidents="Wilson",
+        conflict_type="Defensive",
+        reason=(
+            "Stated: Germany's resumption of unrestricted submarine warfare against "
+            "American ships and the Zimmermann telegram inviting Mexico to attack the "
+            "US. Wilson framed it as making the world safe for democracy."
+        ),
+        summary=(
+            "The US entered in April 1917 after three years of neutrality. Two million "
+            "men of the American Expeditionary Forces reached France; they held at "
+            "Belleau Wood and Chateau-Thierry, then fought the Meuse-Argonne "
+            "offensive, the largest battle in US history, in the war's final seven "
+            "weeks. The 1918 influenza killed almost as many soldiers as the Germans "
+            "did. The Senate refused the treaty Wilson brought home."
+        ),
+        auth_level=5,
+        authority="Declared war",
+        auth_note=(
+            "Congress declared war on Germany on 6 April 1917, 82-6 and 373-50, and on "
+            "Austria-Hungary in December."
+        ),
+        kia=53_402,
+        deaths=116_516,
+        wounded=204_002,
+        losses_text=(
+            "53,402 battle deaths; 63,114 other deaths, mostly influenza; 204,002 "
+            "wounded"
+        ),
+        cost_m=20_000,
+        cost_text="$20,000m then-year (CRS; spending through 1921)",
+        cost_year=1919,
+        cost_year_note="Peak year of war spending",
+        sources=[1, 2],
+    ),
+
+    conflict(
+        name="Intervention in the Russian Civil War",
+        theatre="Archangel and Murmansk; Siberia",
+        start=date(1918, 9, 4),
+        end=date(1920, 4, 1),
+        era="Imperial and World Wars",
+        presidents="Wilson",
+        conflict_type="Other",
+        reason=(
+            "Stated: guard Allied war supplies at Archangel, rescue the Czech Legion "
+            "and keep the Trans-Siberian Railway open. In practice the North Russia "
+            "force fought the Bolsheviks under British command."
+        ),
+        summary=(
+            "The 'Polar Bear' regiment from Michigan spent a winter fighting the Red "
+            "Army 200 miles south of Archangel, months after the Armistice ended the "
+            "war they had been sent to support, and near mutiny before withdrawal in "
+            "mid-1919. The Siberian force guarded the railway, skirmished with "
+            "partisans and Cossacks, and left in April 1920. Wilson never explained "
+            "the mission to Congress."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note=(
+            "Ordered by Wilson in an aide-memoire of July 1918; no congressional "
+            "authorisation. Senate resolutions demanding withdrawal failed narrowly."
+        ),
+        kia=200,
+        deaths=424,
+        wounded=355,
+        losses_text=(
+            "North Russia: 109 killed in action, 35 died of wounds, about 30 missing, "
+            "100 other deaths, 305 wounded. Siberia: 189 died from all causes. Roughly "
+            "200 hostile deaths and missing in total (estimate)"
+        ),
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1919,
+        cost_year_note="No cost figure",
+        sources=[14, 18],
+        combat_end=date(1919, 6, 30),
+        flag="†",
+    ),
+
+    conflict(
+        name="World War II",
+        theatre="Europe, the Atlantic, the Pacific and Asia",
+        start=date(1941, 12, 8),
+        end=date(1945, 9, 2),
+        era="Imperial and World Wars",
+        presidents="F. Roosevelt, Truman",
+        conflict_type="Defensive",
+        reason=(
+            "The Japanese attack on Pearl Harbor and the Philippines; Germany and "
+            "Italy declared war on the US three days later."
+        ),
+        summary=(
+            "Sixteen million Americans served. The US fought a two-ocean war, supplied "
+            "the Allies through Lend-Lease, invaded North Africa, Italy and Normandy, "
+            "drove across the Pacific island by island, and ended the war with two "
+            "atomic bombs. It emerged as the strongest power on earth, with a "
+            "permanent military establishment and global commitments it has kept ever "
+            "since. The last war Congress declared."
+        ),
+        auth_level=5,
+        authority="Declared war",
+        auth_note=(
+            "Congress declared war on Japan on 8 December 1941 (82-0, 388-1) and on "
+            "Germany and Italy on 11 December (unanimous). Three further declarations "
+            "followed in 1942."
+        ),
+        kia=291_557,
+        deaths=405_399,
+        wounded=670_846,
+        losses_text="291,557 battle deaths; 113,842 other deaths; 670,846 wounded",
+        cost_m=296_000,
+        cost_text="$296,000m then-year (CRS)",
+        cost_year=1944,
+        cost_year_note="Outlay-weighted: spending peaked FY1944-45",
+        sources=[1, 2],
+    ),
+
     # ---- Cold War, 1946-1989 ------------------------------------------------
     conflict(
         name="Korean War",
