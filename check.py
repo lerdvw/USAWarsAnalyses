@@ -46,9 +46,23 @@ def scales():
     print(f"authorization   {', '.join(counts)}")
 
 
+def sources():
+    """Sources are numbered 1..n, linked securely, and every citation exists."""
+    numbers = [number for number, label, url in data.REFS]
+    check(numbers == list(range(1, len(numbers) + 1)), "REFS is not numbered 1..n")
+    for number, label, url in data.REFS:
+        check(url is None or url.startswith("https://"), f"source {number} is not an https link")
+    for row in ROWS:
+        check(row["sources"] and all(1 <= n <= len(numbers) for n in row["sources"]),
+              f"{row['name']}: cites a source that is not in REFS")
+    cited = {n for row in ROWS for n in row["sources"]}
+    print(f"sources         {len(numbers)} listed, {len(cited)} cited")
+
+
 if __name__ == "__main__":
     rows()
     scales()
+    sources()
     for message in FAILED:
         print("FAIL", message)
     print("\nall checks pass" if not FAILED else f"\n{len(FAILED)} check(s) failed")
