@@ -27,6 +27,13 @@ CPI_BASE_LABEL = "August 2026"
 #   1800-1912   Federal Reserve Bank of Minneapolis estimates (1967 = 100),
 #               rebased here by multiplying by 9.9 / 29.7.
 CPI = {
+    # Expansion
+    1847: 9.3,
+    1858: 8.7,
+    1862: 10.0,
+    1863: 12.3,
+    1864: 15.7,
+    1865: 15.3,
     # Imperial and world wars
     1898: 8.3,
     1900: 8.3,
@@ -275,6 +282,138 @@ def conflict(name, theatre, start, end, era, presidents, conflict_type, reason, 
 
 
 ROWS = [
+    # ---- Expansion, 1816-1897 -----------------------------------------------
+    conflict(
+        name="Mexican-American War",
+        theatre="Texas, northern Mexico, California and Mexico City",
+        start=date(1846, 4, 25),
+        end=date(1848, 2, 2),
+        era="Expansion",
+        presidents="Polk",
+        conflict_type="Offensive",
+        reason=(
+            "Stated: Mexican forces had attacked US troops on American soil. The "
+            "disputed strip was claimed by both, and Polk had already resolved on "
+            "acquiring California and New Mexico."
+        ),
+        summary=(
+            "Polk sent Taylor's army into the disputed zone, and when Mexican cavalry "
+            "attacked a patrol, told Congress that American blood had been shed on "
+            "American soil. Taylor won in the north, Scott landed at Veracruz and took "
+            "Mexico City, and the Treaty of Guadalupe Hidalgo transferred half of "
+            "Mexico's territory to the US for $15m. Congressman Lincoln's 'spot "
+            "resolutions' challenged Polk's account."
+        ),
+        auth_level=5,
+        authority="Declared war",
+        auth_note=(
+            "Congress declared war on 13 May 1846, 174-14 and 40-2, after a two-hour "
+            "debate; the declaration was bundled with the supply bill so that voting "
+            "no meant refusing to supply troops already under fire."
+        ),
+        kia=1733,
+        deaths=13_283,
+        wounded=4152,
+        losses_text=(
+            "1,733 battle deaths; 11,550 other deaths, mostly disease; 4,152 wounded"
+        ),
+        cost_m=71,
+        cost_text="$71m then-year (CRS)",
+        cost_year=1847,
+        cost_year_note="Peak year of war spending",
+        sources=[1, 2],
+        combat_end=date(1847, 9, 14),
+    ),
+
+    conflict(
+        name="American Civil War",
+        theatre="The Confederate States",
+        start=date(1861, 4, 12),
+        end=date(1865, 5, 26),
+        era="Expansion",
+        presidents="Lincoln, A. Johnson",
+        conflict_type="Defensive",
+        reason=(
+            "Suppress the secession of eleven Southern states and preserve the Union; "
+            "from 1863 also to end slavery."
+        ),
+        summary=(
+            "The deadliest war in American history. After Fort Sumter, Lincoln called "
+            "up the militia, blockaded Southern ports and suspended habeas corpus on "
+            "his own authority, and Congress ratified it all in July. Four years of "
+            "war ended with Lee's surrender at Appomattox; the last Confederate army "
+            "surrendered in May. Modern demographic estimates put total deaths at "
+            "620,000 to 750,000, above the official returns used here."
+        ),
+        auth_level=3,
+        authority="Congress",
+        auth_note=(
+            "Lincoln acted under Article II for three months; Congress retroactively "
+            "approved his acts in August 1861, and the Supreme Court upheld the "
+            "blockade in the Prize Cases (1863). There was never a declaration of war, "
+            "since the Union did not recognise the Confederacy as a state."
+        ),
+        kia=214_938,
+        deaths=498_332,
+        wounded=281_881,
+        losses_text=(
+            "Union: 140,414 battle deaths, 224,097 other deaths, 281,881 wounded. "
+            "Confederate: 74,524 battle deaths and 59,297 other deaths on incomplete "
+            "returns; wounded unknown. Both sides were Americans and both are counted"
+        ),
+        cost_m=3183,
+        cost_text=(
+            "$3,183m then-year for the Union (CRS). The Confederacy spent a further "
+            "~$1,000m, not borne by US taxpayers and not counted"
+        ),
+        cost_year=1864,
+        cost_year_note="Outlay-weighted: Union spending peaked FY1864-65",
+        sources=[1, 2, 3],
+        combat_end=date(1865, 4, 9),
+        flag="†",
+    ),
+
+    conflict(
+        name="Dakota War of 1862",
+        theatre="Minnesota",
+        start=date(1862, 8, 17),
+        end=date(1862, 12, 26),
+        era="Expansion",
+        presidents="Lincoln",
+        conflict_type="Defensive",
+        reason=(
+            "Suppress the Dakota uprising, which began after annuity payments the "
+            "tribe depended on were withheld and traders refused credit during a "
+            "famine."
+        ),
+        summary=(
+            "Dakota warriors attacked settlements along the Minnesota River, killing "
+            "several hundred settlers. State forces under Sibley defeated them at Wood "
+            "Lake. A military commission sentenced 303 Dakota to death in trials "
+            "lasting minutes; Lincoln reviewed the cases and commuted all but 38, who "
+            "were hanged at Mankato - still the largest mass execution in US history."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note=(
+            "State militia and volunteers under the governor, with War Department "
+            "support; no congressional action."
+        ),
+        kia=113,
+        deaths=113,
+        wounded=None,
+        losses_text=(
+            "77 soldiers and 36 militia and armed civilians killed; wounded not "
+            "reliably tallied. Several hundred settlers were also killed"
+        ),
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1862,
+        cost_year_note="No cost figure",
+        sources=[29],
+        flag="†",
+    ),
+
     # ---- Imperial and world wars, 1898-1945 ---------------------------------
     conflict(
         name="Spanish-American War",
