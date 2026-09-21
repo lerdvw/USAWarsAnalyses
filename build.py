@@ -40,6 +40,27 @@ MUTED = "FF64707C"    # notes and captions
 INTEGER = "#,##0"
 MONEY = "$#,##0"
 
+# Authorization levels, 5 (declared war) to 0 (executive only): green
+# through blue and amber to red. Fill, then text colour.
+LEVEL_FILL = {5: "FFBFDCCB", 4: "FFCFE6D8", 3: "FFDCECE1", 2: "FFD9E4F2", 1: "FFF0E6CD", 0: "FFF3DCD9"}
+LEVEL_FONT = {5: "FF0F4530", 4: "FF14503A", 3: "FF1F5C43", 2: "FF1E4478", 1: "FF6A5314", 0: "FF7E2F27"}
+
+# One hue per conflict type. Fill, then text colour.
+TYPE_FILL = {
+    "Defensive": "FFDCE6EF",
+    "Offensive": "FFF2DEDA",
+    "Humanitarian": "FFDEEBE0",
+    "Freedom of passage": "FFDAE9E8",
+    "Other": "FFE8E5E0",
+}
+TYPE_FONT = {
+    "Defensive": "FF1E4478",
+    "Offensive": "FF7E2F27",
+    "Humanitarian": "FF1F5C43",
+    "Freedom of passage": "FF1B5450",
+    "Other": "FF55504A",
+}
+
 
 def font(size=9, color=INK, bold=False, italic=False, underline=None):
     """Arial in the given size and colour; 9pt body text by default."""
@@ -77,6 +98,16 @@ def add_table(ws, name, first_row, last_row, columns, style="TableStyleLight1"):
     table.tableStyleInfo = TableStyleInfo(name=style, showRowStripes=True, showColumnStripes=False,
                                           showFirstColumn=False, showLastColumn=False)
     ws.add_table(table)
+
+
+def colour_chip(cell, kind, key):
+    """Colour a cell as an authorization level (kind "level") or a conflict type."""
+    if kind == "level":
+        cell.fill = PatternFill("solid", fgColor=LEVEL_FILL[key])
+        cell.font = font(bold=True, color=LEVEL_FONT[key])
+    else:
+        cell.fill = PatternFill("solid", fgColor=TYPE_FILL[key])
+        cell.font = font(bold=True, color=TYPE_FONT[key])
 
 
 # ===========================================================================
@@ -164,6 +195,8 @@ def write_figures_table(ws):
         values = figure_values(r)
         for n, column in enumerate(FIGURE_COLUMNS, 1):
             style_cell(ws.cell(row=row, column=n, value=values[column.key]), column.kind)
+        colour_chip(ws.cell(row=row, column=position("type")), "type", r["conflict_type"])
+        colour_chip(ws.cell(row=row, column=position("authorization")), "level", r["auth_level"])
         ws.row_dimensions[row].height = 40
     add_table(ws, "Figures", HEADER_ROW, LAST_ROW, len(FIGURE_COLUMNS))
     for n, column in enumerate(FIGURE_COLUMNS, 1):
