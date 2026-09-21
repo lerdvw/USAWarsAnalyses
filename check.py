@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
 """
-Sanity checks for the dataset.
+Sanity checks for the dataset and everything built from it.
 
-    python3 check.py
+    python3 build.py && python3 check.py
 
 Prints a summary, then every failed check; exits with status 1 if any failed.
+Outputs not built yet are skipped.
 """
+
+import os
 
 import data
 from data import ROWS
 
+HERE = os.path.dirname(os.path.abspath(__file__))
 FAILED = []
 
 
@@ -89,6 +93,31 @@ def crs():
             print(f"  CRS / CPI {ratio:5.2f}  {row['name']}")
 
 
+# ---------------------------------------------------------------------------
+# What build.py makes
+# ---------------------------------------------------------------------------
+
+def figures():
+    """The Figures workbook holds every conflict in its own row, in order."""
+    path = os.path.join(HERE, "US-Conflicts-1775-2026-Figures.xlsx")
+    if not os.path.exists(path):
+        print("figures.xlsx    not built; run build.py first")
+        return
+    from openpyxl import load_workbook
+    from openpyxl.utils import get_column_letter
+    wb = load_workbook(path)
+    ws = wb["Figures"]
+    first, last = 6, 5 + len(ROWS)
+    headers = [cell.value for cell in ws[5] if cell.value]
+    column = {header: get_column_letter(n) for n, header in enumerate(headers, 1)}
+    check(ws.tables["Figures"].ref == f"A5:{get_column_letter(len(headers))}{last}",
+          "the Figures table does not cover every row and column")
+    for row in ROWS:
+        name = ws[f"{column['Conflict']}{5 + row['idx']}"].value.replace(" ‡", "")
+        check(name == row["name"], f"Figures row {5 + row['idx']} holds {name}, not {row['name']}")
+    print(f"figures.xlsx    {len(wb.sheetnames)} sheets, {last - first + 1} rows")
+
+
 if __name__ == "__main__":
     rows()
     scales()
@@ -96,6 +125,7 @@ if __name__ == "__main__":
     totals()
     inflation()
     crs()
+    figures()
     for message in FAILED:
         print("FAIL", message)
     print("\nall checks pass" if not FAILED else f"\n{len(FAILED)} check(s) failed")
