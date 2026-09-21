@@ -80,12 +80,22 @@ def inflation():
     print(f"cost, {data.CPI_BASE_LABEL} ${total('cost_adj'):,.0f}m")
 
 
+def crs():
+    """Compare CRS's constant-dollar figures with the CPI method, war by war."""
+    check(set(data.CRS_FY2011) <= {row["name"] for row in ROWS}, "CRS_FY2011 names a conflict not in ROWS")
+    for row in ROWS:
+        if row["crs_2011"] and row["cost_adj"]:
+            ratio = row["crs_2011"] * data.CPI_BASE / 224.939 / row["cost_adj"]
+            print(f"  CRS / CPI {ratio:5.2f}  {row['name']}")
+
+
 if __name__ == "__main__":
     rows()
     scales()
     sources()
     totals()
     inflation()
+    crs()
     for message in FAILED:
         print("FAIL", message)
     print("\nall checks pass" if not FAILED else f"\n{len(FAILED)} check(s) failed")

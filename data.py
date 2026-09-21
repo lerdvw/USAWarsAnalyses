@@ -136,6 +136,22 @@ def cpi_basis(year):
     return CPI_BASIS["bls"]
 
 
+# CRS's own estimates in constant FY2011 dollars (RS22926, Daggett 2010), to
+# cross-check the CPI method; build.py uplifts them to CPI_BASE.
+CRS_FY2011 = {
+    "American Revolutionary War": 2407,
+    "War of 1812": 1553,
+    "Mexican-American War": 2376,
+    "American Civil War": 59_631,
+    "Spanish-American War": 9034,
+    "World War I": 334_000,
+    "World War II": 4_104_000,
+    "Korean War": 341_000,
+    "Vietnam War": 738_000,
+    "Desert Shield / Desert Storm": 102_000,
+}
+
+
 # ---------------------------------------------------------------------------
 # Scales
 # ---------------------------------------------------------------------------
@@ -3213,6 +3229,7 @@ for number, row in enumerate(ROWS, 1):
     row["cpi"] = CPI[row["cost_year"]]
     row["factor"] = CPI_BASE / row["cpi"]
     row["cost_adj"] = None if row["cost_m"] is None else row["cost_m"] * row["factor"]
+    row["crs_2011"] = CRS_FY2011.get(row["name"])
 
 # All 75 conflicts, none lost or doubled.
 assert len(ROWS) == 75, len(ROWS)
