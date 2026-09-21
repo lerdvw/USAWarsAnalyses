@@ -244,7 +244,8 @@ REFS = [
     (29, "Wikipedia, Dakota War of 1862", "https://en.wikipedia.org/wiki/Dakota_War_of_1862"),
     (30, "Wikipedia, Red Cloud's War", "https://en.wikipedia.org/wiki/Red_Cloud's_War"),
     # 31-45: 1980-2026
-    (31, "DoD, Conduct of the Persian Gulf War: Final Report to Congress (1992)", None),
+    (31, "DoD, Conduct of the Persian Gulf War: Final Report to Congress (1992); net cost per CRS RS22926 n.b",
+         None),
     (32, "CSIS, The War May Be Ending. What Did Epic Fury Cost?",
          "https://www.csis.org/analysis/war-may-be-ending-what-did-epic-fury-cost"),
     (33, "Military Times, 13 US troops killed, 346 wounded in Operation Epic Fury",
@@ -2296,8 +2297,11 @@ ROWS = [
         deaths=383,
         wounded=467,
         losses_text="148 battle deaths, 235 other deaths in theatre, 467 wounded",
-        cost_m=7000,
-        cost_text="About $7bn net after allied contributions (estimate)",
+        cost_m=4700,
+        cost_text=(
+            "$61bn gross; net cost to US taxpayers $4.7bn after allied contributions "
+            "(DoD Annual Report FY1994, via CRS)"
+        ),
         cost_year=1991,
         cost_year_note="Combat and most outlays in 1991",
         sources=[1, 2, 31],
