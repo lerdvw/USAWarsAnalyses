@@ -16,7 +16,7 @@ from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.table import Table, TableStyleInfo
 
-from data import CPI_BASE_LABEL, ERAS, LV_LABEL, ROWS, TYPES
+from data import CPI_BASE, CPI_BASE_LABEL, ERAS, LV_LABEL, ROWS, TYPES, cpi_basis
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 FIGURES_FILE = "US-Conflicts-1775-2026-Figures.xlsx"
@@ -176,8 +176,9 @@ def style_cell(cell, kind):
         cell.alignment = Alignment(vertical="center")
 
 
-def figure_values(r):
+def figure_values(r, row):
     """One conflict's cells on the Figures sheet, keyed like FIGURE_COLUMNS."""
+    cost = f"{LETTER['cost_m']}{row}"
     return {
         "idx": r["idx"],
         "name": r["name"] + (" ‡" if r["ongoing"] else ""),
@@ -194,7 +195,8 @@ def figure_values(r):
         "kia": r["kia"],
         "casualties": r["casualties"],
         "cost_m": r["cost_m"],
-        "cost_adj": r["cost_adj"],
+        # The then-year cost times this conflict's factor on the deflator sheet.
+        "cost_adj": f'=IF({cost}="","",{cost}*CPI_Deflator!F{row})',
     }
 
 
@@ -205,7 +207,7 @@ def write_figures_table(ws):
     style_header(ws, HEADER_ROW, len(FIGURE_COLUMNS), height=44)
     for r in ROWS:
         row = HEADER_ROW + r["idx"]
-        values = figure_values(r)
+        values = figure_values(r, row)
         for n, column in enumerate(FIGURE_COLUMNS, 1):
             style_cell(ws.cell(row=row, column=n, value=values[column.key]), column.kind)
         colour_chip(ws.cell(row=row, column=position("type")), "type", r["conflict_type"])
@@ -298,6 +300,50 @@ def write_breakdowns(ws):
     return row
 
 
+def write_deflator_sheet(wb):
+    """How every inflation-adjusted cost was produced, one row per conflict."""
+    cs = wb.create_sheet("CPI_Deflator")
+    cs["A1"] = "Inflation deflator - how every adjusted figure was produced"
+    cs["A1"].font = font(size=13, bold=True)
+    cs["A2"] = f"Base index (CPI-U, {CPI_BASE_LABEL}):"
+    cs["A2"].font = font(bold=True)
+    cs["B2"] = CPI_BASE                    # the one input on the sheet: blue on yellow
+    cs["B2"].number_format = "0.000"
+    cs["B2"].font = font(bold=True, color="FF0000FF")
+    cs["B2"].fill = PatternFill("solid", fgColor="FFFFFF00")
+    cs["C2"] = "<- input. Change this cell to restate every adjusted cost against a different base month."
+    cs["C2"].font = font(italic=True, color=MUTED)
+
+    headers = ["#", "Conflict", "Cost-centre year", "Why that year / index basis", "CPI-U index (1982-84=100)",
+               "Factor to base"]
+    for n, header in enumerate(headers, 1):
+        cs.cell(row=4, column=n, value=header)
+    style_header(cs, 4, len(headers), height=40)
+
+    for r in ROWS:
+        row = 4 + r["idx"]
+        cs.cell(row=row, column=1, value=r["idx"])
+        cs.cell(row=row, column=2, value=r["name"])
+        cs.cell(row=row, column=3, value=r["cost_year"]).number_format = "0"
+        cs.cell(row=row, column=4, value=f"{r['cost_year_note']}. Index: {cpi_basis(r['cost_year'])}.")
+        cs.cell(row=row, column=5, value=r["cpi"]).number_format = "0.000"
+        cs.cell(row=row, column=6, value=f"=$B$2/E{row}").number_format = "0.0000"
+        for n in range(1, len(headers) + 1):
+            cell = cs.cell(row=row, column=n)
+            cell.font = font(bold=(n == 2))
+            cell.alignment = Alignment(wrap_text=(n == 4), vertical="top",
+                                       horizontal="left" if n in (2, 4) else "right")
+            if "OUTLAY-WEIGHTED" in r["cost_year_note"] and n in (3, 4):
+                cell.fill = PatternFill("solid", fgColor="FFF0E6CD")
+        cs.row_dimensions[row].height = 30
+
+    add_table(cs, "Deflator", 4, 4 + len(ROWS), len(headers), "TableStyleLight9")
+    for n, width in enumerate([5, 30, 12, 70, 14, 12], 1):
+        cs.column_dimensions[get_column_letter(n)].width = width
+    cs.freeze_panes = "A5"
+    cs.sheet_view.showGridLines = False
+
+
 def build_figures():
     """Write the Figures workbook and return its path."""
     wb = Workbook()
@@ -309,6 +355,7 @@ def build_figures():
     write_figures_table(ws)
     write_totals(ws)
     write_breakdowns(ws)
+    write_deflator_sheet(wb)
     path = os.path.join(HERE, FIGURES_FILE)
     wb.save(path)
     return path
