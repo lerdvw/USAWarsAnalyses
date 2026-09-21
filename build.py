@@ -16,7 +16,7 @@ from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.table import Table, TableStyleInfo
 
-from data import CPI_BASE_LABEL, ROWS
+from data import CPI_BASE_LABEL, ERAS, LV_LABEL, ROWS, TYPES
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 FIGURES_FILE = "US-Conflicts-1775-2026-Figures.xlsx"
@@ -149,6 +149,12 @@ def position(key):
     return KEYS.index(key) + 1
 
 
+def column_range(key):
+    """An absolute reference to one column's conflict rows, e.g. $G$6:$G$80."""
+    letter = LETTER[key]
+    return f"${letter}${FIRST_ROW}:${letter}${LAST_ROW}"
+
+
 def is_numeric(n):
     """Whether Figures column n holds a quantity (the # column does not count)."""
     column = FIGURE_COLUMNS[n - 1]
@@ -249,6 +255,49 @@ def write_totals(ws):
                 cell.alignment = Alignment(horizontal="right")
 
 
+def write_breakdown(ws, top, label, match_key, groups):
+    """One block of counts and sums, a row per group; returns the next free row.
+
+    A group's row counts and sums the conflicts whose match_key cell holds
+    exactly the group's name."""
+    heads = ["Group", "Conflicts", "Combat days", "KIA + MIA", "All casualties",
+             "Cost then-year ($m)", f"Cost {CPI_BASE_LABEL} ($m)", "Share of adj. cost"]
+    ws.cell(row=top, column=2, value=label).font = font(bold=True, color=ACCENT)
+    for k, head in enumerate(heads):
+        cell = ws.cell(row=top + 1, column=2 + k, value=head)
+        cell.font = font(bold=True, color=MUTED)
+        if k:
+            cell.alignment = Alignment(horizontal="right")
+    match = column_range(match_key)
+    for k, group in enumerate(groups):
+        row = top + 2 + k
+        cell = ws.cell(row=row, column=2, value=group)
+        if match_key == "type":
+            colour_chip(cell, "type", group)
+        else:
+            cell.font = font(bold=True)
+        ws.cell(row=row, column=3, value=f"=COUNTIF({match},$B{row})")
+        for n, key in enumerate(("combat_days", "kia", "casualties", "cost_m", "cost_adj"), 4):
+            ws.cell(row=row, column=n, value=f"=SUMIF({match},$B{row},{column_range(key)})")
+        ws.cell(row=row, column=9, value=f'=IFERROR(H{row}/${LETTER["cost_adj"]}${TOTAL_ROW},"")')
+        for n in range(3, 10):
+            cell = ws.cell(row=row, column=n)
+            cell.font = font()
+            cell.alignment = Alignment(horizontal="right")
+            cell.number_format = "0.0%" if n == 9 else (MONEY if n in (7, 8) else INTEGER)
+    return top + 2 + len(groups) + 1
+
+
+def write_breakdowns(ws):
+    """Totals by conflict type, era and authorization; returns the next free row."""
+    row = TOTAL_ROW + 6
+    row = write_breakdown(ws, row, "BY CONFLICT TYPE", "type", TYPES)
+    row = write_breakdown(ws, row, "BY ERA", "era", ERAS)
+    row = write_breakdown(ws, row, "BY AUTHORIZATION", "authorization",
+                          [LV_LABEL[level] for level in (5, 4, 3, 2, 1, 0)])
+    return row
+
+
 def build_figures():
     """Write the Figures workbook and return its path."""
     wb = Workbook()
@@ -259,6 +308,7 @@ def build_figures():
                 len(FIGURE_COLUMNS))
     write_figures_table(ws)
     write_totals(ws)
+    write_breakdowns(ws)
     path = os.path.join(HERE, FIGURES_FILE)
     wb.save(path)
     return path
