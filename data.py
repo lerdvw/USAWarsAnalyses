@@ -26,7 +26,18 @@ CPI_BASE_LABEL = "August 2026"
 #   1913 on     BLS annual averages; 2026 is the mean of January to August.
 #   1800-1912   Federal Reserve Bank of Minneapolis estimates (1967 = 100),
 #               rebased here by multiplying by 9.9 / 29.7.
+#   1780        implied from CRS's own constant-dollar conversion of the
+#               Revolutionary War's cost (RS22926); no CPI series goes back
+#               that far.
 CPI = {
+    # Founding
+    1780: 9.44,
+    1800: 17.0,
+    1802: 14.3,
+    1805: 15.0,
+    1813: 19.3,
+    1814: 21.0,
+    1815: 18.3,
     # Expansion
     1818: 17.0,
     1832: 10.0,
@@ -101,6 +112,10 @@ CPI = {
 
 # Where each year's index comes from, in words for the deflator sheet.
 CPI_BASIS = {
+    1780: (
+        "Implied from CRS RS22926's constant-dollar conversion (x23.8 to FY2011); no "
+        "CPI series exists for the 1770s"
+    ),
     "pre1913": (
         "Minneapolis Fed historical estimate (1967=100), rebased x9.9/29.7; the Fed "
         "says pre-1913 values 'should be considered estimates'"
@@ -112,6 +127,8 @@ CPI_BASIS = {
 
 def cpi_basis(year):
     """Which series a year's CPI figure comes from, in words."""
+    if year == 1780:
+        return CPI_BASIS[1780]
     if year == 2026:
         return CPI_BASIS[2026]
     if year < 1913:
@@ -292,6 +309,296 @@ def conflict(name, theatre, start, end, era, presidents, conflict_type, reason, 
 
 
 ROWS = [
+    # ---- Founding, 1775-1815 ------------------------------------------------
+    conflict(
+        name="American Revolutionary War",
+        theatre="Thirteen colonies against Britain",
+        start=date(1775, 4, 19),
+        end=date(1783, 9, 3),
+        era="Founding",
+        presidents="None (Continental Congress)",
+        conflict_type="Defensive",
+        reason=(
+            "Armed resistance to British attempts to disarm the colonial militias, "
+            "escalating into a war for independence."
+        ),
+        summary=(
+            "Began with the British march on Lexington and Concord and ended with the "
+            "Treaty of Paris. The Continental Army under Washington, allied with "
+            "France from 1778, forced the surrender at Yorktown in October 1781; "
+            "fighting largely ceased after that, though the treaty took two more "
+            "years. Deaths from disease and in British prison ships far exceeded "
+            "battle deaths."
+        ),
+        auth_level=3,
+        authority="Continental Congress",
+        auth_note=(
+            "Predates the Constitution. The Continental Congress raised the army (June "
+            "1775) and declared independence (July 1776); there was no executive to "
+            "act alone."
+        ),
+        kia=4435,
+        deaths=25_000,
+        wounded=6188,
+        losses_text=(
+            "4,435 battle deaths (VA); roughly 25,000 dead from all causes including "
+            "disease and captivity; 6,188 wounded"
+        ),
+        cost_m=101,
+        cost_text="$101m then-year (CRS, from an 1895 financial history; unofficial)",
+        cost_year=1780,
+        cost_year_note=(
+            "No CPI series exists for the 1770s; factor implied from CRS's own "
+            "constant-dollar conversion"
+        ),
+        sources=[1, 2, 18],
+        combat_end=date(1781, 10, 19),
+        flag="†",
+    ),
+
+    conflict(
+        name="Northwest Indian War",
+        theatre="Ohio Country; Western Confederacy of tribes",
+        start=date(1785, 1, 1),
+        end=date(1795, 8, 3),
+        era="Founding",
+        presidents="Washington",
+        conflict_type="Offensive",
+        reason=(
+            "Assert US sovereignty over the Ohio Country ceded by Britain in 1783 and "
+            "open it to settlement over the resistance of a confederacy of tribes."
+        ),
+        summary=(
+            "Two expeditions were destroyed - Harmar's in 1790 and St. Clair's in "
+            "1791, the worst defeat the US Army has ever suffered against Native "
+            "forces, with 632 soldiers killed in one morning. Congress then authorised "
+            "a professional Legion of the United States under Anthony Wayne, which won "
+            "at Fallen Timbers in 1794; the Treaty of Greenville ceded most of Ohio."
+        ),
+        auth_level=3,
+        authority="Congress",
+        auth_note=(
+            "Congress created and funded the Legion of the United States by statute in "
+            "March 1792 after St. Clair's defeat; earlier campaigns ran on general War "
+            "Department authority."
+        ),
+        kia=1221,
+        deaths=1221,
+        wounded=500,
+        losses_text=(
+            "About 1,221 US soldiers and militia killed, 632 of them at St. Clair's "
+            "defeat; wounded roughly 500 (estimate)"
+        ),
+        cost_m=None,
+        cost_text="Not separately accounted; the Legion cost roughly $1m a year",
+        cost_year=1800,
+        cost_year_note="No cost figure; deflator shown for reference only",
+        sources=[17, 18],
+        combat_start=date(1790, 10, 1),
+        combat_end=date(1794, 8, 20),
+        flag="†",
+    ),
+
+    conflict(
+        name="Quasi-War with France",
+        theatre="Undeclared naval war, Caribbean and Atlantic",
+        start=date(1798, 7, 7),
+        end=date(1800, 9, 30),
+        era="Founding",
+        presidents="J. Adams",
+        conflict_type="Defensive",
+        reason=(
+            "Stop French privateers seizing American merchant ships after the US "
+            "refused to honour its Revolutionary War alliance and the XYZ Affair "
+            "humiliated its envoys."
+        ),
+        summary=(
+            "Fought entirely at sea. Congress abrogated the French treaties, created "
+            "the Department of the Navy and authorised the seizure of armed French "
+            "vessels. The new frigates Constellation and Constitution won several "
+            "single-ship actions before the Convention of 1800 ended it. The precedent "
+            "- Congress authorising a limited war without declaring one - was tested "
+            "in Bas v. Tingy."
+        ),
+        auth_level=3,
+        authority="Congress",
+        auth_note=(
+            "A series of statutes in 1798 authorised naval action against French armed "
+            "vessels; Congress deliberately stopped short of a declaration of war."
+        ),
+        kia=20,
+        deaths=20,
+        wounded=140,
+        losses_text=(
+            "About 160 US sailors and marines killed or wounded in total; killed "
+            "roughly 20 (estimate)"
+        ),
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1800,
+        cost_year_note="No cost figure",
+        sources=[4, 18],
+        flag="†",
+    ),
+
+    conflict(
+        name="First Barbary War",
+        theatre="Tripoli; Mediterranean",
+        start=date(1801, 5, 10),
+        end=date(1805, 6, 10),
+        era="Founding",
+        presidents="Jefferson",
+        conflict_type="Freedom of passage",
+        reason=(
+            "End the Pasha of Tripoli's seizure of American merchant ships and "
+            "enslavement of their crews after the US refused to raise its tribute."
+        ),
+        summary=(
+            "Tripoli declared war by cutting down the flagstaff at the US consulate. A "
+            "US squadron blockaded and bombarded Tripoli; the frigate Philadelphia ran "
+            "aground and was captured, then burned in a raid Nelson called the most "
+            "bold act of the age. William Eaton's overland march from Egypt took Derna "
+            "in 1805, and a treaty followed. The first war fought under the "
+            "Constitution's war-powers arrangement."
+        ),
+        auth_level=3,
+        authority="Congress",
+        auth_note=(
+            "Jefferson sent a squadron on his own authority in 1801, then asked "
+            "Congress, which authorised offensive action in February 1802."
+        ),
+        kia=35,
+        deaths=35,
+        wounded=64,
+        losses_text=(
+            "About 35 killed and 64 wounded, including 13 lost when the fireship "
+            "Intrepid exploded"
+        ),
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1805,
+        cost_year_note="No cost figure",
+        sources=[10, 18],
+        flag="†",
+    ),
+
+    conflict(
+        name="War of 1812",
+        theatre="Canada, the Great Lakes, the Atlantic coast and the Gulf",
+        start=date(1812, 6, 18),
+        end=date(1815, 2, 17),
+        era="Founding",
+        presidents="Madison",
+        conflict_type="Offensive",
+        reason=(
+            "Stated grievances were British impressment of American sailors, blockade "
+            "of trade and support for Native resistance in the Northwest; the war plan "
+            "was an invasion of Canada."
+        ),
+        summary=(
+            "The invasions of Canada failed; the British burned Washington in 1814 but "
+            "were stopped at Baltimore and Plattsburgh. The Treaty of Ghent restored "
+            "the pre-war borders, and Jackson's victory at New Orleans came after it "
+            "was signed. The Federalist opposition collapsed; the war settled the "
+            "border with British North America for good."
+        ),
+        auth_level=5,
+        authority="Declared war",
+        auth_note=(
+            "Congress declared war on 18 June 1812 - the first declaration under the "
+            "Constitution - by 79-49 in the House and 19-13 in the Senate."
+        ),
+        kia=2260,
+        deaths=15_000,
+        wounded=4505,
+        losses_text=(
+            "2,260 battle deaths; roughly 15,000 dead from all causes; 4,505 wounded"
+        ),
+        cost_m=90,
+        cost_text="$90m then-year (CRS)",
+        cost_year=1813,
+        cost_year_note="Peak year of war spending",
+        sources=[1, 2, 18],
+        combat_end=date(1815, 2, 12),
+        flag="†",
+    ),
+
+    conflict(
+        name="Creek War",
+        theatre="Alabama and Georgia; the Red Stick faction",
+        start=date(1813, 7, 27),
+        end=date(1814, 8, 9),
+        era="Founding",
+        presidents="Madison",
+        conflict_type="Offensive",
+        reason=(
+            "Crush the Red Stick Creeks after the Fort Mims massacre, and take Creek "
+            "land - which the resulting treaty did on a vast scale."
+        ),
+        summary=(
+            "Fought within the War of 1812 by Tennessee, Georgia and Mississippi "
+            "militia and US regulars under Andrew Jackson. The war ended at Horseshoe "
+            "Bend, where some 800 Red Sticks died, and the Treaty of Fort Jackson took "
+            "23 million acres from the Creek nation, including from Creeks who had "
+            "fought on the American side."
+        ),
+        auth_level=5,
+        authority="Declared war",
+        auth_note=(
+            "Conducted within the declared War of 1812 by state militias and regulars; "
+            "no separate authorisation."
+        ),
+        kia=584,
+        deaths=584,
+        wounded=None,
+        losses_text=(
+            "About 584 US soldiers and militia killed; wounded not reliably tallied"
+        ),
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1814,
+        cost_year_note="No cost figure",
+        sources=[18],
+        flag="†",
+    ),
+
+    conflict(
+        name="Second Barbary War",
+        theatre="Algiers; Mediterranean",
+        start=date(1815, 6, 17),
+        end=date(1815, 6, 30),
+        era="Founding",
+        presidents="Madison",
+        conflict_type="Freedom of passage",
+        reason=(
+            "End Algerine seizure of American ships and enslavement of crews, resumed "
+            "while the US was occupied with Britain."
+        ),
+        summary=(
+            "Decatur's squadron captured the Algerine flagship Mashouda within days of "
+            "reaching the Mediterranean and dictated a treaty at gunpoint that ended "
+            "tribute and freed American captives. Tunis and Tripoli were then made to "
+            "pay compensation. It ended Barbary depredations against American shipping "
+            "permanently."
+        ),
+        auth_level=3,
+        authority="Congress",
+        auth_note=(
+            "Congress authorised the use of naval force against Algiers on 3 March "
+            "1815."
+        ),
+        kia=10,
+        deaths=10,
+        wounded=30,
+        losses_text="10 killed, 30 wounded",
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1815,
+        cost_year_note="No cost figure",
+        sources=[10, 18],
+        combat=3,
+    ),
+
     # ---- Expansion, 1816-1897 -----------------------------------------------
     conflict(
         name="First Seminole War",
@@ -2907,5 +3214,7 @@ for number, row in enumerate(ROWS, 1):
     row["factor"] = CPI_BASE / row["cpi"]
     row["cost_adj"] = None if row["cost_m"] is None else row["cost_m"] * row["factor"]
 
+# All 75 conflicts, none lost or doubled.
+assert len(ROWS) == 75, len(ROWS)
 # No misspelt era or type.
 assert all(row["era"] in ERAS and row["conflict_type"] in TYPES for row in ROWS)
