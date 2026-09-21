@@ -28,12 +28,22 @@ CPI_BASE_LABEL = "August 2026"
 #               rebased here by multiplying by 9.9 / 29.7.
 CPI = {
     # Expansion
+    1818: 17.0,
+    1832: 10.0,
+    1838: 10.7,
     1847: 9.3,
     1858: 8.7,
     1862: 10.0,
     1863: 12.3,
     1864: 15.7,
     1865: 15.3,
+    1867: 14.0,
+    1871: 12.0,
+    1873: 11.0,
+    1876: 10.7,
+    1877: 10.7,
+    1886: 9.0,
+    1890: 9.0,
     # Imperial and world wars
     1898: 8.3,
     1900: 8.3,
@@ -284,6 +294,125 @@ def conflict(name, theatre, start, end, era, presidents, conflict_type, reason, 
 ROWS = [
     # ---- Expansion, 1816-1897 -----------------------------------------------
     conflict(
+        name="First Seminole War",
+        theatre="Spanish Florida",
+        start=date(1817, 11, 21),
+        end=date(1818, 5, 28),
+        era="Expansion",
+        presidents="Monroe",
+        conflict_type="Offensive",
+        reason=(
+            "Stated: stop Seminole raids across the Georgia border and recapture "
+            "enslaved people who had escaped to Florida. In practice, Jackson seized "
+            "Spanish Florida."
+        ),
+        summary=(
+            "Andrew Jackson exceeded his orders, invaded Spanish territory, executed "
+            "two British subjects and took Pensacola. Monroe's cabinet debated "
+            "repudiating him; John Quincy Adams instead used the fait accompli to "
+            "extract the cession of Florida from Spain in the Adams-Onis Treaty of "
+            "1819."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note=(
+            "No congressional authorisation; the House debated censuring Jackson and "
+            "declined."
+        ),
+        kia=47,
+        deaths=47,
+        wounded=36,
+        losses_text="47 killed, 36 wounded",
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1818,
+        cost_year_note="No cost figure",
+        sources=[16, 18],
+    ),
+
+    conflict(
+        name="Black Hawk War",
+        theatre="Illinois and Wisconsin Territory",
+        start=date(1832, 4, 6),
+        end=date(1832, 8, 27),
+        era="Expansion",
+        presidents="Jackson",
+        conflict_type="Offensive",
+        reason=(
+            "Force the Sauk band under Black Hawk back across the Mississippi after "
+            "they re-crossed into Illinois to reclaim ceded land."
+        ),
+        summary=(
+            "Black Hawk's band of around 1,500, most of them non-combatants, attempted "
+            "to return to their village; militia panic and a botched parley started "
+            "the fighting. It ended at Bad Axe, where soldiers and a gunboat killed "
+            "hundreds trying to cross the river. Abraham Lincoln served as a militia "
+            "captain without seeing combat; cholera killed more regulars than the Sauk "
+            "did."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note=(
+            "State militia called out by the governor of Illinois, reinforced by US "
+            "regulars on War Department orders."
+        ),
+        kia=60,
+        deaths=60,
+        wounded=36,
+        losses_text=(
+            "About 60 soldiers and militia killed and 36 wounded in action; cholera "
+            "killed many more regulars en route"
+        ),
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1832,
+        cost_year_note="No cost figure",
+        sources=[18, 28],
+        flag="†",
+    ),
+
+    conflict(
+        name="Second Seminole War",
+        theatre="Florida",
+        start=date(1835, 12, 23),
+        end=date(1842, 8, 14),
+        era="Expansion",
+        presidents="Jackson, Van Buren, W.H. Harrison, Tyler",
+        conflict_type="Offensive",
+        reason=(
+            "Remove the Seminoles to Indian Territory under the Indian Removal Act, "
+            "which they refused."
+        ),
+        summary=(
+            "The longest and costliest of the Indian wars. It opened with the "
+            "destruction of Major Dade's column and Osceola's killing of the Indian "
+            "agent, and became a seven-year guerrilla war in the swamps that no US "
+            "commander could win outright. Osceola was seized under a flag of truce. "
+            "Most Seminoles were eventually deported; a few hundred were left "
+            "unconquered in the Everglades."
+        ),
+        auth_level=1,
+        authority="Standing law",
+        auth_note=(
+            "Fought under the Indian Removal Act of 1830 and annual appropriations; no "
+            "separate authorisation."
+        ),
+        kia=328,
+        deaths=1466,
+        wounded=None,
+        losses_text=(
+            "1,466 US regulars died, most from disease; roughly 328 in battle "
+            "(estimate); wounded not tallied. Militia deaths are additional"
+        ),
+        cost_m=40,
+        cost_text="About $40m then-year (contemporary estimates ranged $30-40m)",
+        cost_year=1838,
+        cost_year_note="Midpoint of a seven-year war",
+        sources=[16, 18],
+        flag="†",
+    ),
+
+    conflict(
         name="Mexican-American War",
         theatre="Texas, northern Mexico, California and Mexico City",
         start=date(1846, 4, 25),
@@ -412,6 +541,266 @@ ROWS = [
         cost_year_note="No cost figure",
         sources=[29],
         flag="†",
+    ),
+
+    conflict(
+        name="Red Cloud's War",
+        theatre="Powder River Country, Wyoming and Montana",
+        start=date(1866, 7, 1),
+        end=date(1868, 11, 6),
+        era="Expansion",
+        presidents="A. Johnson",
+        conflict_type="Offensive",
+        reason=(
+            "Hold forts along the Bozeman Trail through the Lakota hunting grounds "
+            "guaranteed to them by treaty."
+        ),
+        summary=(
+            "The Lakota, Cheyenne and Arapaho under Red Cloud besieged the forts and "
+            "destroyed Fetterman's entire command of 81 men in December 1866. Unable "
+            "to hold the trail, the government abandoned the forts and in the Treaty "
+            "of Fort Laramie recognised the Black Hills as Lakota land - the only "
+            "Indian war the United States conceded outright. The treaty was broken "
+            "within a decade."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note="Regular Army operations on War Department authority.",
+        kia=106,
+        deaths=106,
+        wounded=50,
+        losses_text=(
+            "Roughly 106 soldiers killed, 81 of them in the Fetterman Fight; wounded "
+            "roughly 50 (estimate)"
+        ),
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1867,
+        cost_year_note="No cost figure",
+        sources=[30],
+        flag="†",
+    ),
+
+    conflict(
+        name="Korea Expedition",
+        theatre="Ganghwa Island, Korea",
+        start=date(1871, 6, 1),
+        end=date(1871, 7, 3),
+        era="Expansion",
+        presidents="Grant",
+        conflict_type="Offensive",
+        reason=(
+            "Force open trade and obtain an apology for the destruction of the "
+            "merchant ship General Sherman and its crew in 1866."
+        ),
+        summary=(
+            "An Asiatic Squadron landing party stormed the forts on Ganghwa Island "
+            "after Korean batteries fired on surveying boats. The forts fell and some "
+            "240 Korean defenders died, but the Joseon court refused to negotiate and "
+            "the squadron withdrew. Korea did not open to the US until a treaty in "
+            "1882."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note=(
+            "Ordered by the Navy Department in support of a diplomatic mission; no "
+            "congressional action."
+        ),
+        kia=3,
+        deaths=3,
+        wounded=10,
+        losses_text="3 killed, 10 wounded",
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1871,
+        cost_year_note="No cost figure",
+        sources=[28],
+        combat=2,
+    ),
+
+    conflict(
+        name="Modoc War",
+        theatre="Lava Beds, northern California",
+        start=date(1872, 11, 29),
+        end=date(1873, 6, 1),
+        era="Expansion",
+        presidents="Grant",
+        conflict_type="Offensive",
+        reason=(
+            "Force a Modoc band under Captain Jack back onto the Klamath reservation "
+            "from which they had left."
+        ),
+        summary=(
+            "Around 55 Modoc fighters held the lava beds against a thousand soldiers "
+            "for months. At a peace parley Captain Jack shot General Canby - the only "
+            "general killed in the Indian wars - and the government's negotiator. The "
+            "Modocs were eventually run down, and Captain Jack and three others were "
+            "hanged at Fort Klamath."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note="Regular Army operations on War Department authority.",
+        kia=83,
+        deaths=83,
+        wounded=46,
+        losses_text="83 soldiers and volunteers killed, 46 wounded",
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1873,
+        cost_year_note="No cost figure",
+        sources=[28],
+    ),
+
+    conflict(
+        name="Great Sioux War",
+        theatre="Montana, Wyoming and the Dakotas",
+        start=date(1876, 3, 17),
+        end=date(1877, 5, 7),
+        era="Expansion",
+        presidents="Grant, Hayes",
+        conflict_type="Offensive",
+        reason=(
+            "Force the Lakota and Northern Cheyenne onto reservations after gold was "
+            "found in the Black Hills, which the 1868 treaty had guaranteed them."
+        ),
+        summary=(
+            "The government ordered all Lakota onto reservations by January 1876 and "
+            "sent three columns after those who did not comply. Custer's Seventh "
+            "Cavalry was destroyed at the Little Bighorn in June; the Army then "
+            "pursued the bands through the winter until most surrendered or fled to "
+            "Canada. Congress seized the Black Hills by statute in 1877, a taking the "
+            "Supreme Court ruled unlawful in 1980."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note=(
+            "Regular Army operations on War Department authority; Congress acted only "
+            "afterward, to take the Black Hills."
+        ),
+        kia=310,
+        deaths=310,
+        wounded=100,
+        losses_text=(
+            "More than 300 soldiers killed, 268 of them at the Little Bighorn; wounded "
+            "roughly 100 (estimate)"
+        ),
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1876,
+        cost_year_note="No cost figure",
+        sources=[19],
+        flag="†",
+    ),
+
+    conflict(
+        name="Nez Perce War",
+        theatre="Idaho, Montana and Wyoming",
+        start=date(1877, 6, 17),
+        end=date(1877, 10, 5),
+        era="Expansion",
+        presidents="Hayes",
+        conflict_type="Offensive",
+        reason=(
+            "Force the non-treaty Nez Perce bands onto the reduced Idaho reservation."
+        ),
+        summary=(
+            "About 750 Nez Perce, fewer than a third of them fighters, fought a "
+            "1,170-mile retreat toward Canada through a dozen engagements, defeating "
+            "or eluding every force sent after them. They were caught 40 miles from "
+            "the border at Bear Paw, where Chief Joseph surrendered with the words 'I "
+            "will fight no more forever'. They were sent to Kansas and Indian "
+            "Territory, not home."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note="Regular Army operations on War Department authority.",
+        kia=125,
+        deaths=125,
+        wounded=146,
+        losses_text="125 soldiers killed, 146 wounded",
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1877,
+        cost_year_note="No cost figure",
+        sources=[20],
+    ),
+
+    conflict(
+        name="Apache Wars, final phase",
+        theatre="Arizona, New Mexico and Sonora; Victorio and Geronimo",
+        start=date(1879, 9, 4),
+        end=date(1886, 9, 4),
+        era="Expansion",
+        presidents="Hayes, Garfield, Arthur, Cleveland",
+        conflict_type="Offensive",
+        reason=(
+            "Confine the Chiricahua and Warm Springs Apache to the San Carlos "
+            "reservation and end raiding on both sides of the border."
+        ),
+        summary=(
+            "Victorio's band fought for a year until Mexican troops killed him in "
+            "1880. Geronimo broke out of San Carlos repeatedly; the final campaign put "
+            "5,000 soldiers, a quarter of the Army, after 36 people. He surrendered in "
+            "September 1886. The entire Chiricahua tribe, including the scouts who had "
+            "tracked him, was shipped to Florida as prisoners of war and not released "
+            "for 27 years."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note=(
+            "Regular Army operations on War Department authority, with an 1882 "
+            "agreement allowing pursuit into Mexico."
+        ),
+        kia=None,
+        deaths=None,
+        wounded=None,
+        losses_text=(
+            "US Army deaths across the final campaigns were in the low dozens but have "
+            "never been reliably tallied as a series; left blank rather than guessed"
+        ),
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1886,
+        cost_year_note="No figures",
+        sources=[18, 28],
+        flag="†",
+    ),
+
+    conflict(
+        name="Wounded Knee",
+        theatre="Pine Ridge, South Dakota",
+        start=date(1890, 12, 29),
+        end=date(1891, 1, 15),
+        era="Expansion",
+        presidents="B. Harrison",
+        conflict_type="Offensive",
+        reason=(
+            "Disarm Big Foot's Miniconjou band during the suppression of the Ghost "
+            "Dance movement."
+        ),
+        summary=(
+            "The Seventh Cavalry surrounded the band and began confiscating weapons; a "
+            "shot was fired and the troopers, with Hotchkiss guns on the ridge above, "
+            "killed 250 to 300 Lakota, most of them women and children. Twenty Medals "
+            "of Honor were awarded. The Army's own investigation called it a massacre; "
+            "Congress formally expressed regret in 1990."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note="Regular Army operations on War Department authority.",
+        kia=25,
+        deaths=31,
+        wounded=39,
+        losses_text=(
+            "25 soldiers killed and 39 wounded, many by their own crossfire; 6 of the "
+            "wounded later died"
+        ),
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1890,
+        cost_year_note="No cost figure",
+        sources=[28],
+        combat=2,
     ),
 
     # ---- Imperial and world wars, 1898-1945 ---------------------------------
