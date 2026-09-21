@@ -12,7 +12,7 @@ import os
 from collections import namedtuple
 
 from openpyxl import Workbook
-from openpyxl.styles import Alignment, Font, PatternFill
+from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.table import Table, TableStyleInfo
 
@@ -117,6 +117,7 @@ def colour_chip(cell, kind, key):
 HEADER_ROW = 5                   # rows 1-4 hold the title block
 FIRST_ROW = HEADER_ROW + 1       # conflict n is on row HEADER_ROW + n
 LAST_ROW = HEADER_ROW + len(ROWS)
+TOTAL_ROW = LAST_ROW + 1
 
 # The Figures sheet's columns, left to right. The key names a column in
 # figure_values() and in formulas; kind sets how its cells look.
@@ -146,6 +147,12 @@ LETTER = {column.key: get_column_letter(n) for n, column in enumerate(FIGURE_COL
 def position(key):
     """The 1-based number of a Figures column."""
     return KEYS.index(key) + 1
+
+
+def is_numeric(n):
+    """Whether Figures column n holds a quantity (the # column does not count)."""
+    column = FIGURE_COLUMNS[n - 1]
+    return column.kind in ("integer", "money") and column.key != "idx"
 
 
 def style_cell(cell, kind):
@@ -205,6 +212,43 @@ def write_figures_table(ws):
     ws.sheet_view.showGridLines = False
 
 
+def write_totals(ws):
+    """A SUM row under the table, then three rows giving shares of it."""
+    ws.cell(row=TOTAL_ROW, column=1, value="TOTAL")
+    ws.cell(row=TOTAL_ROW, column=2, value=f"{len(ROWS)} conflicts")
+    for key in ("combat_days", "all_days", "kia", "casualties", "cost_m", "cost_adj"):
+        letter = LETTER[key]
+        cell = ws.cell(row=TOTAL_ROW, column=position(key), value=f"=SUM({letter}{FIRST_ROW}:{letter}{LAST_ROW})")
+        cell.number_format = MONEY if key.startswith("cost") else INTEGER
+    for n in range(1, len(FIGURE_COLUMNS) + 1):
+        cell = ws.cell(row=TOTAL_ROW, column=n)
+        cell.font = font(bold=True)
+        cell.fill = PatternFill("solid", fgColor="FFE9ECEF")
+        cell.border = Border(top=Side(style="medium", color=ACCENT))
+        if is_numeric(n):
+            cell.alignment = Alignment(horizontal="right")
+
+    row_of = {r["name"]: HEADER_ROW + r["idx"] for r in ROWS}
+    shares = [
+        ("World War II alone", ["World War II"]),
+        ("Civil War + both World Wars", ["American Civil War", "World War I", "World War II"]),
+        ("Afghanistan + Iraq", ["Enduring Freedom", "Iraqi Freedom / New Dawn"]),
+    ]
+    for offset, (label, names) in enumerate(shares, 1):
+        row = TOTAL_ROW + offset
+        ws.cell(row=row, column=2, value=f"{label}, share of total")
+        for key in ("kia", "casualties", "cost_m", "cost_adj"):
+            letter = LETTER[key]
+            part = "+".join(f"{letter}{row_of[name]}" for name in names)
+            cell = ws.cell(row=row, column=position(key), value=f'=IFERROR(({part})/{letter}{TOTAL_ROW},"")')
+            cell.number_format = "0.0%"
+        for n in range(1, len(FIGURE_COLUMNS) + 1):
+            cell = ws.cell(row=row, column=n)
+            cell.font = font(italic=True, color=MUTED)
+            if is_numeric(n):
+                cell.alignment = Alignment(horizontal="right")
+
+
 def build_figures():
     """Write the Figures workbook and return its path."""
     wb = Workbook()
@@ -214,6 +258,7 @@ def build_figures():
                 "Every column sorts and filters from the header arrows. Column '#' restores chronological order.",
                 len(FIGURE_COLUMNS))
     write_figures_table(ws)
+    write_totals(ws)
     path = os.path.join(HERE, FIGURES_FILE)
     wb.save(path)
     return path

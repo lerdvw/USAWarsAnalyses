@@ -115,6 +115,12 @@ def figures():
     for row in ROWS:
         name = ws[f"{column['Conflict']}{5 + row['idx']}"].value.replace(" ‡", "")
         check(name == row["name"], f"Figures row {5 + row['idx']} holds {name}, not {row['name']}")
+    # Each total sums every conflict's row.
+    for header in headers:
+        if header in ("Combat Days", "All Conflict Days", "KIA + MIA", "All Casualties") or header.startswith("Net Cost"):
+            letter = column[header]
+            check(ws[f"{letter}{last + 1}"].value == f"=SUM({letter}{first}:{letter}{last})",
+                  f"the {header} total misses rows")
     print(f"figures.xlsx    {len(wb.sheetnames)} sheets, {last - first + 1} rows")
 
 
