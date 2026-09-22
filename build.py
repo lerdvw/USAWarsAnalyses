@@ -12,11 +12,12 @@ import os
 from collections import namedtuple
 
 from openpyxl import Workbook
+from openpyxl.comments import Comment
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.table import Table, TableStyleInfo
 
-from data import CPI_BASE, CPI_BASE_LABEL, ERAS, LV_LABEL, ROWS, TYPES, cpi_basis
+from data import CPI_BASE, CPI_BASE_LABEL, ERAS, LV_LABEL, REFS, ROWS, TYPES, cpi_basis
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 FIGURES_FILE = "US-Conflicts-1775-2026-Figures.xlsx"
@@ -25,6 +26,94 @@ FIGURES_FILE = "US-Conflicts-1775-2026-Figures.xlsx"
 # ===========================================================================
 # Shared text
 # ===========================================================================
+
+# How each measure is counted: shown on the Method & Sources sheet and pages.
+METHOD = [
+    ("Scope",
+     "Overt uses of US armed force at the scale of a named war, campaign or operation, 1775 to 22 "
+     "September 2026: 75 entries. Excludes the several hundred minor landings and shows of force "
+     "in the CRS list, purely covert action (Bay of Pigs is included because US airmen died), and "
+     "the smaller Indian War campaigns not listed."),
+    ("KIA + MIA",
+     "US military deaths from hostile action, plus those missing and presumed dead. Excludes "
+     "accidents, disease and other non-hostile deaths. For the Civil War both Union and "
+     "Confederate dead are counted: both were Americans."),
+    ("All casualties",
+     "All US deaths (hostile and non-hostile) plus wounded. Where wounded were never tallied the "
+     "cell holds deaths alone and is flagged. Excludes contractors, allied forces and foreign "
+     "deaths."),
+    ("Combat days",
+     "Days on which US forces were engaged or striking. For the major wars this is the whole war; "
+     "for occupations it is the insurgency phase; for one-day strikes it is 1."),
+    ("All conflict days",
+     "First to last day of the named conflict, inclusive. Ongoing conflicts run to 22 September "
+     "2026."),
+    ("Net cost, then-year",
+     "Best estimate of the US taxpayer burden in the dollars of the time, net of allied "
+     "reimbursement. Pre-1991 major wars: CRS RS22926 (military operations only - no veterans' "
+     "benefits, no debt interest). Afghanistan and Iraq: Costs of War full burden including "
+     "veterans' care. Small operations: DoD or press estimates. Blank where no reliable figure "
+     "exists."),
+    ("Net cost, Aug-2026 dollars",
+     f"The then-year cost restated with CPI-U to {CPI_BASE_LABEL} = {CPI_BASE}, using each "
+     "conflict's cost-centre year. BLS series from 1913; Minneapolis Fed historical estimates for "
+     "1800-1912; the 1770s factor is implied from CRS's own conversion. Fully auditable on the "
+     "CPI_Deflator sheet, which also shows CRS's constant-dollar figures for the ten major wars as "
+     "a cross-check."),
+    ("Authorization strength",
+     "Ordinal: 5 = declaration of war; 4 = statute plus UN Security Council resolution; 3 = "
+     "statute or joint resolution (including retroactive); 2 = UN resolution only; 1 = a "
+     "pre-existing statute or AUMF invoked; 0 = executive action alone."),
+    ("Conflict type",
+     "The conflict's principal STATED rationale: Defensive, Offensive, Humanitarian, Freedom of "
+     "passage, or Other. A judgment, not a fact - see the caveats."),
+]
+
+# Where the figures are contested, numbered in the order shown.
+CAVEATS = [
+    "GULF WAR NET COST REVISED. Earlier versions of these tables used ~$7bn net; DoD's own figure, "
+    "cited by CRS, is $4.7bn in current-year dollars after allied contributions of about $54bn "
+    "against a $61bn gross. This file uses $4.7bn.",
+    "CIVIL WAR FIGURES ARE OFFICIAL RETURNS, NOT MODERN ESTIMATES. VA/DoD returns give 498,332 "
+    "dead on both sides; demographic work since 2011 puts the true figure at 620,000-750,000. "
+    "Confederate returns are incomplete and Confederate wounded were never tallied.",
+    "PRE-1900 SMALL CONFLICTS ARE ESTIMATES. Deaths for the Indian Wars, the Quasi-War and the "
+    "Barbary Wars come from regimental returns and secondary histories, not a central casualty "
+    "system, and are flagged. The Apache Wars' US deaths were never reliably tallied as a series "
+    "and are left blank rather than guessed.",
+    "COSTS BEFORE VIETNAM WERE NEVER SEPARATELY RECORDED. CRS estimated them as the increase in "
+    "Army and Navy outlays over the pre-war average. For the occupations, expeditions and Indian "
+    "Wars no such figure exists; those cells are blank and the totals therefore understate.",
+    "TWO DEFLATOR METHODS DIVERGE FOR THE OLDEST WARS. This file uses CPI from each conflict's "
+    "cost-centre year. CRS used a hybrid (CPI before 1940, defence-specific deflators after). For "
+    "the Civil War the two differ by about 30%, for World War II by about 15%. Both are shown on "
+    "the CPI_Deflator sheet; neither is 'right'.",
+    "AFGHANISTAN AND IRAQ ADJUSTED COSTS ARE INDICATIVE ONLY. Their totals already blend past "
+    "outlays with veterans' care projected to 2050 - partly future dollars - so inflating them "
+    "overstates. They are also on a broader cost basis (full burden) than every other row "
+    "(operations only), which flatters the older wars by comparison.",
+    "COST-CENTRE YEARS FOR LONG WARS ARE OUTLAY-WEIGHTED. Civil War 1864, WWI 1919, WWII 1944, "
+    "Korea 1952, Vietnam 1968, Afghanistan 2012, Iraq 2008, Inherent Resolve 2018. Marked on the "
+    "deflator sheet.",
+    "CONFLICT TYPE IS A JUDGMENT. Each conflict is classed by its principal stated rationale. "
+    "Reasonable people would reclassify several: the War of 1812 is 'offensive' because the plan "
+    "was to invade Canada though the grievances were real; the Mexican War is 'offensive' though "
+    "Polk claimed self-defence; Vietnam and Korea are 'defensive' as collective defence of an "
+    "ally; Southern Spear is 'other' because the government calls it armed conflict and critics "
+    "call it law enforcement.",
+    "EPIC FURY'S DEATH TOLL IS UNSETTLED. Military Times reported 13 killed in April 2026; later "
+    "accounting gives 7 killed in action with 417 wounded; officials alleged in September 2026 an "
+    "undercount of at least four. This file uses 7 KIA and 13 total deaths.",
+    "THE VENEZUELA COST IS DERIVED. DoD reported $4.7bn jointly for boat strikes and the January "
+    "2026 operation; the Southern Spear campaign figure ($820m) is subtracted. The split is an "
+    "inference.",
+    "DAY TOTALS DOUBLE-COUNT OVERLAPS. The Creek War sits inside the War of 1812, the Cambodian "
+    "Campaign inside Vietnam, and Inherent Resolve overlaps Poseidon Archer and Epic Fury. Their "
+    "casualties are also included in the parent war's totals where noted.",
+    "PRECISION WARNING. The deflator is precise to a tenth of an index point; the underlying "
+    "figures are not. The pre-1900 rows are order-of-magnitude and the adjusted column inherits "
+    "every weakness of its input.",
+]
 
 FLAGS = "† rough estimate or incomplete returns · ‡ ongoing as of 22 Sep 2026 · § disputed figure, see caveats"
 
@@ -84,7 +173,7 @@ def title_block(ws, title, subtitle, columns):
     ws["A2"] = subtitle
     ws["A2"].font = font(italic=True, color=MUTED)
     ws["A3"] = (f"Compiled 22 September 2026 · 75 conflicts, 1775-2026 · then-year dollars unless stated · "
-                f"{FLAGS}")
+                f"{FLAGS} · read 'Method & Sources' before quoting a number")
     ws["A3"].font = font(color=MUTED)
     for row, span in ((1, 6), (2, 9), (3, 12)):
         ws.merge_cells(start_row=row, start_column=1, end_row=row, end_column=min(columns, span))
@@ -108,6 +197,58 @@ def colour_chip(cell, kind, key):
     else:
         cell.fill = PatternFill("solid", fgColor=TYPE_FILL[key])
         cell.font = font(bold=True, color=TYPE_FONT[key])
+
+
+def write_method_sheet(wb):
+    """The Method & Sources sheet: definitions, caveats, then every source."""
+    ws = wb.create_sheet("Method & Sources")
+    ws["A1"] = "Method, caveats and sources"
+    ws["A1"].font = font(size=14, bold=True)
+    row = 3
+
+    ws.cell(row=row, column=1, value="HOW THESE FIGURES ARE COUNTED").font = font(size=10, bold=True, color=ACCENT)
+    row += 1
+    for term, definition in METHOD:
+        ws.cell(row=row, column=1, value=term).font = font(bold=True)
+        cell = ws.cell(row=row, column=2, value=definition)
+        cell.font = font()
+        cell.alignment = Alignment(wrap_text=True, vertical="top")
+        ws.row_dimensions[row].height = 44
+        row += 1
+
+    row += 1
+    ws.cell(row=row, column=1, value="WHERE THE FIGURES ARE CONTESTED").font = font(size=10, bold=True, color="FF7E2F27")
+    row += 1
+    for number, caveat in enumerate(CAVEATS, 1):
+        ws.cell(row=row, column=1, value=str(number)).font = font(bold=True, color=MUTED)
+        cell = ws.cell(row=row, column=2, value=caveat)
+        cell.font = font()
+        cell.alignment = Alignment(wrap_text=True, vertical="top")
+        ws.row_dimensions[row].height = 58
+        row += 1
+
+    row += 1
+    ws.cell(row=row, column=1, value="SOURCES").font = font(size=10, bold=True, color=ACCENT)
+    row += 1
+    ws.cell(row=row, column=1, value="#").font = font(bold=True, color=MUTED)
+    ws.cell(row=row, column=2,
+            value="Reference (the 'Sources' column of the main table cites these numbers)").font = font(bold=True, color=MUTED)
+    row += 1
+    for number, label, url in REFS:
+        ws.cell(row=row, column=1, value=number).font = font(color=MUTED)
+        cell = ws.cell(row=row, column=2, value=label)
+        if url:
+            cell.hyperlink = url
+            cell.font = font(color=ACCENT, underline="single")
+        else:
+            cell.font = font()
+        cell.alignment = Alignment(wrap_text=True, vertical="top")
+        ws.row_dimensions[row].height = 26
+        row += 1
+
+    ws.column_dimensions["A"].width = 28
+    ws.column_dimensions["B"].width = 122
+    ws.sheet_view.showGridLines = False
 
 
 # ===========================================================================
@@ -300,6 +441,36 @@ def write_breakdowns(ws):
     return row
 
 
+def write_notes(ws, row):
+    """Notes on reading the sheet, from the given row down."""
+    notes = [
+        "Note  Blank cells mean no reliable public figure exists; they are not zeros and Excel "
+        "sorts them last. 0 means none.",
+        "Cost is NET of allied reimbursement in then-year US$ millions; column "
+        f"{LETTER['cost_adj']} restates it in {CPI_BASE_LABEL} dollars via the CPI_Deflator sheet "
+        "(base index in one yellow cell).",
+        "Pre-1991 major-war costs are CRS estimates of military operations only; Afghanistan and "
+        "Iraq are Costs of War full burden. See caveats 4-6.",
+        "Civil War casualties count Union and Confederate dead; official returns understate the "
+        "true toll. See caveat 2.",
+        "Full method, caveats and per-row sources: 'Method & Sources' sheet.",
+    ]
+    for k, text in enumerate(notes):
+        ws.cell(row=row + k, column=1, value=text).font = font(color=MUTED)
+
+
+def add_header_comments(ws):
+    """Hover notes on the two headings most likely to be misread."""
+    ws.cell(row=HEADER_ROW, column=position("cost_adj")).comment = Comment(
+        f"CPI-U adjusted to {CPI_BASE_LABEL} dollars (base {CPI_BASE}). Formula multiplies the then-year cost "
+        "by the factor on the CPI_Deflator sheet for each conflict's cost-centre year. Long wars use "
+        "outlay-weighted years. Afghanistan and Iraq are indicative only.",
+        "Compiler", height=150, width=360)
+    ws.cell(row=HEADER_ROW, column=position("kia")).comment = Comment(
+        "Hostile deaths plus missing presumed dead. Civil War counts both sides. Blank = never reliably tallied.",
+        "Compiler", height=90, width=330)
+
+
 def write_deflator_sheet(wb):
     """How every inflation-adjusted cost was produced, one row per conflict.
 
@@ -367,8 +538,11 @@ def build_figures():
                 len(FIGURE_COLUMNS))
     write_figures_table(ws)
     write_totals(ws)
-    write_breakdowns(ws)
+    notes_row = write_breakdowns(ws)
+    write_notes(ws, notes_row)
+    add_header_comments(ws)
     write_deflator_sheet(wb)
+    write_method_sheet(wb)
     path = os.path.join(HERE, FIGURES_FILE)
     wb.save(path)
     return path
