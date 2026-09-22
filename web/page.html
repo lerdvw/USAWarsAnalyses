@@ -32,6 +32,7 @@
   </section>
 
   <div class="toolbar">
+    <button type="button" id="clear">Clear filters</button>
     <button type="button" id="reset">Reset sort</button>
     <span class="hint">Showing <b id="count"></b> &middot; sorted by <b id="sort-state"></b></span>
   </div>
@@ -43,7 +44,7 @@
       <tbody></tbody>
     </table>
   </div>
-  <p class="note">Sort by clicking a heading (numeric columns open highest-first). Rows with no figure sort last.</p>
+  <p class="note">Sort by clicking a heading (numeric columns open highest-first). Filter with the row beneath the headings: text boxes match anywhere in the cell, dropdowns match exactly, and numeric columns take a minimum and maximum. Rows with no figure sort last and are excluded by a numeric filter.</p>
 
   <section class="panel">
     <h2>How these figures are counted</h2>

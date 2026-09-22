@@ -410,6 +410,53 @@ th[aria-sort] button {
 }
 
 
+/* ---- Filter row ------------------------------------------------------------ */
+
+/* Sits just under the headings, which are 38px tall. */
+thead tr.filters th {
+  top: 38px;
+  z-index: 3;
+  padding: 6px 8px;
+  background: var(--surface);
+  border-bottom: 1.5px solid var(--rule);
+}
+
+thead tr.filters .sticky1,
+thead tr.filters .sticky2 {
+  background: var(--surface);
+}
+
+.filters input,
+.filters select {
+  width: 100%;
+  min-width: 70px;
+  padding: 4px 6px;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+/* Minimum and maximum boxes side by side */
+.filters .range {
+  display: flex;
+  gap: 4px;
+}
+
+.filters .range input {
+  width: 50%;
+  min-width: 52px;
+}
+
+.filters input:focus-visible,
+.filters select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 0;
+}
+
+
 /* ---- Cells ----------------------------------------------------------------- */
 
 tbody td {

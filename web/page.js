@@ -134,8 +134,99 @@
       ' <span class="arrow">&#9650;</span></button></th>';
   }
 
+  // The filter under a heading: minimum and maximum boxes for numbers, a
+  // dropdown for categories, a search box for text, nothing for sources.
+  function filterCell(column) {
+    var id = "f-" + column.key;
+    var label = escapeHtml(column.label);
+    var control = "";
+    if (column.kind === "num") {
+      control = '<div class="range">' +
+        '<input id="' + id + '-min" type="number" placeholder="min" aria-label="' + label + ' minimum">' +
+        '<input id="' + id + '-max" type="number" placeholder="max" aria-label="' + label + ' maximum">' +
+        "</div>";
+    } else if (column.kind === "cat") {
+      var options = categoryValues(column).map(function (value) {
+        return '<option value="' + escapeHtml(value) + '">' + escapeHtml(value) + "</option>";
+      });
+      control = '<select id="' + id + '" aria-label="Filter ' + label + '">' +
+        '<option value="">All</option>' + options.join("") + "</select>";
+    } else if (column.kind !== "refs") {
+      control = '<input id="' + id + '" type="search" placeholder="filter" aria-label="Filter ' + label + '">';
+    }
+    return '<th class="' + pinClass(column) + '">' + control + "</th>";
+  }
+
+  // The distinct values of a category column, in the column's own order.
+  function categoryValues(column) {
+    var values = [];
+    ROWS.forEach(function (row) {
+      if (values.indexOf(row[column.key]) < 0) values.push(row[column.key]);
+    });
+    if (column.order) {
+      values.sort(function (a, b) {
+        return column.order.indexOf(a) - column.order.indexOf(b);
+      });
+    } else {
+      values.sort();
+    }
+    return values;
+  }
+
   function buildHeader() {
-    thead.innerHTML = "<tr>" + COLUMNS.map(headingCell).join("") + "</tr>";
+    thead.innerHTML =
+      "<tr>" + COLUMNS.map(headingCell).join("") + "</tr>" +
+      '<tr class="filters">' + COLUMNS.map(filterCell).join("") + "</tr>";
+  }
+
+
+  /* ---- Filtering ------------------------------------------------------ */
+
+  // The filters now set: {key: text} for text and categories,
+  // {key: {min, max}} for numbers.
+  function readFilters() {
+    var filters = {};
+    COLUMNS.forEach(function (column) {
+      var id = "f-" + column.key;
+      if (column.kind === "num") {
+        var min = document.getElementById(id + "-min");
+        var max = document.getElementById(id + "-max");
+        var low = min && min.value !== "" ? Number(min.value) : null;
+        var high = max && max.value !== "" ? Number(max.value) : null;
+        if (low != null || high != null) filters[column.key] = { min: low, max: high };
+      } else {
+        var control = document.getElementById(id);
+        if (control && control.value !== "") filters[column.key] = control.value;
+      }
+    });
+    return filters;
+  }
+
+  // What a search box looks through: the name cell includes the theatre,
+  // the authorization cell its note, a date its words.
+  function searchText(column, row) {
+    if (column.key === "name") return row.name + " " + row.theatre;
+    if (column.key === "auth_label") return row.auth_label + " " + row.auth_note;
+    if (column.kind === "date") return String(row[column.key + "_text"]);
+    return String(row[column.key] == null ? "" : row[column.key]);
+  }
+
+  function passes(row, filters) {
+    for (var key in filters) {
+      var column = columnFor(key);
+      var wanted = filters[key];
+      var value = row[key];
+      if (column.kind === "num") {
+        if (value == null) return false;  // a blank never meets a number filter
+        if (wanted.min != null && value < wanted.min) return false;
+        if (wanted.max != null && value > wanted.max) return false;
+      } else if (column.kind === "cat") {
+        if (String(value) !== wanted) return false;
+      } else if (searchText(column, row).toLowerCase().indexOf(wanted.toLowerCase()) < 0) {
+        return false;
+      }
+    }
+    return true;
   }
 
 
@@ -200,7 +291,10 @@
   /* ---- Drawing -------------------------------------------------------- */
 
   function render() {
-    var rows = ROWS.slice();
+    var filters = readFilters();
+    var rows = ROWS.filter(function (row) {
+      return passes(row, filters);
+    });
     rows.sort(compareRows);
     tbody.innerHTML = rows.map(function (row) {
       return "<tr>" + COLUMNS.map(function (column) {
@@ -231,6 +325,17 @@
     button.addEventListener("click", function () {
       sortBy(button.parentNode.dataset.key);
     });
+  });
+
+  thead.querySelectorAll("tr.filters input, tr.filters select").forEach(function (control) {
+    control.addEventListener("input", render);
+  });
+
+  document.getElementById("clear").addEventListener("click", function () {
+    thead.querySelectorAll("tr.filters input, tr.filters select").forEach(function (control) {
+      control.value = "";
+    });
+    render();
   });
 
   document.getElementById("reset").addEventListener("click", function () {
