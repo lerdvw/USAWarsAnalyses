@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 """
-Build the Figures workbook from data.py.
+Build the two workbooks from data.py.
 
     python3 build.py
 
-writes US-Conflicts-1775-2026-Figures.xlsx next to this file: the numbers,
-one row per conflict.
+Both are written next to this file:
+
+    US-Conflicts-1775-2026-Figures.xlsx   the numbers, with live formulas
+    US-Conflicts-1775-2026-Record.xlsx    the same conflicts, in words
 """
 
 import os
@@ -21,6 +23,7 @@ from data import CPI_BASE, CPI_BASE_LABEL, ERAS, LV_LABEL, REFS, ROWS, TYPES, cp
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 FIGURES_FILE = "US-Conflicts-1775-2026-Figures.xlsx"
+RECORD_FILE = "US-Conflicts-1775-2026-Record.xlsx"
 
 
 # ===========================================================================
@@ -118,6 +121,40 @@ CAVEATS = [
 ]
 
 FLAGS = "† rough estimate or incomplete returns · ‡ ongoing as of 22 Sep 2026 · § disputed figure, see caveats"
+
+
+def date_text(day):
+    """A date as it reads in the tables: 4 Sep 1879."""
+    return f"{day.day} {day:%b %Y}"
+
+
+def dates_text(r):
+    """The span of a conflict: one date, two dates, or a start and 'ongoing'."""
+    if r["ongoing"]:
+        return f"{date_text(r['start'])} - ongoing"
+    if r["start"] == r["end"]:
+        return date_text(r["start"])
+    return f"{date_text(r['start'])} - {date_text(r['end'])}"
+
+
+def duration_text(r):
+    """Days in all, and days of combat when they differ: '52 days, 38 of combat'."""
+    text = f"{r['all_days']:,} day" + ("s" if r["all_days"] != 1 else "")
+    if r["combat_days"] != r["all_days"]:
+        text += f", {r['combat_days']:,} of combat"
+    if r["ongoing"]:
+        text += " (ongoing)"
+    return text
+
+
+def sources_text(r):
+    """The source numbers a row cites: '1, 2, 18'."""
+    return ", ".join(str(number) for number in r["sources"])
+
+
+def authorization_text(r):
+    """The authorization level with its explanation, as both workbooks show it."""
+    return f"{r['auth_label']} - {r['auth_note']}"
 
 
 # ===========================================================================
@@ -552,5 +589,89 @@ def build_figures():
     return path
 
 
+# ===========================================================================
+# The Record workbook
+# ===========================================================================
+
+# The Record sheet's columns: header and width.
+RECORD_COLUMNS = [
+    ("#", 5),
+    ("Conflict and theatre", 28),
+    ("Dates", 22),
+    ("President(s)", 22),
+    ("Conflict Type", 18),
+    ("Why it was fought", 44),
+    ("What happened", 70),
+    ("Authorization", 44),
+    ("Duration", 18),
+    ("US losses", 40),
+    ("Cost", 36),
+    ("Sources", 12),
+]
+
+
+def record_values(r):
+    """One conflict's cells on the Record sheet, left to right."""
+    return [
+        r["idx"],
+        f"{r['name']}\n{r['theatre']}",
+        dates_text(r),
+        r["presidents"],
+        r["conflict_type"],
+        r["reason"],
+        r["summary"],
+        authorization_text(r),
+        duration_text(r),
+        r["losses_text"],
+        r["cost_text"],
+        sources_text(r),
+    ]
+
+
+def build_record():
+    """Write the Record workbook and return its path."""
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Record"
+    title_block(ws, "US Conflicts, 1775-2026 - The Record",
+                "Fewer columns, fuller descriptions. Every column sorts and filters from the header arrows; "
+                "column '#' restores chronological order.",
+                len(RECORD_COLUMNS))
+    for n, (header, width) in enumerate(RECORD_COLUMNS, 1):
+        ws.cell(row=HEADER_ROW, column=n, value=header)
+        ws.column_dimensions[get_column_letter(n)].width = width
+    style_header(ws, HEADER_ROW, len(RECORD_COLUMNS), height=36)
+
+    for r in ROWS:
+        row = HEADER_ROW + r["idx"]
+        for n, value in enumerate(record_values(r), 1):
+            cell = ws.cell(row=row, column=n, value=value)
+            cell.font = font(bold=(n == 2))
+            cell.alignment = Alignment(wrap_text=(n != 1), vertical="top", horizontal="right" if n == 1 else "left")
+        colour_chip(ws.cell(row=row, column=5), "type", r["conflict_type"])
+        colour_chip(ws.cell(row=row, column=8), "level", r["auth_level"])
+        ws.cell(row=row, column=8).alignment = Alignment(wrap_text=True, vertical="top")
+        ws.row_dimensions[row].height = 150
+    add_table(ws, "Record", HEADER_ROW, LAST_ROW, len(RECORD_COLUMNS), "TableStyleLight9")
+    ws.freeze_panes = "C6"
+    ws.sheet_view.showGridLines = False
+
+    # A key to the colours, under the table.
+    key_row = LAST_ROW + 2
+    ws.cell(row=key_row, column=2, value="AUTHORIZATION, STRONGEST TO WEAKEST").font = font(bold=True, color=ACCENT)
+    for k, level in enumerate((5, 4, 3, 2, 1, 0), 1):
+        colour_chip(ws.cell(row=key_row + k, column=2, value=LV_LABEL[level]), "level", level)
+    ws.cell(row=key_row, column=4, value="CONFLICT TYPE").font = font(bold=True, color=ACCENT)
+    for k, conflict_type in enumerate(TYPES, 1):
+        colour_chip(ws.cell(row=key_row + k, column=4, value=conflict_type), "type", conflict_type)
+    ws.cell(row=key_row + 8, column=2, value=FLAGS).font = font(italic=True, color=MUTED)
+
+    write_method_sheet(wb)
+    path = os.path.join(HERE, RECORD_FILE)
+    wb.save(path)
+    return path
+
+
 if __name__ == "__main__":
     print(build_figures())
+    print(build_record())

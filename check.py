@@ -133,6 +133,21 @@ def figures():
     print(f"figures.xlsx    {len(wb.sheetnames)} sheets, {last - first + 1} rows")
 
 
+def record():
+    """The Record workbook holds every conflict in its own row, in order."""
+    path = os.path.join(HERE, "US-Conflicts-1775-2026-Record.xlsx")
+    if not os.path.exists(path):
+        print("record.xlsx     not built; run build.py first")
+        return
+    from openpyxl import load_workbook
+    ws = load_workbook(path)["Record"]
+    check(ws.tables["Record"].ref == f"A5:L{5 + len(ROWS)}", "the Record table does not cover every row")
+    for row in ROWS:
+        name = ws.cell(row=5 + row["idx"], column=2).value.split("\n")[0]
+        check(name == row["name"], f"Record row {5 + row['idx']} holds {name}, not {row['name']}")
+    print(f"record.xlsx     {len(ROWS)} rows")
+
+
 if __name__ == "__main__":
     rows()
     scales()
@@ -141,6 +156,7 @@ if __name__ == "__main__":
     inflation()
     crs()
     figures()
+    record()
     for message in FAILED:
         print("FAIL", message)
     print("\nall checks pass" if not FAILED else f"\n{len(FAILED)} check(s) failed")
