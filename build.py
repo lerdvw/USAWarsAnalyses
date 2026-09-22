@@ -316,9 +316,12 @@ def write_deflator_sheet(wb):
     cs["B2"].fill = PatternFill("solid", fgColor="FFFFFF00")
     cs["C2"] = "<- input. Change this cell to restate every adjusted cost against a different base month."
     cs["C2"].font = font(italic=True, color=MUTED)
+    cs["A3"] = "CRS FY2011 constant-dollar figures are uplifted to the base with CPI-U 2011 = 224.939."
+    cs["A3"].font = font(italic=True, color=MUTED)
 
     headers = ["#", "Conflict", "Cost-centre year", "Why that year / index basis", "CPI-U index (1982-84=100)",
-               "Factor to base"]
+               "Factor to base", "CRS constant FY2011 $m", "CRS uplifted to base ($m)",
+               "CPI-method adjusted ($m)", "CRS / CPI ratio"]
     for n, header in enumerate(headers, 1):
         cs.cell(row=HEADER_ROW, column=n, value=header)
     style_header(cs, HEADER_ROW, len(headers), height=40)
@@ -331,9 +334,16 @@ def write_deflator_sheet(wb):
         cs.cell(row=row, column=4, value=f"{r['cost_year_note']}. Index: {cpi_basis(r['cost_year'])}.")
         cs.cell(row=row, column=5, value=r["cpi"]).number_format = "0.000"
         cs.cell(row=row, column=6, value=f"=$B$2/E{row}").number_format = "0.0000"
+        if r["crs_2011"]:
+            # CRS's own constant-dollar figure, uplifted to the base, against ours.
+            cs.cell(row=row, column=7, value=r["crs_2011"]).number_format = MONEY
+            cs.cell(row=row, column=8, value=f"=G{row}*$B$2/224.939").number_format = MONEY
+            cs.cell(row=row, column=9, value=f"=Figures!{LETTER['cost_adj']}{row}").number_format = MONEY
+            cs.cell(row=row, column=10, value=f'=IFERROR(H{row}/I{row},"")').number_format = "0.00"
         for n in range(1, len(headers) + 1):
             cell = cs.cell(row=row, column=n)
-            cell.font = font(bold=(n == 2))
+            # Green marks a figure pulled from the Figures sheet.
+            cell.font = font(bold=(n == 2), color="FF008000" if n == 9 else INK)
             cell.alignment = Alignment(wrap_text=(n == 4), vertical="top",
                                        horizontal="left" if n in (2, 4) else "right")
             if "OUTLAY-WEIGHTED" in r["cost_year_note"] and n in (3, 4):
@@ -341,7 +351,7 @@ def write_deflator_sheet(wb):
         cs.row_dimensions[row].height = 30
 
     add_table(cs, "Deflator", HEADER_ROW, LAST_ROW, len(headers), "TableStyleLight9")
-    for n, width in enumerate([5, 30, 12, 70, 14, 12], 1):
+    for n, width in enumerate([5, 30, 12, 70, 14, 12, 16, 18, 18, 12], 1):
         cs.column_dimensions[get_column_letter(n)].width = width
     cs.freeze_panes = "A6"
     cs.sheet_view.showGridLines = False
