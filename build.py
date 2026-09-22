@@ -2,9 +2,11 @@
 """
 Build the workbooks and web pages from data.py.
 
-    python3 build.py              build everything
-    python3 build.py xlsx         build the two workbooks
-    python3 build.py pages        build the two pages
+    python3 build.py                  build everything
+    python3 build.py xlsx             build the two workbooks
+    python3 build.py pages [REC FIG]  build the two pages; REC and FIG are
+                                      the published URLs of the Record and
+                                      Figures pages, to link each to the other
 
 Everything is written next to this file:
 
@@ -743,6 +745,7 @@ PAGES = {
         "dollars": f"then-year, and {CPI_BASE_LABEL}",
         "columns": FIGURES_PAGE_COLUMNS,
         "totals": True,
+        "other": "The Record",
     },
     "record": {
         "file": "record.html",
@@ -755,6 +758,7 @@ PAGES = {
         "dollars": "then-year",
         "columns": RECORD_PAGE_COLUMNS,
         "totals": False,
+        "other": "War by the Numbers",
     },
 }
 
@@ -832,14 +836,16 @@ def legend_html():
     return indented(chips, 6)
 
 
-def build_page(kind):
+def build_page(kind, other_url=""):
     """Fill web/page.html for one page ("figures" or "record") and return the HTML."""
     page = PAGES[kind]
+    other_link = f'<a href="{other_url}">&rarr; {page["other"]}</a>' if other_url else ""
     definitions = [f"<div><dt>{html.escape(term)}</dt><dd>{html.escape(text)}</dd></div>" for term, text in METHOD]
     caveats = [f"<li>{html.escape(caveat)}</li>" for caveat in CAVEATS]
     return fill(read_web("page.html"), {
         "title": page["title"],
         "eyebrow": page["eyebrow"],
+        "other_link": other_link,
         "standfirst": page["standfirst"],
         "count": str(len(ROWS)),
         "dollars": page["dollars"],
@@ -856,13 +862,13 @@ def build_page(kind):
     }) + "\n"
 
 
-def build_pages():
-    """Write both pages and return their paths."""
+def build_pages(record_url="", figures_url=""):
+    """Write both pages and return their paths; each links to the other's URL if given."""
     paths = []
-    for kind in ("figures", "record"):
+    for kind, other_url in (("figures", record_url), ("record", figures_url)):
         path = os.path.join(HERE, PAGES[kind]["file"])
         with open(path, "w", encoding="utf-8") as f:
-            f.write(build_page(kind))
+            f.write(build_page(kind, other_url))
         paths.append(path)
     return paths
 
@@ -873,5 +879,6 @@ if __name__ == "__main__":
         print(build_figures())
         print(build_record())
     if what in ("all", "pages"):
-        for path in build_pages():
+        urls = sys.argv[2:4]
+        for path in build_pages(*urls):
             print(path)
