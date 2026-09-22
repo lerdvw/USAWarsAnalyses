@@ -32,7 +32,8 @@
   </section>
 
   <div class="toolbar">
-    <span class="hint">Showing <b id="count"></b></span>
+    <button type="button" id="reset">Reset sort</button>
+    <span class="hint">Showing <b id="count"></b> &middot; sorted by <b id="sort-state"></b></span>
   </div>
 
   <!-- Drawn by the script from the JSON blocks at the end of the page -->
@@ -42,7 +43,7 @@
       <tbody></tbody>
     </table>
   </div>
-  <p class="note">The table scrolls sideways; the Conflict column stays pinned while it does.</p>
+  <p class="note">Sort by clicking a heading (numeric columns open highest-first). Rows with no figure sort last.</p>
 
   <section class="panel">
     <h2>How these figures are counted</h2>

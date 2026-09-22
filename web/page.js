@@ -29,6 +29,10 @@
     "Other": "--tOther"
   };
 
+  // The current sort: a column key, and 1 for lowest first or -1 for highest.
+  var sortKey = "idx";
+  var sortDirection = 1;
+
   function readJson(id) {
     return JSON.parse(document.getElementById(id).textContent);
   }
@@ -120,13 +124,14 @@
     return "";
   }
 
-  // A heading; the first two stay pinned.
+  // A heading whose button sorts the column.
   function headingCell(column) {
-    var classes = [];
+    var classes = ["sortable"];
     if (column.kind === "num") classes.push("num");
     if (pinClass(column)) classes.push(pinClass(column));
-    return '<th scope="col" class="' + classes.join(" ") + '" style="padding:11px 10px">' +
-      escapeHtml(column.label) + "</th>";
+    return '<th scope="col" class="' + classes.join(" ") + '" data-key="' + column.key + '">' +
+      '<button type="button">' + escapeHtml(column.label) +
+      ' <span class="arrow">&#9650;</span></button></th>';
   }
 
   function buildHeader() {
@@ -134,16 +139,76 @@
   }
 
 
+  /* ---- Sorting -------------------------------------------------------- */
+
+  // What a column sorts by: numbers and ISO dates as they are, authorization
+  // by its strength rather than its label, everything else as text.
+  function sortValue(row, column) {
+    var value = row[column.key];
+    if (column.kind === "num" || column.kind === "date") return value;
+    if (column.key === "auth_label") return row.auth_level;
+    return String(value == null ? "" : value);
+  }
+
+  // Blanks always sort last; ties fall back to the # order.
+  function compareRows(a, b) {
+    var column = columnFor(sortKey);
+    var va = sortValue(a, column);
+    var vb = sortValue(b, column);
+    var aBlank = va == null || va === "";
+    var bBlank = vb == null || vb === "";
+    if (aBlank && bBlank) return a.idx - b.idx;
+    if (aBlank) return 1;
+    if (bBlank) return -1;
+    if (typeof va === "string" && column.kind !== "num") {
+      var order = va.localeCompare(vb);
+      return order !== 0 ? order * sortDirection : a.idx - b.idx;
+    }
+    return va === vb ? a.idx - b.idx : (va - vb) * sortDirection;
+  }
+
+  // Clicking the sorted column reverses it. A new column starts highest
+  // first for numbers and authorization, lowest first for the rest.
+  function sortBy(key) {
+    if (key === sortKey) {
+      sortDirection = -sortDirection;
+    } else {
+      var column = columnFor(key);
+      sortKey = key;
+      sortDirection = column.kind === "num" || key === "auth_label" ? -1 : 1;
+    }
+    render();
+  }
+
+  // Mark the sorted heading, and say in the toolbar what the order is.
+  function showSortState() {
+    thead.querySelectorAll("th.sortable").forEach(function (th) {
+      var arrow = th.querySelector(".arrow");
+      if (th.dataset.key === sortKey) {
+        th.setAttribute("aria-sort", sortDirection === 1 ? "ascending" : "descending");
+        arrow.innerHTML = sortDirection === 1 ? "&#9650;" : "&#9660;";
+      } else {
+        th.removeAttribute("aria-sort");
+        arrow.innerHTML = "&#9650;";
+      }
+    });
+    document.getElementById("sort-state").textContent =
+      columnFor(sortKey).label + ", " + (sortDirection === 1 ? "lowest first" : "highest first");
+  }
+
+
   /* ---- Drawing -------------------------------------------------------- */
 
   function render() {
     var rows = ROWS.slice();
+    rows.sort(compareRows);
     tbody.innerHTML = rows.map(function (row) {
       return "<tr>" + COLUMNS.map(function (column) {
         return renderCell(column, row);
       }).join("") + "</tr>";
     }).join("");
     document.getElementById("count").textContent = rows.length + " of " + ROWS.length;
+    showSortState();
   }
 
   // The numbered list of sources at the foot of the page.
@@ -161,6 +226,18 @@
   /* ---- Start ---------------------------------------------------------- */
 
   buildHeader();
+
+  thead.querySelectorAll("th.sortable button").forEach(function (button) {
+    button.addEventListener("click", function () {
+      sortBy(button.parentNode.dataset.key);
+    });
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    sortKey = "idx";
+    sortDirection = 1;
+    render();
+  });
 
   renderSources();
   render();
