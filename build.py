@@ -301,7 +301,10 @@ def write_breakdowns(ws):
 
 
 def write_deflator_sheet(wb):
-    """How every inflation-adjusted cost was produced, one row per conflict."""
+    """How every inflation-adjusted cost was produced, one row per conflict.
+
+    Rows line up with the Figures sheet (conflict n is on row 5 + n of both),
+    so Figures can multiply by CPI_Deflator!F on the same row."""
     cs = wb.create_sheet("CPI_Deflator")
     cs["A1"] = "Inflation deflator - how every adjusted figure was produced"
     cs["A1"].font = font(size=13, bold=True)
@@ -317,11 +320,11 @@ def write_deflator_sheet(wb):
     headers = ["#", "Conflict", "Cost-centre year", "Why that year / index basis", "CPI-U index (1982-84=100)",
                "Factor to base"]
     for n, header in enumerate(headers, 1):
-        cs.cell(row=4, column=n, value=header)
-    style_header(cs, 4, len(headers), height=40)
+        cs.cell(row=HEADER_ROW, column=n, value=header)
+    style_header(cs, HEADER_ROW, len(headers), height=40)
 
     for r in ROWS:
-        row = 4 + r["idx"]
+        row = HEADER_ROW + r["idx"]
         cs.cell(row=row, column=1, value=r["idx"])
         cs.cell(row=row, column=2, value=r["name"])
         cs.cell(row=row, column=3, value=r["cost_year"]).number_format = "0"
@@ -337,10 +340,10 @@ def write_deflator_sheet(wb):
                 cell.fill = PatternFill("solid", fgColor="FFF0E6CD")
         cs.row_dimensions[row].height = 30
 
-    add_table(cs, "Deflator", 4, 4 + len(ROWS), len(headers), "TableStyleLight9")
+    add_table(cs, "Deflator", HEADER_ROW, LAST_ROW, len(headers), "TableStyleLight9")
     for n, width in enumerate([5, 30, 12, 70, 14, 12], 1):
         cs.column_dimensions[get_column_letter(n)].width = width
-    cs.freeze_panes = "A5"
+    cs.freeze_panes = "A6"
     cs.sheet_view.showGridLines = False
 
 

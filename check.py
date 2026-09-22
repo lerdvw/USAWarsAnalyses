@@ -121,6 +121,15 @@ def figures():
             letter = column[header]
             check(ws[f"{letter}{last + 1}"].value == f"=SUM({letter}{first}:{letter}{last})",
                   f"the {header} total misses rows")
+    # Each conflict is priced by its own row of the deflator sheet.
+    deflator = wb["CPI_Deflator"]
+    cost = column[next(h for h in headers if h.startswith("Net Cost to"))]
+    adjusted = column[next(h for h in headers if h.startswith("Net Cost in"))]
+    for row in ROWS:
+        r = 5 + row["idx"]
+        check(deflator[f"B{r}"].value == row["name"], f"CPI_Deflator row {r} is not {row['name']}")
+        check(ws[f"{adjusted}{r}"].value == f'=IF({cost}{r}="","",{cost}{r}*CPI_Deflator!F{r})',
+              f"Figures row {r} is priced from another conflict's deflator row")
     print(f"figures.xlsx    {len(wb.sheetnames)} sheets, {last - first + 1} rows")
 
 
