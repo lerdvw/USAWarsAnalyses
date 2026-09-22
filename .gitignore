@@ -5,3 +5,5 @@ __pycache__/
 # built by build.py
 *.xlsx
 .~lock.*#
+figures.html
+record.html

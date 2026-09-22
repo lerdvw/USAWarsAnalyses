@@ -1,0 +1,597 @@
+/*
+ * Styles for figures.html and record.html.
+ *
+ * Every colour is a token on :root. The dark palette redefines the same
+ * tokens twice: once for a viewer whose system is set to dark, and once for
+ * an explicit data-theme="dark" on the page.
+ */
+
+
+/* ---- Light palette (the default) ----------------------------------------- */
+
+:root {
+  /* Surfaces and text */
+  --ground: #e9ecef;
+  --surface: #fff;
+  --surface-2: #f3f5f7;
+  --ink: #11161b;
+  --ink-2: #39444f;
+  --muted: #64707c;
+  --faint: #8b959f;
+  --rule: #cfd6dd;
+  --rule-soft: #e2e7ec;
+  --accent: #2c4a63;
+
+  /* Authorization levels, 5 (declared war) to 0 (executive only):
+     background, text and border of each level's chip */
+  --lv5-bg: #bfdccb;  --lv5-fg: #0f4530;  --lv5-bd: #7fb89a;
+  --lv4-bg: #cfe6d8;  --lv4-fg: #14503a;  --lv4-bd: #8fc4a8;
+  --lv3-bg: #dcece1;  --lv3-fg: #1f5c43;  --lv3-bd: #a9cdb8;
+  --lv2-bg: #d9e4f2;  --lv2-fg: #1e4478;  --lv2-bd: #a5bedd;
+  --lv1-bg: #f0e6cd;  --lv1-fg: #6a5314;  --lv1-bd: #d6c391;
+  --lv0-bg: #f3dcd9;  --lv0-fg: #7e2f27;  --lv0-bd: #ddaaa2;
+
+  /* Conflict types: text colour, on one shared tint */
+  --tDefensive: #1e4478;
+  --tOffensive: #7e2f27;
+  --tHumanitarian: #1f5c43;
+  --tFreedom: #1b5450;
+  --tOther: #55504a;
+  --tbg: rgba(17, 22, 27, .06);
+
+  --shadow: 0 1px 2px rgba(17, 22, 27, .05), 0 8px 24px -12px rgba(17, 22, 27, .18);
+
+  /* Typefaces: a serif for headings, a sans for text, a mono for data */
+  --font-display: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+
+/* ---- Dark palette --------------------------------------------------------- */
+
+/* The viewer's system is dark and the page has not been told otherwise. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --ground: #10141a;
+    --surface: #171d25;
+    --surface-2: #1d242d;
+    --ink: #e7ecf1;
+    --ink-2: #c0cad4;
+    --muted: #94a1ad;
+    --faint: #6d7a86;
+    --rule: #2e3742;
+    --rule-soft: #242c35;
+    --accent: #8fb4d4;
+
+    --lv5-bg: #11382a;  --lv5-fg: #93e3bd;  --lv5-bd: #2f6a50;
+    --lv4-bg: #15352a;  --lv4-fg: #86dcb2;  --lv4-bd: #2c5f48;
+    --lv3-bg: #17302a;  --lv3-fg: #74c9a4;  --lv3-bd: #2a5544;
+    --lv2-bg: #172a40;  --lv2-fg: #93bbe8;  --lv2-bd: #2d4a6d;
+    --lv1-bg: #33290f;  --lv1-fg: #d9bd72;  --lv1-bd: #5c4a1e;
+    --lv0-bg: #37201d;  --lv0-fg: #e59e94;  --lv0-bd: #62352f;
+
+    --tDefensive: #93bbe8;
+    --tOffensive: #e59e94;
+    --tHumanitarian: #74c9a4;
+    --tFreedom: #7fcfc9;
+    --tOther: #b9b2a8;
+    --tbg: rgba(231, 236, 241, .08);
+
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 28px -14px rgba(0, 0, 0, .7);
+  }
+}
+
+/* The page has been set to dark explicitly. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --ground: #10141a;
+  --surface: #171d25;
+  --surface-2: #1d242d;
+  --ink: #e7ecf1;
+  --ink-2: #c0cad4;
+  --muted: #94a1ad;
+  --faint: #6d7a86;
+  --rule: #2e3742;
+  --rule-soft: #242c35;
+  --accent: #8fb4d4;
+
+  --lv5-bg: #11382a;  --lv5-fg: #93e3bd;  --lv5-bd: #2f6a50;
+  --lv4-bg: #15352a;  --lv4-fg: #86dcb2;  --lv4-bd: #2c5f48;
+  --lv3-bg: #17302a;  --lv3-fg: #74c9a4;  --lv3-bd: #2a5544;
+  --lv2-bg: #172a40;  --lv2-fg: #93bbe8;  --lv2-bd: #2d4a6d;
+  --lv1-bg: #33290f;  --lv1-fg: #d9bd72;  --lv1-bd: #5c4a1e;
+  --lv0-bg: #37201d;  --lv0-fg: #e59e94;  --lv0-bd: #62352f;
+
+  --tDefensive: #93bbe8;
+  --tOffensive: #e59e94;
+  --tHumanitarian: #74c9a4;
+  --tFreedom: #7fcfc9;
+  --tOther: #b9b2a8;
+  --tbg: rgba(231, 236, 241, .08);
+
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 28px -14px rgba(0, 0, 0, .7);
+}
+
+
+/* ---- Page ------------------------------------------------------------------ */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-inline: 20px;
+  padding-block: 40px 64px;
+}
+
+
+/* ---- Header ---------------------------------------------------------------- */
+
+.eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin: 0 0 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.eyebrow a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.eyebrow a:hover {
+  text-decoration: underline;
+}
+
+h1 {
+  margin: 0 0 16px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  line-height: 1.04;
+  letter-spacing: -.018em;
+  text-wrap: balance;
+}
+
+.standfirst {
+  max-width: 70ch;
+  margin: 0 0 22px;
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+.dateline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin-bottom: 28px;
+  padding-block: 12px;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.dateline b {
+  color: var(--ink-2);
+  font-weight: 500;
+}
+
+
+/* ---- Panels and the legend ------------------------------------------------- */
+
+.panel {
+  margin-bottom: 22px;
+  padding: 18px 22px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  box-shadow: var(--shadow);
+}
+
+.panel h2 {
+  margin: 0 0 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+/* A thin divider between groups of chips */
+.legend .sep {
+  width: 1px;
+  height: 16px;
+  background: var(--rule);
+}
+
+/* Authorization chip; its colours come from the lv0-lv5 classes below */
+.chip {
+  display: inline-block;
+  padding: 2px 7px;
+  border: 1px solid;
+  border-radius: 2px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: .03em;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.lv5 { background: var(--lv5-bg); color: var(--lv5-fg); border-color: var(--lv5-bd); font-weight: 600; }
+.lv4 { background: var(--lv4-bg); color: var(--lv4-fg); border-color: var(--lv4-bd); font-weight: 600; }
+.lv3 { background: var(--lv3-bg); color: var(--lv3-fg); border-color: var(--lv3-bd); }
+.lv2 { background: var(--lv2-bg); color: var(--lv2-fg); border-color: var(--lv2-bd); }
+.lv1 { background: var(--lv1-bg); color: var(--lv1-fg); border-color: var(--lv1-bd); }
+.lv0 { background: var(--lv0-bg); color: var(--lv0-fg); border-color: var(--lv0-bd); }
+
+/* Conflict-type chip; the script sets its text colour per type */
+.tchip {
+  display: inline-block;
+  padding: 2px 7px;
+  background: var(--tbg);
+  border: 1px solid transparent;
+  border-radius: 2px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  white-space: nowrap;
+}
+
+
+/* ---- Toolbar above the table ----------------------------------------------- */
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin-bottom: 10px;
+}
+
+.toolbar .hint {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.toolbar .hint b {
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
+
+/* ---- The table ------------------------------------------------------------- */
+
+/* The table scrolls inside this box, sideways and down, so the page never
+   scrolls sideways. */
+.scroller {
+  max-height: 80vh;
+  margin-bottom: 12px;
+  overflow-x: auto;
+  overflow-y: auto;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  box-shadow: var(--shadow);
+}
+
+table {
+  min-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 12.5px;
+}
+
+/* Headings stay at the top of the box while the rows scroll under them. */
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  padding: 0;
+  background: var(--surface-2);
+  border-bottom: 1.5px solid var(--rule);
+  text-align: left;
+  vertical-align: bottom;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--muted);
+}
+
+
+/* ---- Cells ----------------------------------------------------------------- */
+
+tbody td {
+  padding: 9px 10px;
+  border-bottom: 1px solid var(--rule-soft);
+  vertical-align: top;
+  color: var(--ink-2);
+}
+
+tbody tr:hover td {
+  background: var(--surface-2);
+}
+
+/* Numbers and dates: monospaced, lined up on the right */
+td.num,
+th.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* The conflict's name, with its theatre underneath */
+.c-name {
+  min-width: 200px;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.c-name .sub {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--faint);
+}
+
+/* Columns of running text */
+.prose {
+  min-width: 260px;
+  max-width: 520px;
+  line-height: 1.5;
+}
+
+.prose.wide {
+  min-width: 340px;
+  max-width: 640px;
+}
+
+.small {
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+/* The note under an authorization chip */
+.auth-note {
+  max-width: 300px;
+  margin-top: 4px;
+  white-space: normal;
+}
+
+/* An em dash where no figure exists */
+.nil {
+  color: var(--faint);
+}
+
+.strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Source numbers, linked to the list at the foot of the page */
+sup.ref {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+}
+
+sup.ref a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+sup.ref a:hover {
+  text-decoration: underline;
+}
+
+
+/* ---- Pinned columns -------------------------------------------------------- */
+
+/* The first two columns stay put while the table scrolls sideways. */
+.sticky1,
+.sticky2 {
+  position: sticky;
+  z-index: 2;
+  background: var(--surface);
+}
+
+.sticky1 {
+  left: 0;
+  min-width: 44px;
+}
+
+.sticky2 {
+  left: 44px;
+  box-shadow: 4px 0 8px -6px rgba(17, 22, 27, .25);
+}
+
+thead .sticky1,
+thead .sticky2 {
+  z-index: 4;
+  background: var(--surface-2);
+}
+
+tbody tr:hover .sticky1,
+tbody tr:hover .sticky2 {
+  background: var(--surface-2);
+}
+
+
+/* ---- Notes, caveats and sources -------------------------------------------- */
+
+.note {
+  max-width: 90ch;
+  margin: 0 0 28px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.caveats {
+  margin-bottom: 28px;
+  padding: 20px 24px;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--lv0-bd);
+  border-radius: 3px;
+}
+
+.caveats h2,
+.refs-sec h2 {
+  margin: 0 0 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.caveats ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.caveats li {
+  margin-bottom: 8px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+
+/* Definitions of each measure, in as many columns as fit */
+.defs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px 28px;
+  margin: 0;
+}
+
+.defs dt {
+  margin-bottom: 4px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  color: var(--ink);
+}
+
+.defs dd {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+ol.refs {
+  margin: 0;
+  padding-left: 26px;
+  columns: 2;
+  column-gap: 40px;
+}
+
+ol.refs li {
+  margin-bottom: 8px;
+  break-inside: avoid;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+ol.refs li a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+ol.refs li a:hover {
+  text-decoration: underline;
+}
+
+/* The source a reader just jumped to from the table */
+ol.refs li:target {
+  color: var(--ink);
+}
+
+footer {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--rule);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--faint);
+}
+
+
+/* ---- Narrow screens -------------------------------------------------------- */
+
+@media (max-width: 760px) {
+  .wrap {
+    padding-block: 30px 50px;
+  }
+
+  ol.refs {
+    columns: 1;
+  }
+
+  .panel,
+  .caveats {
+    padding: 16px 18px;
+  }
+
+  /* Let the page scroll instead of a box inside it. */
+  .scroller {
+    max-height: none;
+  }
+
+  .sticky2 {
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -8,7 +8,9 @@ Prints a summary, then every failed check; exits with status 1 if any failed.
 Outputs not built yet are skipped.
 """
 
+import json
 import os
+import re
 
 import data
 from data import ROWS
@@ -148,6 +150,28 @@ def record():
     print(f"record.xlsx     {len(ROWS)} rows")
 
 
+def json_block(text, block_id):
+    """Parse one <script type="application/json" id="..."> block of a page."""
+    match = re.search(r'<script type="application/json" id="' + block_id + r'">\s*(.*?)\s*</script>', text, re.S)
+    return json.loads(match.group(1)) if match else []
+
+
+def pages():
+    """Both pages carry every conflict, in order."""
+    columns = {}
+    for name in ("figures.html", "record.html"):
+        path = os.path.join(HERE, name)
+        if not os.path.exists(path):
+            print(f"{name:<15} not built; run build.py first")
+            continue
+        with open(path, encoding="utf-8") as f:
+            text = f.read()
+        rows = json_block(text, "table-rows")
+        columns[name] = {c["key"]: c for c in json_block(text, "table-columns")}
+        check([r["name"] for r in rows] == [row["name"] for row in ROWS], f"{name} does not carry every conflict in order")
+        print(f"{name:<15} {len(rows)} rows, {len(text):,} bytes")
+
+
 if __name__ == "__main__":
     rows()
     scales()
@@ -157,6 +181,7 @@ if __name__ == "__main__":
     crs()
     figures()
     record()
+    pages()
     for message in FAILED:
         print("FAIL", message)
     print("\nall checks pass" if not FAILED else f"\n{len(FAILED)} check(s) failed")

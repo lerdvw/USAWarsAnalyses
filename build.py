@@ -1,16 +1,23 @@
 # -*- coding: utf-8 -*-
 """
-Build the two workbooks from data.py.
+Build the workbooks and web pages from data.py.
 
-    python3 build.py
+    python3 build.py              build everything
+    python3 build.py xlsx         build the two workbooks
+    python3 build.py pages        build the two pages
 
-Both are written next to this file:
+Everything is written next to this file:
 
     US-Conflicts-1775-2026-Figures.xlsx   the numbers, with live formulas
     US-Conflicts-1775-2026-Record.xlsx    the same conflicts, in words
+    figures.html, record.html             sortable, filterable web pages
 """
 
+import html
+import json
 import os
+import re
+import sys
 from collections import namedtuple
 
 from openpyxl import Workbook
@@ -672,6 +679,189 @@ def build_record():
     return path
 
 
+# ===========================================================================
+# The web pages
+# ===========================================================================
+
+WEB = os.path.join(HERE, "web")
+LEVEL_ORDER = [LV_LABEL[level] for level in (5, 4, 3, 2, 1, 0)]
+
+# The columns each page shows, left to right. web/page.js draws, sorts and
+# filters a column by its kind (num, date, cat, text or refs). Options:
+#   order   the dropdown order of a "cat" column
+#   money   the figure is millions of dollars
+#   strong  the figure is emphasised
+#   small   smaller text             wide    a wider text column
+#   detail  show the authorization note under its label
+FIGURES_PAGE_COLUMNS = [
+    {"key": "idx", "label": "#", "kind": "num"},
+    {"key": "name", "label": "Conflict", "kind": "text"},
+    {"key": "start", "label": "Start", "kind": "date"},
+    {"key": "end", "label": "End", "kind": "date"},
+    {"key": "era", "label": "Era", "kind": "cat", "order": ERAS},
+    {"key": "presidents", "label": "President(s)", "kind": "text"},
+    {"key": "type", "label": "Conflict type", "kind": "cat", "order": TYPES},
+    {"key": "reason", "label": "Reason", "kind": "text", "small": True},
+    {"key": "auth_label", "label": "Authorization", "kind": "cat", "order": LEVEL_ORDER},
+    {"key": "auth_level", "label": "Auth. strength", "kind": "num"},
+    {"key": "combat_days", "label": "Combat days", "kind": "num"},
+    {"key": "all_days", "label": "All conflict days", "kind": "num"},
+    {"key": "kia", "label": "KIA + MIA", "kind": "num", "strong": True},
+    {"key": "casualties", "label": "All casualties", "kind": "num", "strong": True},
+    {"key": "cost_m", "label": "Net cost, then-year", "kind": "num", "money": True, "strong": True},
+    {"key": "cost_adj", "label": f"Net cost, {CPI_BASE_LABEL} $", "kind": "num", "money": True, "strong": True},
+    {"key": "sources", "label": "Src", "kind": "refs"},
+]
+
+RECORD_PAGE_COLUMNS = [
+    {"key": "idx", "label": "#", "kind": "num"},
+    {"key": "name", "label": "Conflict", "kind": "text"},
+    {"key": "dates", "label": "Dates", "kind": "text"},
+    {"key": "era", "label": "Era", "kind": "cat", "order": ERAS},
+    {"key": "presidents", "label": "President(s)", "kind": "text"},
+    {"key": "type", "label": "Type", "kind": "cat", "order": TYPES},
+    {"key": "reason", "label": "Why it was fought", "kind": "text"},
+    {"key": "summary", "label": "What happened", "kind": "text", "wide": True},
+    {"key": "auth_label", "label": "Authorization", "kind": "cat", "order": LEVEL_ORDER, "detail": True},
+    {"key": "duration", "label": "Duration", "kind": "text", "small": True},
+    {"key": "losses_text", "label": "US losses", "kind": "text", "small": True},
+    {"key": "cost_text", "label": "Cost", "kind": "text", "small": True},
+    {"key": "sources", "label": "Src", "kind": "refs"},
+]
+
+PAGES = {
+    "figures": {
+        "file": "figures.html",
+        "title": "War by the Numbers",
+        "eyebrow": "US Conflicts 1775&ndash;2026 &middot; Figures",
+        "standfirst": ("Seventy-five American conflicts from Lexington to the Strait of Hormuz, reduced to what "
+                       "can be counted: how long each ran, how many Americans it killed and wounded, what it cost "
+                       "then, and what that money would be today. Every column sorts and filters; the table "
+                       "scrolls sideways."),
+        "dollars": f"then-year, and {CPI_BASE_LABEL}",
+        "columns": FIGURES_PAGE_COLUMNS,
+    },
+    "record": {
+        "file": "record.html",
+        "title": "Wars of the Republic",
+        "eyebrow": "US Conflicts 1775&ndash;2026 &middot; The Record",
+        "standfirst": ("Seventy-five American conflicts from Lexington to the Strait of Hormuz: who ordered each "
+                       "one, what permission they had first, why they said they were fighting, and what actually "
+                       "happened. Fewer columns than the figures page, fuller descriptions. Every column sorts "
+                       "and filters."),
+        "dollars": "then-year",
+        "columns": RECORD_PAGE_COLUMNS,
+    },
+}
+
+def page_row(r):
+    """One conflict as the page script sees it; each page shows some of these fields."""
+    return {
+        "idx": r["idx"],
+        "name": r["name"],
+        "theatre": r["theatre"],
+        "flag": r["flag"],
+        "start": r["start"].isoformat(),
+        "start_text": date_text(r["start"]),
+        "end": r["end_or_today"].isoformat(),
+        "end_text": "ongoing ‡" if r["ongoing"] else date_text(r["end"]),
+        "dates": dates_text(r),
+        "duration": duration_text(r),
+        "era": r["era"],
+        "presidents": r["presidents"],
+        "type": r["conflict_type"],
+        "reason": r["reason"],
+        "summary": r["summary"],
+        "auth_label": r["auth_label"],
+        "auth_level": r["auth_level"],
+        "auth_note": r["auth_note"],
+        "combat_days": r["combat_days"],
+        "all_days": r["all_days"],
+        "kia": r["kia"],
+        "casualties": r["casualties"],
+        "losses_text": r["losses_text"],
+        "cost_m": r["cost_m"],
+        "cost_adj": None if r["cost_adj"] is None else round(r["cost_adj"]),
+        "cost_text": r["cost_text"],
+        "sources": r["sources"],
+    }
+
+
+def read_web(name):
+    """The text of a file in web/."""
+    with open(os.path.join(WEB, name), encoding="utf-8") as f:
+        return f.read().rstrip("\n")
+
+
+def fill(template, values):
+    """Replace every {{ name }} in the template, in one pass."""
+    return re.sub(r"\{\{ (\w+) \}\}", lambda match: values[match.group(1)], template)
+
+
+def json_lines(items):
+    """A JSON list with one item per line."""
+    return "[\n" + ",\n".join(json.dumps(item, ensure_ascii=False) for item in items) + "\n]"
+
+
+def script_safe(text):
+    """Keep JSON from ending its <script> block early."""
+    return text.replace("</", "<\\/")
+
+
+def indented(lines, spaces):
+    return "\n".join(" " * spaces + line for line in lines)
+
+
+def legend_html():
+    """The legend's chips: the six authorization levels, the five types, the flags."""
+    chips = [f'<span class="chip lv{level}">{LV_LABEL[level]}</span>' for level in (5, 4, 3, 2, 1, 0)]
+    chips.append('<span class="sep"></span>')
+    for conflict_type in TYPES:
+        colour = "tFreedom" if conflict_type.startswith("Freedom") else "t" + conflict_type
+        chips.append(f'<span class="tchip" style="color:var(--{colour})">{conflict_type}</span>')
+    chips.append('<span class="sep"></span>')
+    chips.append(f"<span>{html.escape(FLAGS)}</span>")
+    return indented(chips, 6)
+
+
+def build_page(kind):
+    """Fill web/page.html for one page ("figures" or "record") and return the HTML."""
+    page = PAGES[kind]
+    definitions = [f"<div><dt>{html.escape(term)}</dt><dd>{html.escape(text)}</dd></div>" for term, text in METHOD]
+    caveats = [f"<li>{html.escape(caveat)}</li>" for caveat in CAVEATS]
+    return fill(read_web("page.html"), {
+        "title": page["title"],
+        "eyebrow": page["eyebrow"],
+        "standfirst": page["standfirst"],
+        "count": str(len(ROWS)),
+        "dollars": page["dollars"],
+        "legend": legend_html(),
+        "definitions": indented(definitions, 6),
+        "caveats": indented(caveats, 6),
+        "style": read_web("page.css"),
+        "script": read_web("page.js"),
+        "columns": script_safe(json_lines(page["columns"])),
+        "rows": script_safe(json.dumps([page_row(r) for r in ROWS], ensure_ascii=False, indent=2)),
+        "sources": script_safe(json_lines(REFS)),
+    }) + "\n"
+
+
+def build_pages():
+    """Write both pages and return their paths."""
+    paths = []
+    for kind in ("figures", "record"):
+        path = os.path.join(HERE, PAGES[kind]["file"])
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(build_page(kind))
+        paths.append(path)
+    return paths
+
+
 if __name__ == "__main__":
-    print(build_figures())
-    print(build_record())
+    what = sys.argv[1] if len(sys.argv) > 1 else "all"
+    if what in ("all", "xlsx"):
+        print(build_figures())
+        print(build_record())
+    if what in ("all", "pages"):
+        for path in build_pages():
+            print(path)
