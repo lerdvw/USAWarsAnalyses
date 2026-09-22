@@ -84,10 +84,12 @@ CAVEATS = [
     "COSTS BEFORE VIETNAM WERE NEVER SEPARATELY RECORDED. CRS estimated them as the increase in "
     "Army and Navy outlays over the pre-war average. For the occupations, expeditions and Indian "
     "Wars no such figure exists; those cells are blank and the totals therefore understate.",
-    "TWO DEFLATOR METHODS DIVERGE FOR THE OLDEST WARS. This file uses CPI from each conflict's "
-    "cost-centre year. CRS used a hybrid (CPI before 1940, defence-specific deflators after). For "
-    "the Civil War the two differ by about 30%, for World War II by about 15%. Both are shown on "
-    "the CPI_Deflator sheet; neither is 'right'.",
+    "TWO DEFLATOR METHODS DIVERGE. This file uses CPI from each conflict's cost-centre year. CRS "
+    "used a hybrid (CPI before 1940, defence-specific deflators after) and its figures come out "
+    "higher: by 3% for Vietnam and 8% for World War II, but 28% for World War I, 31% for the Civil "
+    "War, 34% for Korea and 48% for the War of 1812. Both are shown side by side on the "
+    "CPI_Deflator sheet; neither is 'right'. (The Gulf War cross-check there is CRS's GROSS $61bn, "
+    "not the $4.7bn net used in this file, which is why it differs 13-fold.)",
     "AFGHANISTAN AND IRAQ ADJUSTED COSTS ARE INDICATIVE ONLY. Their totals already blend past "
     "outlays with veterans' care projected to 2050 - partly future dollars - so inflating them "
     "overstates. They are also on a broader cost basis (full burden) than every other row "
@@ -487,7 +489,9 @@ def write_deflator_sheet(wb):
     cs["B2"].fill = PatternFill("solid", fgColor="FFFFFF00")
     cs["C2"] = "<- input. Change this cell to restate every adjusted cost against a different base month."
     cs["C2"].font = font(italic=True, color=MUTED)
-    cs["A3"] = "CRS FY2011 constant-dollar figures are uplifted to the base with CPI-U 2011 = 224.939."
+    cs["A3"] = ("CRS FY2011 constant-dollar figures (RS22926, military operations only) are uplifted to the base "
+                "with CPI-U 2011 = 224.939. The Gulf War cross-check is CRS's gross $61bn; the Figures sheet "
+                "uses the $4.7bn net.")
     cs["A3"].font = font(italic=True, color=MUTED)
 
     headers = ["#", "Conflict", "Cost-centre year", "Why that year / index basis", "CPI-U index (1982-84=100)",
