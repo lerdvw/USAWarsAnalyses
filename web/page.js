@@ -19,6 +19,7 @@
   var table = document.getElementById("tbl");
   var thead = table.querySelector("thead");
   var tbody = table.querySelector("tbody");
+  var tfoot = table.querySelector("tfoot");  // only the figures page has one
 
   // The CSS colour variable for each conflict type (see page.css).
   var TYPE_COLOUR = {
@@ -288,6 +289,30 @@
   }
 
 
+  /* ---- Totals --------------------------------------------------------- */
+
+  // The footer sums each totalled column over the rows now shown, so a
+  // filter gives that subset's totals.
+  function renderTotals(rows) {
+    var cells = COLUMNS.map(function (column, i) {
+      if (i === 0) return '<td class="sticky1"></td>';
+      if (i === 1) return '<td class="sticky2">Total of shown rows</td>';
+      if (column.kind !== "num" || !column.total) return "<td></td>";
+      var sum = 0;
+      var any = false;
+      rows.forEach(function (row) {
+        if (row[column.key] != null) {
+          sum += row[column.key];
+          any = true;
+        }
+      });
+      var text = any ? (column.money ? formatMoney(sum) : formatNumber(sum)) : "";
+      return '<td class="num">' + text + "</td>";
+    });
+    tfoot.innerHTML = "<tr>" + cells.join("") + "</tr>";
+  }
+
+
   /* ---- Drawing -------------------------------------------------------- */
 
   function render() {
@@ -303,6 +328,7 @@
     }).join("");
     document.getElementById("count").textContent = rows.length + " of " + ROWS.length;
     showSortState();
+    if (tfoot) renderTotals(rows);
   }
 
   // The numbered list of sources at the foot of the page.

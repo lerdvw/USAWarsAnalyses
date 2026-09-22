@@ -577,6 +577,22 @@ tbody tr:hover .sticky2 {
 }
 
 
+/* ---- Totals row ------------------------------------------------------------ */
+
+/* Stays at the bottom of the box while the rows scroll above it. */
+tfoot td {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  padding: 11px 10px;
+  background: var(--surface-2);
+  border-top: 1.5px solid var(--rule);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+
 /* ---- Notes, caveats and sources -------------------------------------------- */
 
 .note {

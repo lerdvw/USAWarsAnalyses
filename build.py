@@ -691,6 +691,7 @@ LEVEL_ORDER = [LV_LABEL[level] for level in (5, 4, 3, 2, 1, 0)]
 #   order   the dropdown order of a "cat" column
 #   money   the figure is millions of dollars
 #   strong  the figure is emphasised
+#   total   the figures page's footer sums the column
 #   small   smaller text             wide    a wider text column
 #   detail  show the authorization note under its label
 FIGURES_PAGE_COLUMNS = [
@@ -704,12 +705,13 @@ FIGURES_PAGE_COLUMNS = [
     {"key": "reason", "label": "Reason", "kind": "text", "small": True},
     {"key": "auth_label", "label": "Authorization", "kind": "cat", "order": LEVEL_ORDER},
     {"key": "auth_level", "label": "Auth. strength", "kind": "num"},
-    {"key": "combat_days", "label": "Combat days", "kind": "num"},
-    {"key": "all_days", "label": "All conflict days", "kind": "num"},
-    {"key": "kia", "label": "KIA + MIA", "kind": "num", "strong": True},
-    {"key": "casualties", "label": "All casualties", "kind": "num", "strong": True},
-    {"key": "cost_m", "label": "Net cost, then-year", "kind": "num", "money": True, "strong": True},
-    {"key": "cost_adj", "label": f"Net cost, {CPI_BASE_LABEL} $", "kind": "num", "money": True, "strong": True},
+    {"key": "combat_days", "label": "Combat days", "kind": "num", "total": True},
+    {"key": "all_days", "label": "All conflict days", "kind": "num", "total": True},
+    {"key": "kia", "label": "KIA + MIA", "kind": "num", "strong": True, "total": True},
+    {"key": "casualties", "label": "All casualties", "kind": "num", "strong": True, "total": True},
+    {"key": "cost_m", "label": "Net cost, then-year", "kind": "num", "money": True, "strong": True, "total": True},
+    {"key": "cost_adj", "label": f"Net cost, {CPI_BASE_LABEL} $", "kind": "num", "money": True, "strong": True,
+     "total": True},
     {"key": "sources", "label": "Src", "kind": "refs"},
 ]
 
@@ -740,6 +742,7 @@ PAGES = {
                        "scrolls sideways."),
         "dollars": f"then-year, and {CPI_BASE_LABEL}",
         "columns": FIGURES_PAGE_COLUMNS,
+        "totals": True,
     },
     "record": {
         "file": "record.html",
@@ -751,8 +754,13 @@ PAGES = {
                        "and filters."),
         "dollars": "then-year",
         "columns": RECORD_PAGE_COLUMNS,
+        "totals": False,
     },
 }
+
+TOTALS_NOTE = (" The total row sums whatever is currently shown, so filtering by president or era gives that "
+               "subset's totals.")
+
 
 def page_row(r):
     """One conflict as the page script sees it; each page shows some of these fields."""
@@ -836,6 +844,8 @@ def build_page(kind):
         "count": str(len(ROWS)),
         "dollars": page["dollars"],
         "legend": legend_html(),
+        "tfoot": "<tfoot></tfoot>" if page["totals"] else "",
+        "totals_note": TOTALS_NOTE if page["totals"] else "",
         "definitions": indented(definitions, 6),
         "caveats": indented(caveats, 6),
         "style": read_web("page.css"),
