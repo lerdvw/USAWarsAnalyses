@@ -1376,44 +1376,6 @@ ROWS = [
     ),
 
     conflict(
-        name="Occupation of the Dominican Republic",
-        theatre="Dominican Republic",
-        start=date(1916, 5, 15),
-        end=date(1924, 9, 18),
-        era="Imperial and World Wars",
-        presidents="Wilson, Harding, Coolidge",
-        conflict_type="Offensive",
-        reason=(
-            "Stated: end political chaos and enforce the customs receivership securing "
-            "Dominican debt. In practice, install a compliant government."
-        ),
-        summary=(
-            "When the Dominican government refused US demands, Marines occupied the "
-            "country and the Navy ran it directly under a military governor. A "
-            "guerrilla resistance in the east was suppressed over several years. The "
-            "Marines built roads and a National Guard, which Rafael Trujillo commanded "
-            "and then used to seize power in 1930."
-        ),
-        auth_level=0,
-        authority="Executive only",
-        auth_note="No congressional authorisation.",
-        kia=None,
-        deaths=144,
-        wounded=None,
-        losses_text=(
-            "About 144 Marines died from all causes; hostile deaths and wounded not "
-            "reliably separated in the surviving returns"
-        ),
-        cost_m=None,
-        cost_text="Not separately accounted",
-        cost_year=1920,
-        cost_year_note="No cost figure",
-        sources=[28, 18],
-        combat=180,
-        flag="†",
-    ),
-
-    conflict(
         name="Pancho Villa Expedition",
         theatre="Chihuahua, Mexico",
         start=date(1916, 3, 14),
@@ -1455,6 +1417,44 @@ ROWS = [
         cost_year_note="No cost figure",
         sources=[26],
         combat=30,
+        flag="†",
+    ),
+
+    conflict(
+        name="Occupation of the Dominican Republic",
+        theatre="Dominican Republic",
+        start=date(1916, 5, 15),
+        end=date(1924, 9, 18),
+        era="Imperial and World Wars",
+        presidents="Wilson, Harding, Coolidge",
+        conflict_type="Offensive",
+        reason=(
+            "Stated: end political chaos and enforce the customs receivership securing "
+            "Dominican debt. In practice, install a compliant government."
+        ),
+        summary=(
+            "When the Dominican government refused US demands, Marines occupied the "
+            "country and the Navy ran it directly under a military governor. A "
+            "guerrilla resistance in the east was suppressed over several years. The "
+            "Marines built roads and a National Guard, which Rafael Trujillo commanded "
+            "and then used to seize power in 1930."
+        ),
+        auth_level=0,
+        authority="Executive only",
+        auth_note="No congressional authorisation.",
+        kia=None,
+        deaths=144,
+        wounded=None,
+        losses_text=(
+            "About 144 Marines died from all causes; hostile deaths and wounded not "
+            "reliably separated in the surviving returns"
+        ),
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1920,
+        cost_year_note="No cost figure",
+        sources=[28, 18],
+        combat=180,
         flag="†",
     ),
 
@@ -1663,38 +1663,47 @@ ROWS = [
     ),
 
     conflict(
-        name="Second Taiwan Strait Crisis",
-        theatre="Quemoy and Matsu",
-        start=date(1958, 8, 23),
-        end=date(1958, 12, 2),
+        name="Vietnam War",
+        theatre="South Vietnam, with air war over North Vietnam, Laos and Cambodia",
+        start=date(1955, 11, 1),
+        end=date(1975, 4, 30),
         era="Cold War",
-        presidents="Eisenhower",
+        presidents="Eisenhower, Kennedy, L. Johnson, Nixon, Ford",
         conflict_type="Defensive",
         reason=(
-            "Deter a Chinese seizure of Quemoy under renewed bombardment, and keep it "
-            "supplied."
+            "Stated: defend South Vietnam against communist insurgency and North "
+            "Vietnamese invasion, and hold the line of containment in Southeast Asia."
         ),
         summary=(
-            "China fired 400,000 shells at Quemoy in six weeks. The Seventh Fleet "
-            "escorted Nationalist supply convoys to the three-mile limit; US aircraft "
-            "supplied Sidewinder missiles, first used in combat here. The Joint Chiefs "
-            "again discussed nuclear strikes. Beijing announced a ceasefire in "
-            "October, then shelled on alternate days for twenty years. No US forces "
-            "were hit."
+            "Advisers from 1955 became half a million troops by 1968. The Tonkin Gulf "
+            "Resolution, passed on a disputed account of an attack, was the only "
+            "authorisation. The Tet Offensive broke domestic support; Nixon withdrew "
+            "while widening the war into Cambodia and Laos; the Paris accords ended US "
+            "combat in January 1973 and Saigon fell in April 1975. Congress passed the "
+            "War Powers Resolution over Nixon's veto in response."
         ),
-        auth_level=1,
-        authority="Standing law",
-        auth_note="Fought under the 1955 Formosa Resolution, still in force.",
-        kia=0,
-        deaths=0,
-        wounded=0,
-        losses_text="No US casualties",
-        cost_m=None,
-        cost_text="Not separately accounted",
-        cost_year=1958,
-        cost_year_note="No cost figure",
-        sources=[24],
-        combat=0,
+        auth_level=3,
+        authority="Congress",
+        auth_note=(
+            "Gulf of Tonkin Resolution, August 1964 (416-0, 88-2), authorising 'all "
+            "necessary measures'. Repealed in January 1971; the war continued for two "
+            "more years on Article II and appropriations."
+        ),
+        kia=47_434,
+        deaths=58_220,
+        wounded=153_303,
+        losses_text=(
+            "47,434 battle deaths; 10,786 other deaths in theatre; 153,303 wounded "
+            "requiring hospital care (a further 150,341 did not). Counted 1 November "
+            "1955 to 15 May 1975"
+        ),
+        cost_m=111_000,
+        cost_text="$111,000m then-year (CRS; DoD incremental cost)",
+        cost_year=1968,
+        cost_year_note="Peak year of war spending",
+        sources=[1, 2, 3],
+        combat_start=date(1964, 8, 5),
+        combat_end=date(1973, 1, 27),
     ),
 
     conflict(
@@ -1735,6 +1744,41 @@ ROWS = [
         cost_year_note="No cost figure",
         sources=[28],
         combat=1,
+    ),
+
+    conflict(
+        name="Second Taiwan Strait Crisis",
+        theatre="Quemoy and Matsu",
+        start=date(1958, 8, 23),
+        end=date(1958, 12, 2),
+        era="Cold War",
+        presidents="Eisenhower",
+        conflict_type="Defensive",
+        reason=(
+            "Deter a Chinese seizure of Quemoy under renewed bombardment, and keep it "
+            "supplied."
+        ),
+        summary=(
+            "China fired 400,000 shells at Quemoy in six weeks. The Seventh Fleet "
+            "escorted Nationalist supply convoys to the three-mile limit; US aircraft "
+            "supplied Sidewinder missiles, first used in combat here. The Joint Chiefs "
+            "again discussed nuclear strikes. Beijing announced a ceasefire in "
+            "October, then shelled on alternate days for twenty years. No US forces "
+            "were hit."
+        ),
+        auth_level=1,
+        authority="Standing law",
+        auth_note="Fought under the 1955 Formosa Resolution, still in force.",
+        kia=0,
+        deaths=0,
+        wounded=0,
+        losses_text="No US casualties",
+        cost_m=None,
+        cost_text="Not separately accounted",
+        cost_year=1958,
+        cost_year_note="No cost figure",
+        sources=[24],
+        combat=0,
     ),
 
     conflict(
@@ -1815,50 +1859,6 @@ ROWS = [
         cost_year_note="No cost figure",
         sources=[28],
         combat=0,
-    ),
-
-    conflict(
-        name="Vietnam War",
-        theatre="South Vietnam, with air war over North Vietnam, Laos and Cambodia",
-        start=date(1955, 11, 1),
-        end=date(1975, 4, 30),
-        era="Cold War",
-        presidents="Eisenhower, Kennedy, L. Johnson, Nixon, Ford",
-        conflict_type="Defensive",
-        reason=(
-            "Stated: defend South Vietnam against communist insurgency and North "
-            "Vietnamese invasion, and hold the line of containment in Southeast Asia."
-        ),
-        summary=(
-            "Advisers from 1955 became half a million troops by 1968. The Tonkin Gulf "
-            "Resolution, passed on a disputed account of an attack, was the only "
-            "authorisation. The Tet Offensive broke domestic support; Nixon withdrew "
-            "while widening the war into Cambodia and Laos; the Paris accords ended US "
-            "combat in January 1973 and Saigon fell in April 1975. Congress passed the "
-            "War Powers Resolution over Nixon's veto in response."
-        ),
-        auth_level=3,
-        authority="Congress",
-        auth_note=(
-            "Gulf of Tonkin Resolution, August 1964 (416-0, 88-2), authorising 'all "
-            "necessary measures'. Repealed in January 1971; the war continued for two "
-            "more years on Article II and appropriations."
-        ),
-        kia=47_434,
-        deaths=58_220,
-        wounded=153_303,
-        losses_text=(
-            "47,434 battle deaths; 10,786 other deaths in theatre; 153,303 wounded "
-            "requiring hospital care (a further 150,341 did not). Counted 1 November "
-            "1955 to 15 May 1975"
-        ),
-        cost_m=111_000,
-        cost_text="$111,000m then-year (CRS; DoD incremental cost)",
-        cost_year=1968,
-        cost_year_note="Peak year of war spending",
-        sources=[1, 2, 3],
-        combat_start=date(1964, 8, 5),
-        combat_end=date(1973, 1, 27),
     ),
 
     conflict(

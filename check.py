@@ -37,6 +37,8 @@ def total(key):
 def rows():
     """Numbering, dates, day counts, and casualties that add up."""
     check([row["idx"] for row in ROWS] == list(range(1, len(ROWS) + 1)), "# does not run 1..n")
+    for before, after in zip(ROWS, ROWS[1:]):
+        check(before["start"] <= after["start"], f"{after['name']} starts before {before['name']}, above it")
     for row in ROWS:
         name = row["name"]
         check(row["end"] is None or row["end"] >= row["start"], f"{name}: ends before it starts")
