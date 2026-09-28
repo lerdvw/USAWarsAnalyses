@@ -91,8 +91,10 @@ CAVEATS = [
     "Confederate returns are incomplete and Confederate wounded were never tallied.",
     "PRE-1900 SMALL CONFLICTS ARE ESTIMATES. Deaths for the Indian Wars, the Quasi-War and the "
     "Barbary Wars come from regimental returns and secondary histories, not a central casualty "
-    "system, and are flagged. The Apache Wars' US deaths were never reliably tallied as a series "
-    "and are left blank rather than guessed.",
+    "system, and are flagged. The final phase of the Apache Wars has no official total: its "
+    "figures sum 24 engagements from 1879 to 1886, taking the midpoint of the published accounts "
+    "of the dead (64-78, so 71) and every wounded man reported (38). Minor actions with no "
+    "published losses are left out.",
     "COSTS BEFORE VIETNAM WERE NEVER SEPARATELY RECORDED. CRS estimated them as the increase in "
     "Army and Navy outlays over the pre-war average. For the occupations, expeditions and Indian "
     "Wars no such figure exists; those cells are blank and the totals therefore understate.",

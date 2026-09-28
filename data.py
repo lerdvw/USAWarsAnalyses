@@ -284,6 +284,35 @@ REFS = [
          "https://www.cbsnews.com/news/senate-war-powers-trump-venezuela-boat-strikes/"),
     (50, "WOLA, Killing Spree: Extrajudicial Executions in the U.S. Boat Strikes Campaign",
          "https://www.wola.org/analysis/killing-spree-extrajudicial-executions-in-the-u-s-boat-strikes-campaign/"),
+    # 51-67: the Apache Wars' final phase, engagement by engagement
+    (51, "Wikipedia, Victorio's War", "https://en.wikipedia.org/wiki/Victorio%27s_War"),
+    (52, "Wikipedia, Battle of Carrizo Canyon",
+         "https://en.wikipedia.org/wiki/Battle_of_Carrizo_Canyon"),
+    (53, "HistoryNet, Warm Springs Apache Leader Nana: The 80-Year-Old Warrior Turned the Tables",
+         "https://historynet.com/warm-springs-apache-leader-nana-the-80-year-old-warrior-turned-the-tables/"),
+    (54, "Wikipedia, Battle of Cibecue Creek",
+         "https://en.wikipedia.org/wiki/Battle_of_Cibecue_Creek"),
+    (55, "Wikipedia, Battle of Fort Apache", "https://en.wikipedia.org/wiki/Battle_of_Fort_Apache"),
+    (56, "Fort Tours, Cedar Springs", "https://www.forttours.com/pages/cedarsprings.asp"),
+    (57, "Fort Tours, Horseshoe Canyon", "https://www.forttours.com/pages/horseshoecanyon.asp"),
+    (58, "Wikipedia, 6th Cavalry Regiment (Sierra Enmedio, 1882)",
+         "https://en.wikipedia.org/wiki/6th_Cavalry_Regiment"),
+    (59, "Wikipedia, Battle of Big Dry Wash",
+         "https://en.wikipedia.org/wiki/Battle_of_Big_Dry_Wash"),
+    (60, "HistoryNet, Soldiers vs. Apaches: One Last Time at Guadalupe Canyon",
+         "https://historynet.com/soldiers-vs-apaches-one-last-time-at-guadalupe-canyon/"),
+    (61, "Wikipedia, Battle of Devil's Creek",
+         "https://en.wikipedia.org/wiki/Battle_of_Devil%27s_Creek"),
+    (62, "Fort Tours, battle index (Carrizo Canyon, Guadalupe Canyon and Teres Mountains entries, after Michno's Encyclopedia of Indian Wars)",
+         "https://www.forttours.com/pages/comanbattle.asp"),
+    (63, "Wikipedia, Battle of Little Dry Creek",
+         "https://en.wikipedia.org/wiki/Battle_of_Little_Dry_Creek"),
+    (64, "Wikipedia, Crawford affair", "https://en.wikipedia.org/wiki/Crawford_affair"),
+    (65, "Wikipedia, Bear Valley raid (Lebo and Hatfield fights, 1886)",
+         "https://en.wikipedia.org/wiki/Bear_Valley_raid"),
+    (66, "Wikipedia, Geronimo Campaign", "https://en.wikipedia.org/wiki/Geronimo_Campaign"),
+    (67, "HISTORY, How Geronimo Eluded Death and Capture for 25 Years",
+         "https://www.history.com/articles/geronimo-supernatural-elude-capture"),
 ]
 
 
@@ -1064,10 +1093,10 @@ ROWS = [
         summary=(
             "Victorio's band fought for a year until Mexican troops killed him in "
             "1880. Geronimo broke out of San Carlos repeatedly; the final campaign put "
-            "5,000 soldiers, a quarter of the Army, after 36 people. He surrendered in "
-            "September 1886. The entire Chiricahua tribe, including the scouts who had "
-            "tracked him, was shipped to Florida as prisoners of war and not released "
-            "for 27 years."
+            "5,000 soldiers, nearly a quarter of the Army, after fewer than forty "
+            "people. He surrendered in September 1886. The entire Chiricahua tribe, "
+            "including the scouts who had tracked him, was shipped to Florida as "
+            "prisoners of war and not released for 27 years."
         ),
         auth_level=0,
         authority="Executive only",
@@ -1075,18 +1104,20 @@ ROWS = [
             "Regular Army operations on War Department authority, with an 1882 "
             "agreement allowing pursuit into Mexico."
         ),
-        kia=None,
-        deaths=None,
-        wounded=None,
+        kia=71,
+        deaths=71,
+        wounded=38,
         losses_text=(
-            "US Army deaths across the final campaigns were in the low dozens but have "
-            "never been reliably tallied as a series; left blank rather than guessed"
+            "About 71 US soldiers and Indian scouts killed (64-78, depending on the "
+            "account) and at least 38 wounded, summed over 24 engagements from "
+            "September 1879 to May 1886. Excludes disease and accidents, and minor "
+            "actions with no published losses"
         ),
         cost_m=None,
         cost_text="Not separately accounted",
         cost_year=1886,
         cost_year_note="No figures",
-        sources=[18, 28],
+        sources=[18, 28, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67],
         flag="†",
     ),
 
