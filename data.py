@@ -3141,7 +3141,7 @@ ROWS = [
         ),
         cost_year=2026,
         cost_year_note="Year of the operation",
-        sources=[38, 39, 46],
+        sources=[36, 38, 39, 46],
         flag="†",
     ),
 

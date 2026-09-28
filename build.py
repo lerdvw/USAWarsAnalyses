@@ -322,14 +322,18 @@ FIGURE_COLUMNS = [
     Column("presidents", "President(s)", 26, "text"),
     Column("type", "Conflict Type", 18, "text"),
     Column("reason", "Reason for the Conflict", 60, "wrap"),
+    Column("summary", "What Happened", 70, "wrap"),
     Column("authorization", "Authorization", 17, "text"),
     Column("auth_level", "Auth. strength", 12, "integer"),
     Column("combat_days", "Combat Days", 12, "integer"),
     Column("all_days", "All Conflict Days", 15, "integer"),
     Column("kia", "KIA + MIA", 12, "integer"),
     Column("casualties", "All Casualties", 14, "integer"),
+    Column("losses_text", "Casualty Detail", 40, "wrap"),
     Column("cost_m", "Net Cost to US Taxpayers ($m, then-year)", 22, "money"),
     Column("cost_adj", f"Net Cost in {CPI_BASE_LABEL} Dollars ($m)", 22, "money"),
+    Column("cost_text", "Cost Accounting", 36, "wrap"),
+    Column("sources", "Sources", 12, "wrap"),
 ]
 KEYS = [column.key for column in FIGURE_COLUMNS]
 LETTER = {column.key: get_column_letter(n) for n, column in enumerate(FIGURE_COLUMNS, 1)}
@@ -379,15 +383,19 @@ def figure_values(r, row):
         "presidents": r["presidents"],
         "type": r["conflict_type"],
         "reason": r["reason"],
+        "summary": r["summary"],
         "authorization": r["auth_label"],
         "auth_level": r["auth_level"],
         "combat_days": r["combat_days"],
         "all_days": r["all_days"],
         "kia": r["kia"],
         "casualties": r["casualties"],
+        "losses_text": r["losses_text"],
         "cost_m": r["cost_m"],
         # The then-year cost times this conflict's factor on the deflator sheet.
         "cost_adj": f'=IF({cost}="","",{cost}*CPI_Deflator!F{row})',
+        "cost_text": r["cost_text"],
+        "sources": sources_text(r),
     }
 
 
@@ -403,7 +411,7 @@ def write_figures_table(ws):
             style_cell(ws.cell(row=row, column=n, value=values[column.key]), column.kind)
         colour_chip(ws.cell(row=row, column=position("type")), "type", r["conflict_type"])
         colour_chip(ws.cell(row=row, column=position("authorization")), "level", r["auth_level"])
-        ws.row_dimensions[row].height = 40
+        ws.row_dimensions[row].height = 96
     add_table(ws, "Figures", HEADER_ROW, LAST_ROW, len(FIGURE_COLUMNS))
     for n, column in enumerate(FIGURE_COLUMNS, 1):
         ws.column_dimensions[get_column_letter(n)].width = column.width
@@ -707,15 +715,18 @@ FIGURES_PAGE_COLUMNS = [
     {"key": "presidents", "label": "President(s)", "kind": "text"},
     {"key": "type", "label": "Conflict type", "kind": "cat", "order": TYPES},
     {"key": "reason", "label": "Reason", "kind": "text", "small": True},
+    {"key": "summary", "label": "What happened", "kind": "text", "wide": True},
     {"key": "auth_label", "label": "Authorization", "kind": "cat", "order": LEVEL_ORDER},
     {"key": "auth_level", "label": "Auth. strength", "kind": "num"},
     {"key": "combat_days", "label": "Combat days", "kind": "num", "total": True},
     {"key": "all_days", "label": "All conflict days", "kind": "num", "total": True},
     {"key": "kia", "label": "KIA + MIA", "kind": "num", "strong": True, "total": True},
     {"key": "casualties", "label": "All casualties", "kind": "num", "strong": True, "total": True},
+    {"key": "losses_text", "label": "Casualty detail", "kind": "text", "small": True},
     {"key": "cost_m", "label": "Net cost, then-year", "kind": "num", "money": True, "strong": True, "total": True},
     {"key": "cost_adj", "label": f"Net cost, {CPI_BASE_LABEL} $", "kind": "num", "money": True, "strong": True,
      "total": True},
+    {"key": "cost_text", "label": "Cost accounting", "kind": "text", "small": True},
     {"key": "sources", "label": "Src", "kind": "refs"},
 ]
 

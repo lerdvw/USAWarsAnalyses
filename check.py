@@ -134,6 +134,14 @@ def figures():
         check(deflator[f"B{r}"].value == row["name"], f"CPI_Deflator row {r} is not {row['name']}")
         check(ws[f"{adjusted}{r}"].value == f'=IF({cost}{r}="","",{cost}{r}*CPI_Deflator!F{r})',
               f"Figures row {r} is priced from another conflict's deflator row")
+    # The text columns carry the dataset's words, and each row its sources.
+    for row in ROWS:
+        r = 5 + row["idx"]
+        for header, key in (("What Happened", "summary"), ("Casualty Detail", "losses_text"),
+                            ("Cost Accounting", "cost_text")):
+            check(ws[f"{column[header]}{r}"].value == row[key], f"Figures row {r}: {header} differs from data.py")
+        check(ws[f"{column['Sources']}{r}"].value == ", ".join(str(n) for n in row["sources"]),
+              f"Figures row {r}: sources differ from data.py")
     print(f"figures.xlsx    {len(wb.sheetnames)} sheets, {last - first + 1} rows")
 
 
@@ -172,6 +180,9 @@ def pages():
         columns[name] = {c["key"]: c for c in json_block(text, "table-columns")}
         check([r["name"] for r in rows] == [row["name"] for row in ROWS], f"{name} does not carry every conflict in order")
         print(f"{name:<15} {len(rows)} rows, {len(text):,} bytes")
+    if "figures.html" in columns:
+        check({"summary", "losses_text", "cost_text"} <= set(columns["figures.html"]),
+              "figures.html lacks What happened, Casualty detail or Cost accounting")
 
 
 if __name__ == "__main__":
