@@ -323,7 +323,7 @@ FIGURE_COLUMNS = [
     Column("type", "Conflict Type", 18, "text"),
     Column("reason", "Reason for the Conflict", 60, "wrap"),
     Column("summary", "What Happened", 70, "wrap"),
-    Column("authorization", "Authorization", 17, "text"),
+    Column("authorization", "Authorization", 44, "wrap"),
     Column("auth_level", "Auth. strength", 12, "integer"),
     Column("combat_days", "Combat Days", 12, "integer"),
     Column("all_days", "All Conflict Days", 15, "integer"),
@@ -384,7 +384,7 @@ def figure_values(r, row):
         "type": r["conflict_type"],
         "reason": r["reason"],
         "summary": r["summary"],
-        "authorization": r["auth_label"],
+        "authorization": authorization_text(r),
         "auth_level": r["auth_level"],
         "combat_days": r["combat_days"],
         "all_days": r["all_days"],
@@ -459,8 +459,8 @@ def write_totals(ws):
 def write_breakdown(ws, top, label, match_key, groups):
     """One block of counts and sums, a row per group; returns the next free row.
 
-    A group's row counts and sums the conflicts whose match_key cell holds
-    exactly the group's name."""
+    Each group is (label shown, criterion). A criterion of None matches the
+    label itself against the match_key column."""
     heads = ["Group", "Conflicts", "Combat days", "KIA + MIA", "All casualties",
              "Cost then-year ($m)", f"Cost {CPI_BASE_LABEL} ($m)", "Share of adj. cost"]
     ws.cell(row=top, column=2, value=label).font = font(bold=True, color=ACCENT)
@@ -470,16 +470,17 @@ def write_breakdown(ws, top, label, match_key, groups):
         if k:
             cell.alignment = Alignment(horizontal="right")
     match = column_range(match_key)
-    for k, group in enumerate(groups):
+    for k, (shown, criterion) in enumerate(groups):
         row = top + 2 + k
-        cell = ws.cell(row=row, column=2, value=group)
+        cell = ws.cell(row=row, column=2, value=shown)
         if match_key == "type":
-            colour_chip(cell, "type", group)
+            colour_chip(cell, "type", shown)
         else:
             cell.font = font(bold=True)
-        ws.cell(row=row, column=3, value=f"=COUNTIF({match},$B{row})")
+        test = f"$B{row}" if criterion is None else criterion
+        ws.cell(row=row, column=3, value=f"=COUNTIF({match},{test})")
         for n, key in enumerate(("combat_days", "kia", "casualties", "cost_m", "cost_adj"), 4):
-            ws.cell(row=row, column=n, value=f"=SUMIF({match},$B{row},{column_range(key)})")
+            ws.cell(row=row, column=n, value=f"=SUMIF({match},{test},{column_range(key)})")
         ws.cell(row=row, column=9, value=f'=IFERROR(H{row}/${LETTER["cost_adj"]}${TOTAL_ROW},"")')
         for n in range(3, 10):
             cell = ws.cell(row=row, column=n)
@@ -492,10 +493,11 @@ def write_breakdown(ws, top, label, match_key, groups):
 def write_breakdowns(ws):
     """Totals by conflict type, era and authorization; returns the next free row."""
     row = TOTAL_ROW + 6
-    row = write_breakdown(ws, row, "BY CONFLICT TYPE", "type", TYPES)
-    row = write_breakdown(ws, row, "BY ERA", "era", ERAS)
-    row = write_breakdown(ws, row, "BY AUTHORIZATION", "authorization",
-                          [LV_LABEL[level] for level in (5, 4, 3, 2, 1, 0)])
+    row = write_breakdown(ws, row, "BY CONFLICT TYPE", "type", [(t, None) for t in TYPES])
+    row = write_breakdown(ws, row, "BY ERA", "era", [(era, None) for era in ERAS])
+    # Authorization cells hold the full explanation, so match on the strength number.
+    row = write_breakdown(ws, row, "BY AUTHORIZATION", "auth_level",
+                          [(LV_LABEL[level], level) for level in (5, 4, 3, 2, 1, 0)])
     return row
 
 
@@ -716,7 +718,7 @@ FIGURES_PAGE_COLUMNS = [
     {"key": "type", "label": "Conflict type", "kind": "cat", "order": TYPES},
     {"key": "reason", "label": "Reason", "kind": "text", "small": True},
     {"key": "summary", "label": "What happened", "kind": "text", "wide": True},
-    {"key": "auth_label", "label": "Authorization", "kind": "cat", "order": LEVEL_ORDER},
+    {"key": "auth_label", "label": "Authorization", "kind": "cat", "order": LEVEL_ORDER, "detail": True},
     {"key": "auth_level", "label": "Auth. strength", "kind": "num"},
     {"key": "combat_days", "label": "Combat days", "kind": "num", "total": True},
     {"key": "all_days", "label": "All conflict days", "kind": "num", "total": True},

@@ -142,6 +142,11 @@ def figures():
             check(ws[f"{column[header]}{r}"].value == row[key], f"Figures row {r}: {header} differs from data.py")
         check(ws[f"{column['Sources']}{r}"].value == ", ".join(str(n) for n in row["sources"]),
               f"Figures row {r}: sources differ from data.py")
+    # Authorization reads exactly as it does in the Record workbook.
+    for row in ROWS:
+        r = 5 + row["idx"]
+        check(ws[f"{column['Authorization']}{r}"].value == f"{row['auth_label']} - {row['auth_note']}",
+              f"Figures row {r}: authorization differs from the Record")
     print(f"figures.xlsx    {len(wb.sheetnames)} sheets, {last - first + 1} rows")
 
 
@@ -183,6 +188,9 @@ def pages():
     if "figures.html" in columns:
         check({"summary", "losses_text", "cost_text"} <= set(columns["figures.html"]),
               "figures.html lacks What happened, Casualty detail or Cost accounting")
+    if len(columns) == 2:
+        check(columns["figures.html"]["auth_label"] == columns["record.html"]["auth_label"],
+              "the two pages show authorization differently")
 
 
 if __name__ == "__main__":
