@@ -88,6 +88,18 @@ def inflation():
     print(f"cost, {data.CPI_BASE_LABEL} ${total('cost_adj'):,.0f}m")
 
 
+def tallies():
+    """The Apache row carries the sums of its engagement table, not typed-in numbers."""
+    table = data.APACHE_ENGAGEMENTS
+    check(all(low <= high for _, _, low, high, _, _ in table), "an Apache engagement's low exceeds its high")
+    check([e[0] for e in table] == sorted(e[0] for e in table), "Apache engagements are out of date order")
+    row = next(row for row in ROWS if row["name"] == "Apache Wars, final phase")
+    check(data.APACHE_KILLED_LOW <= row["kia"] <= data.APACHE_KILLED_HIGH, "Apache KIA falls outside its range")
+    check(row["wounded"] == data.APACHE_WOUNDED, "Apache wounded differ from the engagement table")
+    print(f"apache tally    {len(table)} engagements, killed {data.APACHE_KILLED_LOW}-{data.APACHE_KILLED_HIGH} "
+          f"(row {row['kia']}), wounded {data.APACHE_WOUNDED}")
+
+
 def crs():
     """Compare CRS's constant-dollar figures with the CPI method, war by war."""
     check(set(data.CRS_FY2011) <= {row["name"] for row in ROWS}, "CRS_FY2011 names a conflict not in ROWS")
@@ -199,6 +211,7 @@ if __name__ == "__main__":
     sources()
     totals()
     inflation()
+    tallies()
     crs()
     figures()
     record()

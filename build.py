@@ -28,7 +28,8 @@ from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.table import Table, TableStyleInfo
 
-from data import CPI_BASE, CPI_BASE_LABEL, ERAS, LV_LABEL, REFS, ROWS, TYPES, cpi_basis
+from data import (APACHE_ENGAGEMENTS, APACHE_KILLED, APACHE_KILLED_HIGH, APACHE_KILLED_LOW, APACHE_WOUNDED,
+                  CPI_BASE, CPI_BASE_LABEL, ERAS, LV_LABEL, REFS, ROWS, TYPES, cpi_basis)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 FIGURES_FILE = "US-Conflicts-1775-2026-Figures.xlsx"
@@ -92,8 +93,9 @@ CAVEATS = [
     "PRE-1900 SMALL CONFLICTS ARE ESTIMATES. Deaths for the Indian Wars, the Quasi-War and the "
     "Barbary Wars come from regimental returns and secondary histories, not a central casualty "
     "system, and are flagged. The final phase of the Apache Wars has no official total: its "
-    "figures sum 24 engagements from 1879 to 1886, taking the midpoint of the published accounts "
-    "of the dead (64-78, so 71) and every wounded man reported (38). Minor actions with no "
+    f"figures sum {len(APACHE_ENGAGEMENTS)} engagements from 1879 to 1886 (listed in data.py), taking "
+    f"the midpoint of the published accounts of the dead ({APACHE_KILLED_LOW}-{APACHE_KILLED_HIGH}, so "
+    f"{APACHE_KILLED}) and every wounded man reported ({APACHE_WOUNDED}). Minor actions with no "
     "published losses are left out.",
     "COSTS BEFORE VIETNAM WERE NEVER SEPARATELY RECORDED. CRS estimated them as the increase in "
     "Army and Navy outlays over the pre-war average. For the occupations, expeditions and Indian "

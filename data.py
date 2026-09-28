@@ -317,6 +317,47 @@ REFS = [
 
 
 # ---------------------------------------------------------------------------
+# Tallies behind summed figures
+# ---------------------------------------------------------------------------
+
+# The Apache Wars' final phase has no official loss count, so its figures are
+# summed here from each engagement. Where accounts differ, low and high keep
+# both readings; the row takes the midpoint of the killed range.
+# (date, engagement, killed low, killed high, wounded, how the sources read)
+APACHE_ENGAGEMENTS = [
+    ("1879-09-04", "Ojo Caliente, NM", 5, 8, 0, "5 soldiers; other accounts 8"),
+    ("1879-09-18", "Las Animas Canyon", 7, 9, 0, "5-6 soldiers and 2-3 Navajo scouts"),
+    ("1879-09-29", "Cuchillo Negro", 2, 2, 0, ""),
+    ("1879-10-27", "Guzman Mountains", 1, 4, 0,
+     "1 officially; Gatewood recalled several soldiers (read as 3) and a scout"),
+    ("1880-01-12", "Percha Creek", 1, 1, 0, ""),
+    ("1880-04-05", "Hembrillo Basin", 2, 2, 5, ""),
+    ("1880-07-30", "Tinaja de las Palmas", 1, 1, 0, ""),
+    ("1880-08-06", "Rattlesnake Springs", 3, 3, 0, ""),
+    ("1880-10-28", "Ojo Caliente, TX", 5, 5, 0, ""),
+    ("1881-08-12", "Carrizo Canyon", 2, 6, 0, "2; Michno: 5 killed and 1 captured and killed"),
+    ("1881-08-19", "Gavilan Canyon", 4, 6, 3, "Lt Smith and 3 troopers; other accounts 6"),
+    ("1881-08-30", "Cibecue Creek", 7, 8, 2, "7 in the text, 8 in the infobox"),
+    ("1881-09-01", "Fort Apache", 0, 0, 3, ""),
+    ("1881-10-02", "Cedar Springs", 3, 3, 3, ""),
+    ("1882-04-23", "Horseshoe Canyon", 6, 6, 1, "4 scouts and 2 troopers; 1 wounded named"),
+    ("1882-04-28", "Sierra Enmedio", 1, 1, 2, ""),
+    ("1882-07-17", "Big Dry Wash", 2, 2, 6, ""),
+    ("1885-05-22", "Devil's Creek", 0, 0, 3, ""),
+    ("1885-06-08", "Guadalupe Canyon", 3, 5, 0, "3 or 5"),
+    ("1885-09-22", "Teres Mountains", 1, 1, 1, "a scout"),
+    ("1885-12-19", "Little Dry Creek", 5, 5, 2, ""),
+    ("1886-01-11", "Crawford affair", 1, 1, 4, ""),
+    ("1886-05-03", "Lebo fight", 1, 1, 1, ""),
+    ("1886-05-15", "Hatfield fight", 2, 2, 2, ""),
+]
+APACHE_KILLED_LOW = sum(e[2] for e in APACHE_ENGAGEMENTS)
+APACHE_KILLED_HIGH = sum(e[3] for e in APACHE_ENGAGEMENTS)
+APACHE_KILLED = round((APACHE_KILLED_LOW + APACHE_KILLED_HIGH) / 2)
+APACHE_WOUNDED = sum(e[4] for e in APACHE_ENGAGEMENTS)
+
+
+# ---------------------------------------------------------------------------
 # The conflicts
 # ---------------------------------------------------------------------------
 
@@ -1104,12 +1145,13 @@ ROWS = [
             "Regular Army operations on War Department authority, with an 1882 "
             "agreement allowing pursuit into Mexico."
         ),
-        kia=71,
-        deaths=71,
-        wounded=38,
+        kia=APACHE_KILLED,
+        deaths=APACHE_KILLED,
+        wounded=APACHE_WOUNDED,
         losses_text=(
-            "About 71 US soldiers and Indian scouts killed (64-78, depending on the "
-            "account) and at least 38 wounded, summed over 24 engagements from "
+            f"About {APACHE_KILLED} US soldiers and Indian scouts killed "
+            f"({APACHE_KILLED_LOW}-{APACHE_KILLED_HIGH}, depending on the account) and at least "
+            f"{APACHE_WOUNDED} wounded, summed over {len(APACHE_ENGAGEMENTS)} engagements from "
             "September 1879 to May 1886. Excludes disease and accidents, and minor "
             "actions with no published losses"
         ),
