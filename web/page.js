@@ -84,7 +84,8 @@
 
     if (column.kind === "num") {
       var text = column.money ? formatMoney(value) : formatNumber(value);
-      var numClass = "num" + (column.strong && value != null ? " strong" : "");
+      var numClass = "num" + (column.strong && value != null ? " strong" : "") +
+        (column.key === "idx" ? " sticky1" : "");
       var shown = text == null ? '<span class="nil">&mdash;</span>' : text;
       return '<td class="' + numClass + '">' + shown + "</td>";
     }
