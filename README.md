@@ -6,12 +6,13 @@ pages whose tables scroll sideways and sort and filter on every column.
 
 ## Published pages
 
-- [War by the Numbers](https://claude.ai/artifact/FDhjXEvzACXqbdoQZWFmEv):
+- [War by the Numbers](https://lerdvw.github.io/USAWarsAnalyses/):
   duration, casualties, and cost in then-year and August 2026 dollars
-- [Wars of the Republic](https://claude.ai/artifact/C6ByzNyvwmCyCHJ9UMfXsq):
+- [Wars of the Republic](https://lerdvw.github.io/USAWarsAnalyses/record.html):
   who ordered each conflict, on what authority, why, and what happened
 
-The links open only for people each page has been shared with.
+Every push to `main` rebuilds and republishes both through GitHub Pages
+(`.github/workflows/pages.yml`).
 
 ## Files
 
@@ -34,7 +35,8 @@ python3 -m venv .venv
 
 `build.py xlsx` or `build.py pages` builds one half. To link the two pages to
 each other, pass their published URLs: `build.py pages <record-url>
-<figures-url>`. The workbooks carry live formulas; Excel and LibreOffice
+<figures-url>`. `build.py site [folder]` writes a self-hostable
+copy of both pages, linked to each other, into `_site/`. The workbooks carry live formulas; Excel and LibreOffice
 calculate them on open.
 
 ## Method
