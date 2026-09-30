@@ -371,6 +371,14 @@
     render();
   });
 
+  // The # column is as wide as its filter boxes, so the name column pins
+  // where # actually ends rather than at a fixed offset.
+  function pinNameColumn() {
+    table.style.setProperty("--pin2-left", thead.querySelector("th").offsetWidth + "px");
+  }
+  if (window.ResizeObserver) new ResizeObserver(pinNameColumn).observe(thead.querySelector("th"));
+
   renderSources();
   render();
+  pinNameColumn();
 })();

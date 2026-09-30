@@ -421,8 +421,10 @@ thead tr.filters th {
   border-bottom: 1.5px solid var(--rule);
 }
 
+/* Above the other filter cells, which would otherwise slide over them. */
 thead tr.filters .sticky1,
 thead tr.filters .sticky2 {
+  z-index: 4;
   background: var(--surface);
 }
 
@@ -561,7 +563,7 @@ sup.ref a:hover {
 }
 
 .sticky2 {
-  left: 44px;
+  left: var(--pin2-left, 44px);
   box-shadow: 4px 0 8px -6px rgba(17, 22, 27, .25);
 }
 
