@@ -756,7 +756,7 @@ PAGES = {
         "eyebrow": "US Conflicts 1775&ndash;2026 &middot; Figures",
         "standfirst": ("Seventy-five American conflicts from Lexington to the Strait of Hormuz, reduced to what "
                        "can be counted: how long each ran, how many Americans it killed and wounded, what it cost "
-                       "then, and what that money would be today. Every column sorts and filters; the table "
+                       "then, and what that money would be in these times. Every column sorts and filters; the table "
                        "scrolls sideways."),
         "dollars": f"then-year, and {CPI_BASE_LABEL}",
         "columns": FIGURES_PAGE_COLUMNS,
