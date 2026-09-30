@@ -594,6 +594,13 @@ tfoot td {
   color: var(--ink);
 }
 
+/* Above the other footer cells, which would otherwise slide over them. */
+tfoot .sticky1,
+tfoot .sticky2 {
+  z-index: 3;
+  background: var(--surface-2);
+}
+
 
 /* ---- Notes, caveats and sources -------------------------------------------- */
 
