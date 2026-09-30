@@ -313,6 +313,10 @@ REFS = [
     (66, "Wikipedia, Geronimo Campaign", "https://en.wikipedia.org/wiki/Geronimo_Campaign"),
     (67, "HISTORY, How Geronimo Eluded Death and Capture for 25 Years",
          "https://www.history.com/articles/geronimo-supernatural-elude-capture"),
+    (68, "ABC News, Congress passes war powers resolution, offering rare rebuke of Trump (23 Jun 2026)",
+         "https://abcnews.com/Politics/senate-house-pass-war-powers-resolution-1st-time/story?id=134145998"),
+    (69, "NPR, Iran war powers resolution fails in the Senate (24 Sep 2026)",
+         "https://www.npr.org/2026/09/24/nx-s1-5980318/senate-iran-war-powers-vote"),
 ]
 
 
@@ -3205,14 +3209,17 @@ ROWS = [
             "struck back at US bases and shipping and closed the Strait of Hormuz. A "
             "ceasefire took hold on 7 April and the operation was declared over on 5 "
             "May, at a cost of $33bn, more than 400 wounded and dozens of aircraft. "
-            "The House has since voted three times to end the hostilities; the Senate "
-            "has not acted."
+            "The House has since voted three times to end the hostilities. The Senate "
+            "adopted one such resolution 50-48 on 23 June, without binding force, and "
+            "rejected another 49-50 on 24 September."
         ),
         auth_level=0,
         authority="Executive only",
         auth_note=(
-            "Gang of Eight briefed. H.Con.Res. 38 failed 212-219; the House has since "
-            "passed a war powers resolution three times."
+            "No declaration or authorization; Gang of Eight briefed. H.Con.Res. 38 "
+            "failed 212-219. Congress adopted a concurrent resolution to end the "
+            "hostilities in June, which does not bind the president; the Senate "
+            "rejected H.Con.Res. 89 49-50 on 24 September."
         ),
         kia=7,
         deaths=13,
@@ -3225,7 +3232,7 @@ ROWS = [
         cost_text="$33.4bn through 29 June (DoD); CSIS estimates $34-42bn",
         cost_year=2026,
         cost_year_note="Year of the operation",
-        sources=[32, 33, 34, 35, 44, 47, 48],
+        sources=[32, 33, 34, 35, 44, 47, 48, 68, 69],
         combat=38,
         flag="§",
     ),
