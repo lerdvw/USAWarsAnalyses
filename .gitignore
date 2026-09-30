@@ -8,3 +8,4 @@ __pycache__/
 .~lock.*#
 figures.html
 record.html
+_site/

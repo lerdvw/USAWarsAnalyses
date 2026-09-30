@@ -898,6 +898,25 @@ def build_pages(record_url="", figures_url=""):
     return paths
 
 
+# What a browser needs before the template when no host wraps the page.
+STANDALONE_HEAD = ('<!doctype html>\n<html lang="en">\n<meta charset="utf-8">\n'
+                   '<meta name="viewport" content="width=device-width, initial-scale=1">\n')
+
+
+def build_site(folder):
+    """Write a self-hostable site: both pages, linked to each other, with the figures page as index.html."""
+    os.makedirs(folder, exist_ok=True)
+    figures = STANDALONE_HEAD + build_page("figures", "record.html")
+    record = STANDALONE_HEAD + build_page("record", "figures.html")
+    paths = []
+    for name, text in (("index.html", figures), ("figures.html", figures), ("record.html", record)):
+        path = os.path.join(folder, name)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(text)
+        paths.append(path)
+    return paths
+
+
 if __name__ == "__main__":
     what = sys.argv[1] if len(sys.argv) > 1 else "all"
     if what in ("all", "xlsx"):
@@ -906,4 +925,7 @@ if __name__ == "__main__":
     if what in ("all", "pages"):
         urls = sys.argv[2:4]
         for path in build_pages(*urls):
+            print(path)
+    if what == "site":
+        for path in build_site(sys.argv[2] if len(sys.argv) > 2 else os.path.join(HERE, "_site")):
             print(path)
