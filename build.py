@@ -316,25 +316,25 @@ TOTAL_ROW = LAST_ROW + 1
 # figure_values() and in formulas; kind sets how its cells look.
 Column = namedtuple("Column", "key header width kind")
 FIGURE_COLUMNS = [
-    Column("idx", "#", 5, "integer"),
     Column("name", "Conflict", 30, "name"),
-    Column("start", "Start", 13, "date"),
-    Column("end", "End", 13, "date"),
-    Column("era", "Era", 20, "text"),
-    Column("presidents", "President(s)", 26, "text"),
     Column("type", "Conflict Type", 18, "text"),
-    Column("reason", "Reason for the Conflict", 60, "wrap"),
-    Column("summary", "What Happened", 70, "wrap"),
     Column("authorization", "Authorization", 44, "wrap"),
     Column("auth_level", "Auth. strength", 12, "integer"),
-    Column("combat_days", "Combat Days", 12, "integer"),
-    Column("all_days", "All Conflict Days", 15, "integer"),
+    Column("cost_adj", f"Net Cost in {CPI_BASE_LABEL} Dollars ($m)", 22, "money"),
+    Column("cost_m", "Net Cost to US Taxpayers ($m, then-year)", 22, "money"),
+    Column("cost_text", "Cost Accounting", 36, "wrap"),
     Column("kia", "KIA + MIA", 12, "integer"),
     Column("casualties", "All Casualties", 14, "integer"),
     Column("losses_text", "Casualty Detail", 40, "wrap"),
-    Column("cost_m", "Net Cost to US Taxpayers ($m, then-year)", 22, "money"),
-    Column("cost_adj", f"Net Cost in {CPI_BASE_LABEL} Dollars ($m)", 22, "money"),
-    Column("cost_text", "Cost Accounting", 36, "wrap"),
+    Column("reason", "Reason for the Conflict", 60, "wrap"),
+    Column("summary", "What Happened", 70, "wrap"),
+    Column("start", "Start", 13, "date"),
+    Column("end", "End", 13, "date"),
+    Column("presidents", "President(s)", 26, "text"),
+    Column("combat_days", "Combat Days", 12, "integer"),
+    Column("all_days", "All Conflict Days", 15, "integer"),
+    Column("era", "Era", 20, "text"),
+    Column("idx", "#", 5, "integer"),
     Column("sources", "Sources", 12, "wrap"),
 ]
 KEYS = [column.key for column in FIGURE_COLUMNS]
@@ -417,14 +417,13 @@ def write_figures_table(ws):
     add_table(ws, "Figures", HEADER_ROW, LAST_ROW, len(FIGURE_COLUMNS))
     for n, column in enumerate(FIGURE_COLUMNS, 1):
         ws.column_dimensions[get_column_letter(n)].width = column.width
-    ws.freeze_panes = "C6"       # keep the # and Conflict columns and the headings in view
+    ws.freeze_panes = "B6"       # keep the Conflict column and the headings in view
     ws.sheet_view.showGridLines = False
 
 
 def write_totals(ws):
     """A SUM row under the table, then three rows giving shares of it."""
-    ws.cell(row=TOTAL_ROW, column=1, value="TOTAL")
-    ws.cell(row=TOTAL_ROW, column=2, value=f"{len(ROWS)} conflicts")
+    ws.cell(row=TOTAL_ROW, column=position("name"), value=f"TOTAL, {len(ROWS)} conflicts")
     for key in ("combat_days", "all_days", "kia", "casualties", "cost_m", "cost_adj"):
         letter = LETTER[key]
         cell = ws.cell(row=TOTAL_ROW, column=position(key), value=f"=SUM({letter}{FIRST_ROW}:{letter}{LAST_ROW})")
@@ -445,7 +444,7 @@ def write_totals(ws):
     ]
     for offset, (label, names) in enumerate(shares, 1):
         row = TOTAL_ROW + offset
-        ws.cell(row=row, column=2, value=f"{label}, share of total")
+        ws.cell(row=row, column=position("name"), value=f"{label}, share of total")
         for key in ("kia", "casualties", "cost_m", "cost_adj"):
             letter = LETTER[key]
             part = "+".join(f"{letter}{row_of[name]}" for name in names)
@@ -465,30 +464,30 @@ def write_breakdown(ws, top, label, match_key, groups):
     label itself against the match_key column."""
     heads = ["Group", "Conflicts", "Combat days", "KIA + MIA", "All casualties",
              "Cost then-year ($m)", f"Cost {CPI_BASE_LABEL} ($m)", "Share of adj. cost"]
-    ws.cell(row=top, column=2, value=label).font = font(bold=True, color=ACCENT)
+    ws.cell(row=top, column=1, value=label).font = font(bold=True, color=ACCENT)
     for k, head in enumerate(heads):
-        cell = ws.cell(row=top + 1, column=2 + k, value=head)
+        cell = ws.cell(row=top + 1, column=1 + k, value=head)
         cell.font = font(bold=True, color=MUTED)
         if k:
             cell.alignment = Alignment(horizontal="right")
     match = column_range(match_key)
     for k, (shown, criterion) in enumerate(groups):
         row = top + 2 + k
-        cell = ws.cell(row=row, column=2, value=shown)
+        cell = ws.cell(row=row, column=1, value=shown)
         if match_key == "type":
             colour_chip(cell, "type", shown)
         else:
             cell.font = font(bold=True)
-        test = f"$B{row}" if criterion is None else criterion
-        ws.cell(row=row, column=3, value=f"=COUNTIF({match},{test})")
-        for n, key in enumerate(("combat_days", "kia", "casualties", "cost_m", "cost_adj"), 4):
+        test = f"$A{row}" if criterion is None else criterion
+        ws.cell(row=row, column=2, value=f"=COUNTIF({match},{test})")
+        for n, key in enumerate(("combat_days", "kia", "casualties", "cost_m", "cost_adj"), 3):
             ws.cell(row=row, column=n, value=f"=SUMIF({match},{test},{column_range(key)})")
-        ws.cell(row=row, column=9, value=f'=IFERROR(H{row}/${LETTER["cost_adj"]}${TOTAL_ROW},"")')
-        for n in range(3, 10):
+        ws.cell(row=row, column=8, value=f'=IFERROR(G{row}/${LETTER["cost_adj"]}${TOTAL_ROW},"")')
+        for n in range(2, 9):
             cell = ws.cell(row=row, column=n)
             cell.font = font()
             cell.alignment = Alignment(horizontal="right")
-            cell.number_format = "0.0%" if n == 9 else (MONEY if n in (7, 8) else INTEGER)
+            cell.number_format = "0.0%" if n == 8 else (MONEY if n in (6, 7) else INTEGER)
     return top + 2 + len(groups) + 1
 
 
@@ -711,26 +710,26 @@ LEVEL_ORDER = [LV_LABEL[level] for level in (5, 4, 3, 2, 1, 0)]
 #   small   smaller text             wide    a wider text column
 #   detail  show the authorization note under its label
 FIGURES_PAGE_COLUMNS = [
-    {"key": "idx", "label": "#", "kind": "num"},
     {"key": "name", "label": "Conflict", "kind": "text"},
-    {"key": "start", "label": "Start", "kind": "date"},
-    {"key": "end", "label": "End", "kind": "date"},
-    {"key": "era", "label": "Era", "kind": "cat", "order": ERAS},
-    {"key": "presidents", "label": "President(s)", "kind": "text"},
     {"key": "type", "label": "Conflict type", "kind": "cat", "order": TYPES},
-    {"key": "reason", "label": "Reason", "kind": "text", "small": True},
-    {"key": "summary", "label": "What happened", "kind": "text", "wide": True},
     {"key": "auth_label", "label": "Authorization", "kind": "cat", "order": LEVEL_ORDER, "detail": True},
     {"key": "auth_level", "label": "Auth. strength", "kind": "num"},
-    {"key": "combat_days", "label": "Combat days", "kind": "num", "total": True},
-    {"key": "all_days", "label": "All conflict days", "kind": "num", "total": True},
+    {"key": "cost_adj", "label": f"Net cost, {CPI_BASE_LABEL} $", "kind": "num", "money": True, "strong": True,
+     "total": True},
+    {"key": "cost_m", "label": "Net cost, then-year", "kind": "num", "money": True, "strong": True, "total": True},
+    {"key": "cost_text", "label": "Cost accounting", "kind": "text", "small": True},
     {"key": "kia", "label": "KIA + MIA", "kind": "num", "strong": True, "total": True},
     {"key": "casualties", "label": "All casualties", "kind": "num", "strong": True, "total": True},
     {"key": "losses_text", "label": "Casualty detail", "kind": "text", "small": True},
-    {"key": "cost_m", "label": "Net cost, then-year", "kind": "num", "money": True, "strong": True, "total": True},
-    {"key": "cost_adj", "label": f"Net cost, {CPI_BASE_LABEL} $", "kind": "num", "money": True, "strong": True,
-     "total": True},
-    {"key": "cost_text", "label": "Cost accounting", "kind": "text", "small": True},
+    {"key": "reason", "label": "Reason", "kind": "text", "small": True},
+    {"key": "summary", "label": "What happened", "kind": "text", "wide": True},
+    {"key": "start", "label": "Start", "kind": "date"},
+    {"key": "end", "label": "End", "kind": "date"},
+    {"key": "presidents", "label": "President(s)", "kind": "text"},
+    {"key": "combat_days", "label": "Combat days", "kind": "num", "total": True},
+    {"key": "all_days", "label": "All conflict days", "kind": "num", "total": True},
+    {"key": "era", "label": "Era", "kind": "cat", "order": ERAS},
+    {"key": "idx", "label": "#", "kind": "num"},
     {"key": "sources", "label": "Src", "kind": "refs"},
 ]
 

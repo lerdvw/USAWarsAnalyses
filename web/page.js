@@ -85,7 +85,7 @@
     if (column.kind === "num") {
       var text = column.money ? formatMoney(value) : formatNumber(value);
       var numClass = "num" + (column.strong && value != null ? " strong" : "") +
-        (column.key === "idx" ? " sticky1" : "");
+        (pinClass(column) ? " " + pinClass(column) : "");
       var shown = text == null ? '<span class="nil">&mdash;</span>' : text;
       return '<td class="' + numClass + '">' + shown + "</td>";
     }
@@ -121,7 +121,7 @@
 
   // The first two columns are pinned to the left edge (see page.css).
   function pinClass(column) {
-    if (column.key === "idx") return "sticky1";
+    if (column.key === "idx" && column === COLUMNS[0]) return "sticky1";
     if (column.key === "name") return "sticky2";
     return "";
   }
@@ -296,8 +296,8 @@
   // filter gives that subset's totals.
   function renderTotals(rows) {
     var cells = COLUMNS.map(function (column, i) {
-      if (i === 0) return '<td class="sticky1"></td>';
-      if (i === 1) return '<td class="sticky2">Total of shown rows</td>';
+      if (pinClass(column) === "sticky1") return '<td class="sticky1"></td>';
+      if (column.key === "name") return '<td class="sticky2">Total of shown rows</td>';
       if (column.kind !== "num" || !column.total) return "<td></td>";
       var sum = 0;
       var any = false;
@@ -371,12 +371,13 @@
     render();
   });
 
-  // The # column is as wide as its filter boxes, so the name column pins
-  // where # actually ends rather than at a fixed offset.
+  // A leading # column is as wide as its filter boxes, so the name column
+  // pins where # actually ends; with no leading #, it pins at the edge.
+  var pinnedIndex = thead.querySelector("th.sticky1");
   function pinNameColumn() {
-    table.style.setProperty("--pin2-left", thead.querySelector("th").offsetWidth + "px");
+    table.style.setProperty("--pin2-left", (pinnedIndex ? pinnedIndex.offsetWidth : 0) + "px");
   }
-  if (window.ResizeObserver) new ResizeObserver(pinNameColumn).observe(thead.querySelector("th"));
+  if (pinnedIndex && window.ResizeObserver) new ResizeObserver(pinNameColumn).observe(pinnedIndex);
 
   renderSources();
   render();
