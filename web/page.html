@@ -18,7 +18,7 @@
     <h1>{{ title }}</h1>
     <p class="standfirst">{{ standfirst }}</p>
     <div class="dateline">
-      <span>Compiled <b>22 September 2026</b></span>
+      <span>Compiled <b>{{ compiled }}</b></span>
       <span>Conflicts <b>{{ count }}</b></span>
       <span>Span <b>251 years</b></span>
       <span>Dollars <b>{{ dollars }}</b></span>
@@ -67,7 +67,7 @@
     <ol class="refs" id="reflist"></ol>
   </section>
 
-  <footer>Compiled 22 September 2026. Casualty counts follow the Department of Veterans Affairs and DoD's Defense Casualty Analysis System where they publish them, CRS and regimental histories where they do not. Costs before Vietnam are CRS estimates of the increase in military outlays over the pre-war average. The selection of conflicts is a judgment, not an official list. Figures for ongoing operations will change.</footer>
+  <footer>Compiled {{ compiled }}. Casualty counts follow the Department of Veterans Affairs and DoD's Defense Casualty Analysis System where they publish them, CRS and regimental histories where they do not. Costs before Vietnam are CRS estimates of the increase in military outlays over the pre-war average. The selection of conflicts is a judgment, not an official list. Figures for ongoing operations will change.</footer>
 </div>
 
 <script type="application/json" id="table-columns">

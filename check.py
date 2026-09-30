@@ -96,6 +96,12 @@ def tallies():
     row = next(row for row in ROWS if row["name"] == "Apache Wars, final phase")
     check(data.APACHE_KILLED_LOW <= row["kia"] <= data.APACHE_KILLED_HIGH, "Apache KIA falls outside its range")
     check(row["wounded"] == data.APACHE_WOUNDED, "Apache wounded differ from the engagement table")
+    war = next(row for row in ROWS if row["name"] == "Epic Fury")
+    check(war["casualties"] == data.IRAN_WAR_KILLED_OR_WOUNDED, "Epic Fury casualties differ from the Pentagon's count")
+    check(war["cost_m"] == data.IRAN_WAR_COST_TO_3_SEP_M + data.IRAN_WAR_EXTRA_FUEL_M, "Epic Fury cost differs from its parts")
+    check(war["ongoing"], "Epic Fury should run to TODAY while the Iran war continues")
+    print(f"iran war        {war['deaths']} dead ({war['kia']} hostile), {war['wounded']} wounded, "
+          f"{war['casualties']} in all; ${war['cost_m']:,}m")
     print(f"apache tally    {len(table)} engagements, killed {data.APACHE_KILLED_LOW}-{data.APACHE_KILLED_HIGH} "
           f"(row {row['kia']}), wounded {data.APACHE_WOUNDED}")
 

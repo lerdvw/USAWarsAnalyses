@@ -28,7 +28,8 @@ from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.table import Table, TableStyleInfo
 
-from data import (APACHE_ENGAGEMENTS, APACHE_KILLED, APACHE_KILLED_HIGH, APACHE_KILLED_LOW, APACHE_WOUNDED,
+from data import (IRAN_WAR_DEATHS, IRAN_WAR_HOSTILE_DEATHS, IRAN_WAR_KILLED_OR_WOUNDED, TODAY,
+                  APACHE_ENGAGEMENTS, APACHE_KILLED, APACHE_KILLED_HIGH, APACHE_KILLED_LOW, APACHE_WOUNDED,
                   CPI_BASE, CPI_BASE_LABEL, ERAS, LV_LABEL, REFS, ROWS, TYPES, cpi_basis)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -40,11 +41,14 @@ RECORD_FILE = "US-Conflicts-1775-2026-Record.xlsx"
 # Shared text
 # ===========================================================================
 
+# The date every ongoing figure runs to, as the outputs print it.
+COMPILED = f"{TODAY.day} {TODAY:%B %Y}"
+
 # How each measure is counted: shown on the Method & Sources sheet and pages.
 METHOD = [
     ("Scope",
-     "Overt uses of US armed force at the scale of a named war, campaign or operation, 1775 to 22 "
-     "September 2026: 75 entries. Excludes the several hundred minor landings and shows of force "
+     "Overt uses of US armed force at the scale of a named war, campaign or operation, 1775 to "
+     f"{COMPILED}: 75 entries. Excludes the several hundred minor landings and shows of force "
      "in the CRS list, purely covert action (Bay of Pigs is included because US airmen died), and "
      "the smaller Indian War campaigns not listed."),
     ("KIA + MIA",
@@ -59,8 +63,7 @@ METHOD = [
      "Days on which US forces were engaged or striking. For the major wars this is the whole war; "
      "for occupations it is the insurgency phase; for one-day strikes it is 1."),
     ("All conflict days",
-     "First to last day of the named conflict, inclusive. Ongoing conflicts run to 22 September "
-     "2026."),
+     f"First to last day of the named conflict, inclusive. Ongoing conflicts run to {COMPILED}."),
     ("Net cost, then-year",
      "Best estimate of the US taxpayer burden in the dollars of the time, net of allied "
      "reimbursement. Pre-1991 major wars: CRS RS22926 (military operations only - no veterans' "
@@ -119,9 +122,11 @@ CAVEATS = [
     "Polk claimed self-defence; Vietnam and Korea are 'defensive' as collective defence of an "
     "ally; Southern Spear is 'other' because the government calls it armed conflict and critics "
     "call it law enforcement.",
-    "EPIC FURY'S DEATH TOLL IS UNSETTLED. Military Times reported 13 killed in April 2026; later "
-    "accounting gives 7 killed in action with 417 wounded; officials alleged in September 2026 an "
-    "undercount of at least four. This file uses 7 KIA and 13 total deaths.",
+    "EPIC FURY STANDS FOR THE WHOLE IRAN WAR, AND ITS TOLL IS UNSETTLED. The Pentagon says the "
+    "operation formally ended on 5 May, but the fighting did not, so this row runs to "
+    f"{COMPILED} and carries the Pentagon's September count: {IRAN_WAR_DEATHS} dead, "
+    f"{IRAN_WAR_HOSTILE_DEATHS} by hostile fire, and {IRAN_WAR_KILLED_OR_WOUNDED} killed or wounded. "
+    "Military Times reported 13 killed in April, and officials have alleged an undercount.",
     "THE VENEZUELA COST IS DERIVED. DoD reported $4.7bn jointly for boat strikes and the January "
     "2026 operation; the Southern Spear campaign figure ($820m) is subtracted. The split is an "
     "inference.",
@@ -133,7 +138,7 @@ CAVEATS = [
     "every weakness of its input.",
 ]
 
-FLAGS = "† rough estimate or incomplete returns · ‡ ongoing as of 22 Sep 2026 · § disputed figure, see caveats"
+FLAGS = f"† rough estimate or incomplete returns · ‡ ongoing as of {TODAY.day} {TODAY:%b %Y} · § disputed figure, see caveats"
 
 
 def date_text(day):
@@ -224,7 +229,7 @@ def title_block(ws, title, subtitle, columns):
     ws["A1"].font = font(size=16, bold=True)
     ws["A2"] = subtitle
     ws["A2"].font = font(italic=True, color=MUTED)
-    ws["A3"] = (f"Compiled 22 September 2026 · 75 conflicts, 1775-2026 · then-year dollars unless stated · "
+    ws["A3"] = (f"Compiled {COMPILED} · 75 conflicts, 1775-2026 · then-year dollars unless stated · "
                 f"{FLAGS} · read 'Method & Sources' before quoting a number")
     ws["A3"].font = font(color=MUTED)
     for row, span in ((1, 6), (2, 9), (3, 12)):
@@ -871,6 +876,7 @@ def build_page(kind, other_url=""):
         "other_link": other_link,
         "standfirst": page["standfirst"],
         "count": str(len(ROWS)),
+        "compiled": COMPILED,
         "dollars": page["dollars"],
         "legend": legend_html(),
         "tfoot": "<tfoot></tfoot>" if page["totals"] else "",

@@ -11,7 +11,7 @@ the bottom of the file.
 from datetime import date
 
 # Conflicts still going are counted up to this day.
-TODAY = date(2026, 9, 22)
+TODAY = date(2026, 9, 30)
 
 
 # ---------------------------------------------------------------------------
@@ -317,6 +317,16 @@ REFS = [
          "https://abcnews.com/Politics/senate-house-pass-war-powers-resolution-1st-time/story?id=134145998"),
     (69, "NPR, Iran war powers resolution fails in the Senate (24 Sep 2026)",
          "https://www.npr.org/2026/09/24/nx-s1-5980318/senate-iran-war-powers-vote"),
+    (70, "CBS News, Military personnel told last month to stop calling Iran conflict 'Operation Epic Fury' (3 Sep 2026)",
+         "https://www.cbsnews.com/news/military-operation-epic-fury-may-5/"),
+    (71, "CNN, Iran war has cost $45.1 billion, Pentagon tells Congress (18 Sep 2026)",
+         "https://www.cnn.com/2026/09/18/politics/us-iran-war-cost"),
+    (72, "CQ Roll Call, Pentagon's latest Iran war cost estimate: $43.6 billion (18 Sep 2026)",
+         "https://rollcall.com/2026/09/18/pentagons-latest-iran-war-cost-estimate-43-6-billion/"),
+    (73, "The Intercept, Iran Has Wounded and Killed More Americans Since the End of Operation Epic Fury (28 Sep 2026)",
+         "https://theintercept.com/2026/09/28/iran-war-us-casualties-operation-epic-fury/"),
+    (74, "Fox News, Trump says Iran is 'failing very badly,' predicts war will end 'very soon' (29 Sep 2026)",
+         "https://www.foxnews.com/live-news/trump-iran-war-news-peace-talks-hormuz-09-29-26"),
 ]
 
 
@@ -359,6 +369,16 @@ APACHE_KILLED_LOW = sum(e[2] for e in APACHE_ENGAGEMENTS)
 APACHE_KILLED_HIGH = sum(e[3] for e in APACHE_ENGAGEMENTS)
 APACHE_KILLED = round((APACHE_KILLED_LOW + APACHE_KILLED_HIGH) / 2)
 APACHE_WOUNDED = sum(e[4] for e in APACHE_ENGAGEMENTS)
+
+
+# The Iran war (the Epic Fury row) as the Pentagon counted it in September 2026.
+IRAN_WAR_DEATHS = 19                # official count of war dead (The Intercept, 28 Sep)
+IRAN_WAR_HOSTILE_DEATHS = 11        # of those, killed by hostile fire (same)
+IRAN_WAR_KILLED_OR_WOUNDED = 880    # official count of troops killed or wounded (same)
+IRAN_WAR_WOUNDED = IRAN_WAR_KILLED_OR_WOUNDED - IRAN_WAR_DEATHS
+IRAN_WAR_COST_TO_3_SEP_M = 43_600   # DoD document to Congress, as of 3 Sep (CQ Roll Call)
+IRAN_WAR_EXTRA_FUEL_M = 1_500       # added in the same report to Congress (CNN)
+IRAN_WAR_COST_M = IRAN_WAR_COST_TO_3_SEP_M + IRAN_WAR_EXTRA_FUEL_M
 
 
 # ---------------------------------------------------------------------------
@@ -3195,7 +3215,7 @@ ROWS = [
         name="Epic Fury",
         theatre="Iran, with Israel",
         start=date(2026, 2, 28),
-        end=date(2026, 5, 5),
+        end=None,
         era="Post-9/11",
         presidents="Trump",
         conflict_type="Offensive",
@@ -3207,9 +3227,11 @@ ROWS = [
             "A US-Israeli air and missile campaign against Iran's military, nuclear "
             "and security apparatus, the largest US combat operation since 2003. Iran "
             "struck back at US bases and shipping and closed the Strait of Hormuz. A "
-            "ceasefire took hold on 7 April and the operation was declared over on 5 "
-            "May, at a cost of $33bn, more than 400 wounded and dozens of aircraft. "
-            "The House has since voted three times to end the hostilities. The Senate "
+            "ceasefire took hold on 7 April, and the Pentagon says Epic Fury formally "
+            "ended on 5 May, but the war with Iran did not: US troops were still being "
+            "killed and wounded in September, and on 29 September the President said "
+            "it would be over very soon. The House has voted three times to end the "
+            "hostilities. The Senate "
             "adopted one such resolution 50-48 on 23 June, without binding force, and "
             "rejected another 49-50 on 24 September."
         ),
@@ -3221,18 +3243,25 @@ ROWS = [
             "hostilities in June, which does not bind the president; the Senate "
             "rejected H.Con.Res. 89 49-50 on 24 September."
         ),
-        kia=7,
-        deaths=13,
-        wounded=417,
+        kia=IRAN_WAR_HOSTILE_DEATHS,
+        deaths=IRAN_WAR_DEATHS,
+        wounded=IRAN_WAR_WOUNDED,
         losses_text=(
-            "7 killed in action, 13 dead in all (disputed; officials allege an "
-            "undercount of at least four); 417 wounded; 42-52 aircraft lost"
+            f"{IRAN_WAR_DEATHS} dead by the Pentagon's count, {IRAN_WAR_HOSTILE_DEATHS} of them "
+            f"by hostile fire; {IRAN_WAR_KILLED_OR_WOUNDED} killed or wounded in all, so "
+            f"{IRAN_WAR_WOUNDED} wounded, 444 of the {IRAN_WAR_KILLED_OR_WOUNDED} since 7 July "
+            "(disputed; officials have alleged an undercount); 42-52 aircraft lost"
         ),
-        cost_m=33_400,
-        cost_text="$33.4bn through 29 June (DoD); CSIS estimates $34-42bn",
+        cost_m=IRAN_WAR_COST_M,
+        cost_text=(
+            f"${IRAN_WAR_COST_M / 1000:.1f}bn as the Pentagon told Congress in September: "
+            f"${IRAN_WAR_COST_TO_3_SEP_M / 1000:.1f}bn through 3 September plus "
+            f"${IRAN_WAR_EXTRA_FUEL_M / 1000:.1f}bn in extra fuel. Excludes base repairs; "
+            "CBO expects $2-3bn a month more"
+        ),
         cost_year=2026,
         cost_year_note="Year of the operation",
-        sources=[32, 33, 34, 35, 44, 47, 48, 68, 69],
+        sources=[32, 33, 34, 35, 44, 47, 48, 68, 69, 70, 71, 72, 73, 74],
         combat=38,
         flag="§",
     ),
@@ -3253,8 +3282,8 @@ ROWS = [
             "Declared the second stage of the Iran war after Epic Fury ended: "
             "destroyers and aircraft escorting merchant ships through the strait Iran "
             "had closed. The overt phase was paused after two days; Iranian boats and "
-            "missiles engaged three US destroyers on 7 May. No casualty or cost "
-            "accounting has been published."
+            "missiles engaged three US destroyers on 7 May. Its losses and costs are "
+            "counted in the Iran war totals on the Epic Fury row."
         ),
         auth_level=0,
         authority="Executive only",
@@ -3264,12 +3293,12 @@ ROWS = [
         kia=None,
         deaths=None,
         wounded=None,
-        losses_text="Not separately reported",
+        losses_text="Counted in the Iran war totals on the Epic Fury row",
         cost_m=None,
-        cost_text="Not separately reported",
+        cost_text="Counted in the Iran war totals on the Epic Fury row",
         cost_year=2026,
         cost_year_note="No figures",
-        sources=[45],
+        sources=[45, 70],
         combat=3,
         flag="‡",
     ),
