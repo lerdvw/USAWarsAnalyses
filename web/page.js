@@ -31,8 +31,11 @@
   };
 
   // The current sort: a column key, and 1 for lowest first or -1 for highest.
-  var sortKey = "idx";
-  var sortDirection = 1;
+  // Each page names the sort it opens with, and Reset returns to it.
+  var DEFAULT_SORT_KEY = table.dataset.sort || "idx";
+  var DEFAULT_SORT_DIRECTION = Number(table.dataset.direction) || 1;
+  var sortKey = DEFAULT_SORT_KEY;
+  var sortDirection = DEFAULT_SORT_DIRECTION;
 
   function readJson(id) {
     return JSON.parse(document.getElementById(id).textContent);
@@ -366,8 +369,8 @@
   });
 
   document.getElementById("reset").addEventListener("click", function () {
-    sortKey = "idx";
-    sortDirection = 1;
+    sortKey = DEFAULT_SORT_KEY;
+    sortDirection = DEFAULT_SORT_DIRECTION;
     render();
   });
 

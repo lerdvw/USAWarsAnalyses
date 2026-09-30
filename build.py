@@ -308,9 +308,14 @@ def write_method_sheet(wb):
 # ===========================================================================
 
 HEADER_ROW = 5                   # rows 1-4 hold the title block
-FIRST_ROW = HEADER_ROW + 1       # conflict n is on row HEADER_ROW + n
+FIRST_ROW = HEADER_ROW + 1       # the Record's conflict n is on row HEADER_ROW + n
 LAST_ROW = HEADER_ROW + len(ROWS)
 TOTAL_ROW = LAST_ROW + 1
+
+# The Figures sheet opens largest August 2026 cost first; conflicts with no
+# cost follow in date order. Its deflator sheet uses the same rows.
+FIGURES_ORDER = sorted(ROWS, key=lambda r: (r["cost_adj"] is None, -(r["cost_adj"] or 0), r["idx"]))
+FIGURES_ROW = {r["name"]: HEADER_ROW + n for n, r in enumerate(FIGURES_ORDER, 1)}
 
 # The Figures sheet's columns, left to right. The key names a column in
 # figure_values() and in formulas; kind sets how its cells look.
@@ -406,8 +411,8 @@ def write_figures_table(ws):
     for n, column in enumerate(FIGURE_COLUMNS, 1):
         ws.cell(row=HEADER_ROW, column=n, value=column.header)
     style_header(ws, HEADER_ROW, len(FIGURE_COLUMNS), height=44)
-    for r in ROWS:
-        row = HEADER_ROW + r["idx"]
+    for r in FIGURES_ORDER:
+        row = FIGURES_ROW[r["name"]]
         values = figure_values(r, row)
         for n, column in enumerate(FIGURE_COLUMNS, 1):
             style_cell(ws.cell(row=row, column=n, value=values[column.key]), column.kind)
@@ -436,7 +441,7 @@ def write_totals(ws):
         if is_numeric(n):
             cell.alignment = Alignment(horizontal="right")
 
-    row_of = {r["name"]: HEADER_ROW + r["idx"] for r in ROWS}
+    row_of = FIGURES_ROW
     shares = [
         ("World War II alone", ["World War II"]),
         ("Civil War + both World Wars", ["American Civil War", "World War I", "World War II"]),
@@ -560,8 +565,8 @@ def write_deflator_sheet(wb):
         cs.cell(row=HEADER_ROW, column=n, value=header)
     style_header(cs, HEADER_ROW, len(headers), height=40)
 
-    for r in ROWS:
-        row = HEADER_ROW + r["idx"]
+    for r in FIGURES_ORDER:
+        row = FIGURES_ROW[r["name"]]
         cs.cell(row=row, column=1, value=r["idx"])
         cs.cell(row=row, column=2, value=r["name"])
         cs.cell(row=row, column=3, value=r["cost_year"]).number_format = "0"
@@ -597,7 +602,8 @@ def build_figures():
     ws = wb.active
     ws.title = "Figures"
     title_block(ws, "US Conflicts, 1775-2026 - Figures",
-                "Every column sorts and filters from the header arrows. Column '#' restores chronological order.",
+                "Opens sorted by August 2026 net cost, largest first. Every column sorts and filters from the "
+                "header arrows; column '#' restores chronological order.",
                 len(FIGURE_COLUMNS))
     write_figures_table(ws)
     write_totals(ws)
@@ -761,6 +767,7 @@ PAGES = {
         "dollars": f"then-year, and {CPI_BASE_LABEL}",
         "columns": FIGURES_PAGE_COLUMNS,
         "totals": True,
+        "sort": ("cost_adj", -1),
         "other": "The Record",
     },
     "record": {
@@ -867,6 +874,8 @@ def build_page(kind, other_url=""):
         "dollars": page["dollars"],
         "legend": legend_html(),
         "tfoot": "<tfoot></tfoot>" if page["totals"] else "",
+        "sort_key": page.get("sort", ("idx", 1))[0],
+        "sort_direction": str(page.get("sort", ("idx", 1))[1]),
         "totals_note": TOTALS_NOTE if page["totals"] else "",
         "definitions": indented(definitions, 6),
         "caveats": indented(caveats, 6),

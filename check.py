@@ -128,9 +128,14 @@ def figures():
     column = {header: get_column_letter(n) for n, header in enumerate(headers, 1)}
     check(ws.tables["Figures"].ref == f"A5:{get_column_letter(len(headers))}{last}",
           "the Figures table does not cover every row and column")
+    # Rows run from the largest August 2026 cost down; those without one follow in date order.
+    order = sorted(ROWS, key=lambda r: (r["cost_adj"] is None, -(r["cost_adj"] or 0), r["idx"]))
+    at = {row["name"]: 6 + n for n, row in enumerate(order)}
     for row in ROWS:
-        name = ws[f"{column['Conflict']}{5 + row['idx']}"].value.replace(" ‡", "")
-        check(name == row["name"], f"Figures row {5 + row['idx']} holds {name}, not {row['name']}")
+        name = ws[f"{column['Conflict']}{at[row['name']]}"].value.replace(" ‡", "")
+        check(name == row["name"], f"Figures row {at[row['name']]} holds {name}, not {row['name']}")
+    costs = [row["cost_adj"] for row in order if row["cost_adj"] is not None]
+    check(costs == sorted(costs, reverse=True), "Figures rows are not in falling cost order")
     # Each total sums every conflict's row.
     for header in headers:
         if header in ("Combat Days", "All Conflict Days", "KIA + MIA", "All Casualties") or header.startswith("Net Cost"):
@@ -142,13 +147,13 @@ def figures():
     cost = column[next(h for h in headers if h.startswith("Net Cost to"))]
     adjusted = column[next(h for h in headers if h.startswith("Net Cost in"))]
     for row in ROWS:
-        r = 5 + row["idx"]
+        r = at[row["name"]]
         check(deflator[f"B{r}"].value == row["name"], f"CPI_Deflator row {r} is not {row['name']}")
         check(ws[f"{adjusted}{r}"].value == f'=IF({cost}{r}="","",{cost}{r}*CPI_Deflator!F{r})',
               f"Figures row {r} is priced from another conflict's deflator row")
     # The text columns carry the dataset's words, and each row its sources.
     for row in ROWS:
-        r = 5 + row["idx"]
+        r = at[row["name"]]
         for header, key in (("What Happened", "summary"), ("Casualty Detail", "losses_text"),
                             ("Cost Accounting", "cost_text")):
             check(ws[f"{column[header]}{r}"].value == row[key], f"Figures row {r}: {header} differs from data.py")
@@ -156,7 +161,7 @@ def figures():
               f"Figures row {r}: sources differ from data.py")
     # Authorization reads exactly as it does in the Record workbook.
     for row in ROWS:
-        r = 5 + row["idx"]
+        r = at[row["name"]]
         check(ws[f"{column['Authorization']}{r}"].value == f"{row['auth_label']} - {row['auth_note']}",
               f"Figures row {r}: authorization differs from the Record")
     print(f"figures.xlsx    {len(wb.sheetnames)} sheets, {last - first + 1} rows")
